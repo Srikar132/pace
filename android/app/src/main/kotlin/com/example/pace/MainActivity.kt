@@ -661,6 +661,27 @@ class MainActivity: FlutterActivity() {
                         result.success(blockingConfig.getPersistentNotificationConfig())
                     }
 
+                    "getWebsiteBlockingDiagnostics" -> {
+                        val blockedWebsites = websiteBlockManager.getBlockedWebsites().map { website ->
+                            mapOf(
+                                "url" to website.url,
+                                "name" to website.name,
+                                "isActive" to website.isActive
+                            )
+                        }
+                        result.success(mapOf(
+                            "accessibilityServiceEnabled" to permissionManager.hasAccessibilityPermission(),
+                            "totalBlockedWebsites" to websiteBlockManager.getBlockedWebsitesCount(),
+                            "activeBlockedWebsites" to websiteBlockManager.getActiveBlockedWebsitesCount(),
+                            "blockedWebsites" to blockedWebsites,
+                            "supportedBrowsers" to LockInAccessibilityService.BROWSER_PACKAGES.toList()
+                        ))
+                    }
+
+                    "getSupportedBrowsers" -> {
+                        result.success(LockInAccessibilityService.BROWSER_PACKAGES.toList())
+                    }
+
                     else -> {
                         result.notImplemented()
                     }

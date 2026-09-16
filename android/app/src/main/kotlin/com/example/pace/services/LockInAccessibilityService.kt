@@ -54,7 +54,7 @@ class LockInAccessibilityService : AccessibilityService() {
         private const val CHANNEL_NAME = "LockIn Protection Service"
         
         // Browser package names for URL monitoring
-        private val BROWSER_PACKAGES = setOf(
+        val BROWSER_PACKAGES = setOf(
             "com.android.chrome",
             "org.mozilla.firefox",
             "com.microsoft.emmx",
