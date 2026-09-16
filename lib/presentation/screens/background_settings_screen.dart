@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/widgets/background_image_selector.dart';
-import 'package:lock_in/presentation/providers/background_image_provider.dart';
+import 'package:pace/widgets/background_image_selector.dart';
+import 'package:pace/presentation/providers/background_image_provider.dart';
 
 class BackgroundSettingsScreen extends ConsumerWidget {
   const BackgroundSettingsScreen({super.key});
@@ -64,7 +64,7 @@ class ExampleHomeScreen extends ConsumerWidget {
             child: Column(
               children: [
                 AppBar(
-                  title: const Text('Lock-In'),
+                  title: const Text('Pace'),
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
@@ -74,7 +74,7 @@ class ExampleHomeScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Welcome to Lock-In',
+                          'Welcome to Pace',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,

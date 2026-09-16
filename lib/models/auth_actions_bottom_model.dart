@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/widgets/bottom_sheet_darg_handler.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/widgets/bottom_sheet_darg_handler.dart';
 
 class AuthActionsBottomModel extends ConsumerWidget {
   const AuthActionsBottomModel({super.key});
@@ -24,7 +24,7 @@ class AuthActionsBottomModel extends ConsumerWidget {
           const SizedBox(height: 20.0),
 
           Text(
-            'Welcome to LockIn!',
+            'Welcome to Pace!',
             style: theme.textTheme.headlineLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),

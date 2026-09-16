@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/services/native_service.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/data/repositories/user_repository.dart';
+import 'package:pace/services/native_service.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/data/repositories/user_repository.dart';
 
 // Permission state
 class PermissionState {

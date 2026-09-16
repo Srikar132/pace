@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/models/usage_stats_models.dart';
-import 'package:lock_in/presentation/providers/usage_stats_provider.dart';
-import 'package:lock_in/presentation/widgets/usage_stats_widgets.dart';
+import 'package:pace/models/usage_stats_models.dart';
+import 'package:pace/presentation/providers/usage_stats_provider.dart';
+import 'package:pace/presentation/widgets/usage_stats_widgets.dart';
 
 class UsageStatsScreen extends ConsumerStatefulWidget {
   const UsageStatsScreen({super.key});
@@ -395,13 +395,13 @@ Widget _buildFilterChips(ThemeData theme) {
   }
 
 Widget _buildCategoryBreakdown(UsageStatsResponse data, ThemeData theme) {
-  // Filter out lock_in app from all categories
+  // Filter out pace app from all categories
   final filteredApps = data.apps.where((app) => 
-    !app.packageName.contains('lock_in') && 
-    app.packageName != 'com.example.lock_in'
+    !app.packageName.contains('pace') && 
+    app.packageName != 'com.example.pace'
   ).toList();
   
-  // Calculate category times excluding lock_in
+  // Calculate category times excluding pace
   final distractingTime = filteredApps
       .where((app) => app.category == AppCategory.distracting)
       .fold(0, (sum, app) => sum + app.totalUsageMinutes);
@@ -513,10 +513,10 @@ String _formatTime(int minutes) {
   }
 
 List<AppUsageStats> _getFilteredApps(UsageStatsResponse data) {
-  // First filter out the lock_in app itself
+  // First filter out the pace app itself
   var apps = data.apps.where((app) => 
-    !app.packageName.contains('lock_in') && 
-    app.packageName != 'com.example.lock_in'
+    !app.packageName.contains('pace') && 
+    app.packageName != 'com.example.pace'
   ).toList();
   
   if (_selectedFilter == null) {

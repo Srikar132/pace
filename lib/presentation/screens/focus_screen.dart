@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/models/focus_time_bottom_model.dart';
-import 'package:lock_in/models/model_manager.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/focus_session_provider.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
-import 'package:lock_in/presentation/providers/settings_provider.dart';
-import 'package:lock_in/presentation/providers/background_image_provider.dart';
-import 'package:lock_in/presentation/providers/usage_stats_provider.dart';
-import 'package:lock_in/presentation/screens/active_focus_screen.dart';
-import 'package:lock_in/presentation/screens/profile_screen.dart';
-import 'package:lock_in/presentation/screens/usage_stats_screen.dart';
-import 'package:lock_in/widgets/focus_timer_widget.dart';
-import 'package:lock_in/widgets/lumo_mascot_widget.dart';
-import 'package:lock_in/widgets/background_image_selector.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/models/focus_time_bottom_model.dart';
+import 'package:pace/models/model_manager.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/focus_session_provider.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/presentation/providers/settings_provider.dart';
+import 'package:pace/presentation/providers/background_image_provider.dart';
+import 'package:pace/presentation/providers/usage_stats_provider.dart';
+import 'package:pace/presentation/screens/active_focus_screen.dart';
+import 'package:pace/presentation/screens/profile_screen.dart';
+import 'package:pace/presentation/screens/usage_stats_screen.dart';
+import 'package:pace/widgets/focus_timer_widget.dart';
+import 'package:pace/widgets/lumo_mascot_widget.dart';
+import 'package:pace/widgets/background_image_selector.dart';
 import 'dart:math';
 
 class FocusScreen extends ConsumerStatefulWidget {
@@ -337,7 +337,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
 
         const Spacer(),
 
-        // Usage Time Card - Using today's usage stats (excluding lock_in app)
+        // Usage Time Card - Using today's usage stats (excluding pace app)
         Consumer(
           builder: (context, ref, child) {
             final todayUsageAsync = ref.watch(todayUsageStatsProvider);

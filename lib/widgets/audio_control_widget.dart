@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/services/audio_service.dart';
-import 'package:lock_in/presentation/providers/audio_providers.dart';
+import 'package:pace/services/audio_service.dart';
+import 'package:pace/presentation/providers/audio_providers.dart';
 
 /// A comprehensive audio control widget that demonstrates the audio service capabilities
 class AudioControlWidget extends ConsumerStatefulWidget {

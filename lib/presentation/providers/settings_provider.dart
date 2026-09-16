@@ -1,5 +1,5 @@
-import 'package:lock_in/data/models/user_settings_model.dart';
-import 'package:lock_in/data/repositories/settings_repository.dart';
+import 'package:pace/data/models/user_settings_model.dart';
+import 'package:pace/data/repositories/settings_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {

@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lock_in/data/models/user_model.dart';
+import 'package:pace/data/models/user_model.dart';
 
 class HiveService {
   static const String userBoxName = 'user_box';

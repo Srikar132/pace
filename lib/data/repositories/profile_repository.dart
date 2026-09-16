@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lock_in/data/models/achievement_model.dart';
-import 'package:lock_in/data/models/profile_stats_model.dart';
+import 'package:pace/data/models/achievement_model.dart';
+import 'package:pace/data/models/profile_stats_model.dart';
 
 class ProfileRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

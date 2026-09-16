@@ -1,6 +1,6 @@
 {
-    "name": "lock_in",
-    "short_name": "lock_in",
+    "name": "pace",
+    "short_name": "pace",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

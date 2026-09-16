@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/installed_app_model.dart';
-import 'package:lock_in/presentation/providers/focus_session_provider.dart';
+import 'package:pace/data/models/installed_app_model.dart';
+import 'package:pace/presentation/providers/focus_session_provider.dart';
 
 /// Service class to handle all native Android permissions required by the app.
 /// This service communicates with the native Android side through method channels

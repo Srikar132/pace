@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
-import 'package:lock_in/presentation/providers/app_management_provide.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/data/models/installed_app_model.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/presentation/providers/app_management_provide.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/data/models/installed_app_model.dart';
 
 class FocusTimerWidget extends ConsumerStatefulWidget {
   final String initialTimerMode;

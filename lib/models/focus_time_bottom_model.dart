@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/installed_app_model.dart';
-import 'package:lock_in/models/block_app_bottom_model.dart';
-import 'package:lock_in/models/model_manager.dart';
-import 'package:lock_in/presentation/providers/app_management_provide.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
-import 'package:lock_in/widgets/bottom_sheet_darg_handler.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/settings_provider.dart';
+import 'package:pace/data/models/installed_app_model.dart';
+import 'package:pace/models/block_app_bottom_model.dart';
+import 'package:pace/models/model_manager.dart';
+import 'package:pace/presentation/providers/app_management_provide.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/widgets/bottom_sheet_darg_handler.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/settings_provider.dart';
 
 // ============================================================================
 // OPTIMIZED: Extracted BlockedAppsSection to prevent unnecessary rebuilds

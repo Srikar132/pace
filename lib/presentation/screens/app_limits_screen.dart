@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/app_limit_model.dart';
-import 'package:lock_in/presentation/providers/app_limits_provider.dart';
-import 'package:lock_in/presentation/screens/add_app_limit_screen.dart';
-import 'package:lock_in/services/app_limit_native_service.dart';
-import 'package:lock_in/services/auth_service.dart';
+import 'package:pace/data/models/app_limit_model.dart';
+import 'package:pace/presentation/providers/app_limits_provider.dart';
+import 'package:pace/presentation/screens/add_app_limit_screen.dart';
+import 'package:pace/services/app_limit_native_service.dart';
+import 'package:pace/services/auth_service.dart';
 
 class AppLimitsScreen extends ConsumerStatefulWidget {
   const AppLimitsScreen({super.key});

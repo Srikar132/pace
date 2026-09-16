@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/onboarding_provider.dart';
-import 'package:lock_in/presentation/screens/onboarding/welcome_back_screen.dart';
-import 'package:lock_in/presentation/screens/onboarding/distraction_question_screen.dart';
-import 'package:lock_in/presentation/screens/onboarding/study_time_screen.dart';
-import 'package:lock_in/presentation/screens/onboarding/procrastination_screen.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/onboarding_provider.dart';
+import 'package:pace/presentation/screens/onboarding/welcome_back_screen.dart';
+import 'package:pace/presentation/screens/onboarding/distraction_question_screen.dart';
+import 'package:pace/presentation/screens/onboarding/study_time_screen.dart';
+import 'package:pace/presentation/screens/onboarding/procrastination_screen.dart';
 
 class OnboardingScreen extends ConsumerWidget {
   const OnboardingScreen({super.key});

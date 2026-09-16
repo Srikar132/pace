@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lock_in/data/models/blocked_content_model.dart';
+import 'package:pace/data/models/blocked_content_model.dart';
 
 class BlockedContentRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

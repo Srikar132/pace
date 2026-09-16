@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/blocked_content_model.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/data/models/blocked_content_model.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
 
 /// Example widget showing how to use the persistent blocking system
 class PersistentBlockingControl extends ConsumerWidget {

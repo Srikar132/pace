@@ -3,11 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/core/theme/app_theme.dart';
-import 'package:lock_in/presentation/overlays/overlay_app.dart';
-import 'package:lock_in/presentation/screens/splash_screen.dart';
-import 'package:lock_in/presentation/screens/manage_blocked_apps_screen.dart';
-import 'package:lock_in/services/native_service.dart';
+import 'package:pace/core/theme/app_theme.dart';
+import 'package:pace/presentation/overlays/overlay_app.dart';
+import 'package:pace/presentation/screens/splash_screen.dart';
+import 'package:pace/presentation/screens/manage_blocked_apps_screen.dart';
+import 'package:pace/services/native_service.dart';
 
 // Overlay entry point - separate from main app
 @pragma('vm:entry-point')
@@ -79,7 +79,7 @@ class _LockInAppState extends ConsumerState<LockInApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Lock In',
+      title: 'Pace',
       debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,

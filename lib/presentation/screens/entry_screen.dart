@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/models/auth_actions_bottom_model.dart';
-import 'package:lock_in/models/model_manager.dart';
-import 'package:lock_in/widgets/testimonial_card.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/models/auth_actions_bottom_model.dart';
+import 'package:pace/models/model_manager.dart';
+import 'package:pace/widgets/testimonial_card.dart';
 
 class EntryScreen extends StatelessWidget {
   const EntryScreen({super.key});
@@ -38,7 +38,7 @@ class EntryScreen extends StatelessWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        'LockIn',
+                        'Pace',
                         style: theme.textTheme.displayLarge?.copyWith(
                           color: theme.colorScheme.primary,
                         ),

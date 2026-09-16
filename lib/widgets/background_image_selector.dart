@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/background_image_provider.dart';
-import 'package:lock_in/widgets/bottom_sheet_darg_handler.dart';
+import 'package:pace/presentation/providers/background_image_provider.dart';
+import 'package:pace/widgets/bottom_sheet_darg_handler.dart';
 class BackgroundImageSelector extends ConsumerWidget {
   const BackgroundImageSelector({super.key});
 

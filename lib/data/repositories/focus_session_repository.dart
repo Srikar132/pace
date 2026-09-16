@@ -1,6 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lock_in/data/models/focus_session_model.dart';
+import 'package:pace/data/models/focus_session_model.dart';
 import 'package:flutter/foundation.dart';
 
 

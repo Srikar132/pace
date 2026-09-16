@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
 
 // Background Image State
 class BackgroundImageState {

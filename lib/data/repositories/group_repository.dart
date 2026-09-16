@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lock_in/data/models/group_memeber_model.dart';
-import 'package:lock_in/data/models/group_model.dart';
+import 'package:pace/data/models/group_memeber_model.dart';
+import 'package:pace/data/models/group_model.dart';
 
 
 

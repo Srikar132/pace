@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/presentation/screens/lumo_voice_bot_screen.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/presentation/screens/lumo_voice_bot_screen.dart';
 
 class LumoMascotWidget extends StatefulWidget {
   final VoidCallback onTap;

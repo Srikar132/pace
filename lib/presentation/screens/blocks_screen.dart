@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/app_limits_provider.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
-import 'package:lock_in/presentation/providers/permission_provider.dart';
-import 'package:lock_in/presentation/providers/parental_control_provider.dart';
-import 'package:lock_in/data/models/blocked_content_model.dart';
-import 'package:lock_in/data/models/app_limit_model.dart';
-import 'package:lock_in/services/blocks_native_service.dart';
-import 'package:lock_in/services/app_limit_native_service.dart';
-import 'package:lock_in/services/native_service.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/app_limits_provider.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/presentation/providers/permission_provider.dart';
+import 'package:pace/presentation/providers/parental_control_provider.dart';
+import 'package:pace/data/models/blocked_content_model.dart';
+import 'package:pace/data/models/app_limit_model.dart';
+import 'package:pace/services/blocks_native_service.dart';
+import 'package:pace/services/app_limit_native_service.dart';
+import 'package:pace/services/native_service.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:installed_apps/app_info.dart';
-import 'package:lock_in/widgets/parental_control_dialogs.dart';
+import 'package:pace/widgets/parental_control_dialogs.dart';
 import 'dart:async';
 
 // Standalone permission check function accessible by all widgets
@@ -46,7 +46,7 @@ Future<bool> _checkAndRequestPermissions(
           ),
           content: const Text(
             'This feature requires Accessibility Service to block content.\n\n'
-            'Please enable "Lock-In" in Accessibility settings.',
+            'Please enable "Pace" in Accessibility settings.',
             style: TextStyle(color: Colors.white70),
           ),
           actions: [
@@ -121,7 +121,7 @@ Future<bool> _checkAndRequestUsageStatsPermission(BuildContext context) async {
         ),
         content: const Text(
           'App Limits require Usage Access permission to track how long you use apps.\n\n'
-          'This permission allows Lock-In to:\n'
+          'This permission allows Pace to:\n'
           '• Monitor app usage time\n'
           '• Enforce daily limits\n'
           '• Show accurate usage statistics\n\n'
@@ -1833,7 +1833,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
       result.writeln('');
       result.writeln('📋 Enable Steps:');
       result.writeln('1. Go to Android Settings');
-      result.writeln('2. Accessibility > Lock-In');
+      result.writeln('2. Accessibility > Pace');
       result.writeln('3. Toggle ON');
       result.writeln('');
     } else {

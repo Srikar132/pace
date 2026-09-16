@@ -1,10 +1,10 @@
 // Clean Firebase-only authentication provider
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lock_in/data/models/user_model.dart';
-import 'package:lock_in/data/repositories/auth_repository.dart';
-import 'package:lock_in/data/repositories/user_repository.dart';
-import 'package:lock_in/presentation/providers/permission_provider.dart';
+import 'package:pace/data/models/user_model.dart';
+import 'package:pace/data/repositories/auth_repository.dart';
+import 'package:pace/data/repositories/user_repository.dart';
+import 'package:pace/presentation/providers/permission_provider.dart';
 
 // Auth State for loading management
 class AuthState {

@@ -63,7 +63,7 @@ class RealtimeService {
           'session': {
             'modalities': ['text', 'audio'],
             'instructions':
-                'You are Lumo, a helpful AI voice assistant integrated into a focus and study app called LOCK-IN. Be concise, encouraging, and supportive. Help users with their study goals and productivity. Keep responses brief and clear.',
+                'You are Lumo, a helpful AI voice assistant integrated into a focus and study app called PACE. Be concise, encouraging, and supportive. Help users with their study goals and productivity. Keep responses brief and clear.',
             'voice': VoiceApiConfig.ttsVoice,
             'input_audio_format': 'pcm16',
             'output_audio_format': 'pcm16',

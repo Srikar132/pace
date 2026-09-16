@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/overlays/providers/overlay_provider.dart';
-import 'package:lock_in/presentation/overlays/widgets/focus_timer_widget.dart';
-import 'package:lock_in/presentation/overlays/widgets/overlay_background.dart';
+import 'package:pace/presentation/overlays/providers/overlay_provider.dart';
+import 'package:pace/presentation/overlays/widgets/focus_timer_widget.dart';
+import 'package:pace/presentation/overlays/widgets/overlay_background.dart';
 
 class BlockedWebsiteOverlay extends ConsumerStatefulWidget {
   const BlockedWebsiteOverlay({super.key});

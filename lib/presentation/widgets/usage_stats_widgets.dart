@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lock_in/models/usage_stats_models.dart';
+import 'package:pace/models/usage_stats_models.dart';
 import 'dart:typed_data';
 
 /// Widget for displaying individual app usage in a list tile

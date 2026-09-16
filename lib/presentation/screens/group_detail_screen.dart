@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/group_memeber_model.dart';
-import 'package:lock_in/data/models/group_model.dart';
-import 'package:lock_in/presentation/providers/group_provider.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
+import 'package:pace/data/models/group_memeber_model.dart';
+import 'package:pace/data/models/group_model.dart';
+import 'package:pace/presentation/providers/group_provider.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Generate consistent color for group based on name
@@ -759,7 +759,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
 
   void _shareGroup(GroupModel group) {
     Share.share(
-      '🎯 Join my focus group "${group.name}" on Lock In!\n\n'
+      '🎯 Join my focus group "${group.name}" on Pace!\n\n'
       '${group.description}\n\n'
       '👥 ${group.memberIds.length} members\n'
       '⏱️ ${group.getFormattedFocusTime()} total focus time\n\n'

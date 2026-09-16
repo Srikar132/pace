@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/models/parental_control.dart';
+import 'package:pace/models/parental_control.dart';
 
 /// Provider for parental control settings
 final parentalControlProvider = StreamProvider.family<ParentalControl, String>((

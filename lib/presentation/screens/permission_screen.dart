@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:lock_in/presentation/providers/permission_provider.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/widgets/permission_instruction_dialog.dart';
-import 'package:lock_in/models/model_manager.dart';
+import 'package:pace/presentation/providers/permission_provider.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/widgets/permission_instruction_dialog.dart';
+import 'package:pace/models/model_manager.dart';
 
 class PermissionScreen extends ConsumerStatefulWidget {
   const PermissionScreen({super.key});
@@ -343,10 +343,10 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
         'onTap': () => _showPermissionInstructionDialog(
           title: 'Display Over Other Apps Permission',
           description:
-              'This permission allows Lock-in to display blocking screens over other apps when you try to open distracting apps.',
+              'This permission allows Pace to display blocking screens over other apps when you try to open distracting apps.',
           steps: const [
             'Tap "Open Settings" below',
-            'Find "Lock-in" in the app list',
+            'Find "Pace" in the app list',
             'Toggle "Allow display over other apps" ON',
             'Return to this app',
           ],
@@ -361,10 +361,10 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
         'onTap': () => _showPermissionInstructionDialog(
           title: 'Display Popup Windows Permission',
           description:
-              'This permission allows Lock-in to show popup reminders and motivational messages to help you stay focused.',
+              'This permission allows Pace to show popup reminders and motivational messages to help you stay focused.',
           steps: const [
             'Tap "Open Settings" below',
-            'Find "Lock-in" in the Special App Access list',
+            'Find "Pace" in the Special App Access list',
             'Look for "Display pop-up windows" or similar option',
             'Toggle the permission ON',
             'Return to this app',

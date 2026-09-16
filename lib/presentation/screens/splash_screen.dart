@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/focus_session_provider.dart';
-import 'package:lock_in/presentation/providers/permission_provider.dart';
-import 'package:lock_in/presentation/screens/entry_screen.dart';
-import 'package:lock_in/presentation/screens/home_screen.dart';
-import 'package:lock_in/presentation/screens/onboarding/onboarding_screen.dart';
-import 'package:lock_in/presentation/screens/permission_screen.dart';
-import 'package:lock_in/presentation/screens/active_focus_screen.dart';
-import 'package:lock_in/services/native_service.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/focus_session_provider.dart';
+import 'package:pace/presentation/providers/permission_provider.dart';
+import 'package:pace/presentation/screens/entry_screen.dart';
+import 'package:pace/presentation/screens/home_screen.dart';
+import 'package:pace/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:pace/presentation/screens/permission_screen.dart';
+import 'package:pace/presentation/screens/active_focus_screen.dart';
+import 'package:pace/services/native_service.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});

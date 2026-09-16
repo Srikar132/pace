@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/providers/parental_control_provider.dart';
-import 'package:lock_in/presentation/providers/profile_provider.dart';
-import 'package:lock_in/models/parental_control.dart';
-import 'package:lock_in/widgets/parental_control_dialogs.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/providers/parental_control_provider.dart';
+import 'package:pace/presentation/providers/profile_provider.dart';
+import 'package:pace/models/parental_control.dart';
+import 'package:pace/widgets/parental_control_dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -247,7 +247,7 @@ class ProfileScreen extends ConsumerWidget {
                 Row(
                   children: [
                     const Text(
-                      'LockIn',
+                      'Pace',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -882,7 +882,7 @@ class ProfileScreen extends ConsumerWidget {
 
                     // Open WhatsApp share
                     final url = Uri.parse(
-                      'https://wa.me/?text=Join me on Lock In to beat phone addiction!',
+                      'https://wa.me/?text=Join me on Pace to beat phone addiction!',
                     );
                     if (await canLaunchUrl(url)) {
                       await launchUrl(url);

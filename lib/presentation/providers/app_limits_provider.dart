@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/app_limit_model.dart';
-import 'package:lock_in/data/repositories/app_limit_repository.dart';
+import 'package:pace/data/models/app_limit_model.dart';
+import 'package:pace/data/repositories/app_limit_repository.dart';
 
 // ============================================================================
 // REPOSITORY PROVIDER

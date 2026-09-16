@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/services/audio_service.dart';
+import 'package:pace/services/audio_service.dart';
 
 /// Provider for the audio service singleton
 final audioServiceProvider = Provider<AudioService>((ref) {

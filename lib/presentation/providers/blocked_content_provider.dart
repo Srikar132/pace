@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/blocked_content_model.dart';
-import 'package:lock_in/data/repositories/blocked_content_repository.dart';
-import 'package:lock_in/services/native_service.dart';
+import 'package:pace/data/models/blocked_content_model.dart';
+import 'package:pace/data/repositories/blocked_content_repository.dart';
+import 'package:pace/services/native_service.dart';
 
 // ============================================================================
 // REPOSITORY PROVIDER

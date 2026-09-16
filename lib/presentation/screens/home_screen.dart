@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lock_in/presentation/screens/blocks_screen.dart';
-import 'package:lock_in/presentation/screens/focus_screen.dart';
-import 'package:lock_in/presentation/screens/group_screen.dart';
-import 'package:lock_in/presentation/screens/usage_stats_screen.dart';
+import 'package:pace/presentation/screens/blocks_screen.dart';
+import 'package:pace/presentation/screens/focus_screen.dart';
+import 'package:pace/presentation/screens/group_screen.dart';
+import 'package:pace/presentation/screens/usage_stats_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {

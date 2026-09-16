@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/focus_session_provider.dart';
-import 'package:lock_in/core/constants/images.dart';
-import 'package:lock_in/presentation/screens/splash_screen.dart';
+import 'package:pace/presentation/providers/focus_session_provider.dart';
+import 'package:pace/core/constants/images.dart';
+import 'package:pace/presentation/screens/splash_screen.dart';
 
 class SaveSessionScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> sessionData;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/installed_app_model.dart';
-import 'package:lock_in/presentation/providers/app_management_provide.dart';
-import 'package:lock_in/core/theme/app_theme.dart';
+import 'package:pace/data/models/installed_app_model.dart';
+import 'package:pace/presentation/providers/app_management_provide.dart';
+import 'package:pace/core/theme/app_theme.dart';
 
 class AllowedAppsDrawer extends ConsumerWidget {
   final String userId;

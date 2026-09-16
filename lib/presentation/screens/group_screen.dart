@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/presentation/providers/group_provider.dart';
-import 'package:lock_in/presentation/providers/auth_provider.dart';
-import 'package:lock_in/presentation/screens/group_detail_screen.dart';
-import 'package:lock_in/presentation/screens/create_group_screen.dart';
+import 'package:pace/presentation/providers/group_provider.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
+import 'package:pace/presentation/screens/group_detail_screen.dart';
+import 'package:pace/presentation/screens/create_group_screen.dart';
 
 /// Generate consistent color for group based on name
 Color _getGroupColor(String groupName) {

@@ -4,10 +4,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lock_in/data/models/installed_app_model.dart';
-import 'package:lock_in/services/native_service.dart';
+import 'package:pace/data/models/installed_app_model.dart';
+import 'package:pace/services/native_service.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:lock_in/presentation/providers/blocked_content_provider.dart';
+import 'package:pace/presentation/providers/blocked_content_provider.dart';
 
 
 final installedAppsProvider = FutureProvider.autoDispose<List<InstalledApp>>((ref) async {
@@ -40,16 +40,16 @@ final groupedAppsProvider = Provider<Map<String, List<InstalledApp>>>((ref) {
 
   return appsAsync.maybeWhen(
     data: (apps) {
-      // Filter by search query and exclude LockIn app itself
+      // Filter by search query and exclude Pace app itself
       final filtered = apps.where((app) {
         final matchesSearch = app.appName.toLowerCase().contains(query);
-        // Exclude LockIn app from the list
-        final isNotLockIn = !app.packageName.toLowerCase().contains('lock_in') &&
+        // Exclude Pace app from the list
+        final isNotPace = !app.packageName.toLowerCase().contains('pace') &&
                             !app.packageName.toLowerCase().contains('lockin') &&
                             app.appName.toLowerCase() != 'lock in' &&
                             app.appName.toLowerCase() != 'lockin';
         // Allow all apps including YouTube which might be marked as system app
-        return matchesSearch && isNotLockIn;
+        return matchesSearch && isNotPace;
       }).toList();
 
       // Sort apps: popular apps first, then alphabetically
