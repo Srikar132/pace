@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/presentation/overlays/providers/overlay_provider.dart';
 import 'package:pace/presentation/overlays/widgets/focus_timer_widget.dart';
 import 'package:pace/presentation/overlays/widgets/overlay_background.dart';
-import 'package:lottie/lottie.dart';
 
 class BlockedShortsOverlay extends ConsumerStatefulWidget {
   const BlockedShortsOverlay({super.key});

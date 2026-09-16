@@ -473,7 +473,7 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
     } catch (e) {
       debugPrint('❌ Error completing session with notes: $e');
       _isManuallyEnding = false;
-      throw e;
+      rethrow;
     }
   }
 

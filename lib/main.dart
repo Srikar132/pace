@@ -66,6 +66,7 @@ class LockInApp extends ConsumerStatefulWidget {
 }
 
 class _LockInAppState extends ConsumerState<LockInApp> {
+  
   @override
   void initState() {
     super.initState();

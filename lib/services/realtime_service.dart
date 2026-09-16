@@ -198,7 +198,7 @@ class RealtimeService {
         jsonEncode({'type': 'input_audio_buffer.append', 'audio': base64Audio}),
       );
       // Log occasionally to avoid spam
-      if (audioChunk.length > 0) {
+      if (audioChunk.isNotEmpty) {
         print('📤 Sent audio chunk: ${audioChunk.length} bytes');
       }
     } catch (e) {

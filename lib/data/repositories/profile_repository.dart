@@ -55,7 +55,7 @@ class ProfileRepository {
         return defaultAchievements;
       }
 
-      final data = snapshot.data() as Map<String, dynamic>?;
+      final data = snapshot.data();
       if (data == null || data['achievements'] == null) {
         return AchievementModel.getDefaultAchievements();
       }

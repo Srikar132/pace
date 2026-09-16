@@ -96,7 +96,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
     final period = hour >= 12 ? 'PM' : 'AM';
     final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
     
-    return '${displayHour}:${minute.toString().padLeft(2, '0')} $period';
+    return '$displayHour:${minute.toString().padLeft(2, '0')} $period';
   }
 
   Future<void> _saveSession() async {

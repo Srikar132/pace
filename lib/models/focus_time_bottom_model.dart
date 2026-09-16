@@ -586,7 +586,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
             child: Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               activeTrackColor: Colors.white.withOpacity(0.3),
               inactiveThumbColor: Colors.white.withOpacity(0.5),
               inactiveTrackColor: Colors.white.withOpacity(0.1),
@@ -649,7 +649,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
                     setState(() => _strictMode = value);
                     _updateSettings(strict: value);
                   },
-                  activeColor: Colors.white,
+                  activeThumbColor: Colors.white,
                   activeTrackColor: Colors.white.withOpacity(0.3),
                   inactiveThumbColor: Colors.white.withOpacity(0.5),
                   inactiveTrackColor: Colors.white.withOpacity(0.1),

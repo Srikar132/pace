@@ -385,7 +385,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 trailing: Switch(
                   value: parentalControl.isEnabled,
-                  activeColor: const Color(0xFF82D65D),
+                  activeThumbColor: const Color(0xFF82D65D),
                   onChanged: (value) async {
                     if (value) {
                       // Enabling parental mode

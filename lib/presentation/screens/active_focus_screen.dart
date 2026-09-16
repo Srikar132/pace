@@ -412,7 +412,7 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
       displayTime = _formatTime(elapsedSeconds);
     }
 
-    return Container(
+    return SizedBox(
       width: 300,
       height: 300,
       child: Stack(

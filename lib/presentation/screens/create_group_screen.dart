@@ -561,7 +561,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF82D65D),
+            activeThumbColor: const Color(0xFF82D65D),
             activeTrackColor: const Color(0xFF82D65D).withOpacity(0.5),
           ),
         ],

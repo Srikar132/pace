@@ -622,7 +622,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   scale: 0.8,
                   child: Switch(
                     value: widget.limit.isActive,
-                    activeColor: const Color(0xFF82D65D),
+                    activeThumbColor: const Color(0xFF82D65D),
                     activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
                     inactiveTrackColor: Colors.grey.withOpacity(0.2),
                     onChanged: (value) => _handleToggle(value),
@@ -1271,7 +1271,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
           style: TextStyle(color: Colors.white.withOpacity(0.5)),
         ),
         value: displayValue,
-        activeColor: const Color(0xFF82D65D),
+        activeThumbColor: const Color(0xFF82D65D),
         activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
         inactiveTrackColor: Colors.grey.withOpacity(0.2),
         onChanged: _isUpdating
@@ -1522,7 +1522,7 @@ class _WebsiteTile extends ConsumerWidget {
               scale: 0.8,
               child: Switch(
                 value: website.isActive,
-                activeColor: const Color(0xFF82D65D),
+                activeThumbColor: const Color(0xFF82D65D),
                 activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
                 inactiveTrackColor: Colors.grey.withOpacity(0.2),
                 onChanged: (value) async {
@@ -1694,7 +1694,7 @@ class _NotificationBlockingSectionState
                 style: TextStyle(color: Colors.white.withOpacity(0.5)),
               ),
               value: _blockAllNotifications,
-              activeColor: const Color(0xFF82D65D),
+              activeThumbColor: const Color(0xFF82D65D),
               activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
               inactiveTrackColor: Colors.grey.withOpacity(0.2),
               onChanged: (value) {

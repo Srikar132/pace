@@ -216,7 +216,7 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                     scale: 0.8,
                     child: Switch(
                       value: areAllBlocked,
-                      activeColor: const Color(0xFF82D65D),
+                      activeThumbColor: const Color(0xFF82D65D),
                       inactiveTrackColor: const Color(0xFF3A3A3A),
                       onChanged: (bool value) async {
                         if (user == null) return;
@@ -430,7 +430,7 @@ class _AppListTile extends ConsumerWidget {
                     scale: 0.8,
                     child: Switch(
                       value: isBlocked,
-                      activeColor: const Color(0xFF82D65D),
+                      activeThumbColor: const Color(0xFF82D65D),
                       inactiveTrackColor: const Color(0xFF3A3A3A),
                       onChanged: (bool value) async {
                         if (user == null) return;
