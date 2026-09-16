@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:pace/data/models/app_limit_model.dart';
 
 /// Native service for app limit management
 /// Communicates with Android's AccessibilityService + UsageStatsManager
@@ -30,6 +31,15 @@ class AppLimitNativeService {
   /// Set a single app limit (calls updateLimits internally)
   Future<bool> setAppLimit(String packageName, int limitMinutes) async {
     return updateLimits({packageName: limitMinutes});
+  }
+
+  /// Push all active app limits to native (calls updateLimits internally)
+  Future<bool> setAppLimits(List<AppLimitModel> limits) async {
+    final limitsMap = <String, int>{
+      for (final limit in limits)
+        if (limit.isActive) limit.packageName: limit.dailyLimit,
+    };
+    return updateLimits(limitsMap);
   }
 
   /// Remove an app limit by setting it to 0 or removing from map
@@ -80,6 +90,19 @@ class AppLimitNativeService {
     } catch (e) {
       print('Error forcing check limits: $e');
       return [];
+    }
+  }
+
+  /// Clear all pending limit-exceeded warnings (no native handler yet - no-op until implemented)
+  Future<bool> clearAllWarnings() async {
+    try {
+      final result = await _limitsChannel.invokeMethod<bool>(
+        'clearAllWarnings',
+      );
+      return result ?? false;
+    } catch (e) {
+      print('Error clearing warnings: $e');
+      return false;
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:pace/data/models/app_limit_model.dart';
 import 'package:pace/presentation/providers/app_limits_provider.dart';
 import 'package:pace/presentation/screens/add_app_limit_screen.dart';
 import 'package:pace/services/app_limit_native_service.dart';
-import 'package:pace/services/auth_service.dart';
+import 'package:pace/presentation/providers/auth_provider.dart';
 
 class AppLimitsScreen extends ConsumerStatefulWidget {
   const AppLimitsScreen({super.key});
@@ -27,7 +27,7 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
   Future<void> _loadUsageStats() async {
     setState(() => _isLoadingUsage = true);
     try {
-      final stats = await _nativeService.getAppUsageStats();
+      final stats = await _nativeService.getAllUsageStats();
       setState(() {
         _usageStats = stats;
         _isLoadingUsage = false;
@@ -44,7 +44,7 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authServiceProvider).currentUser;
+    final user = ref.watch(currentUserProvider).value;
     if (user == null) {
       return const Scaffold(
         body: Center(child: Text('Please sign in to manage app limits')),
@@ -310,7 +310,7 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
   }
 
   Future<void> _syncLimitsToNative() async {
-    final user = ref.read(authServiceProvider).currentUser;
+    final user = ref.read(currentUserProvider).value;
     if (user == null) return;
 
     try {

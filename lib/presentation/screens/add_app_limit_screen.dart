@@ -215,7 +215,7 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        value: _dailyLimitHours,
+                        initialValue: _dailyLimitHours,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
@@ -246,7 +246,7 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        value: _dailyLimitMinutes,
+                        initialValue: _dailyLimitMinutes,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
@@ -346,7 +346,7 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        value: _weeklyLimitHours,
+                        initialValue: _weeklyLimitHours,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
@@ -377,7 +377,7 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int>(
-                        value: _weeklyLimitMinutes,
+                        initialValue: _weeklyLimitMinutes,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
@@ -561,7 +561,7 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
           .setAppLimit(widget.userId, limit);
 
       // Sync to native service
-      await _nativeService.setAppLimit(limit);
+      await _nativeService.setAppLimit(limit.packageName, limit.dailyLimit);
 
       if (mounted) {
         Navigator.pop(context, true);
