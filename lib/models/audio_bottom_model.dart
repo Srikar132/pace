@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/core/constants/audios.dart';
 import 'package:pace/presentation/providers/audio_providers.dart';
 import 'package:pace/services/audio_service.dart';
-import 'package:pace/widgets/audio_control_widget.dart';
 
 class AudioBottomSheet extends ConsumerStatefulWidget {
   const AudioBottomSheet({super.key});
