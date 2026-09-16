@@ -3,7 +3,7 @@ import 'package:pace/presentation/screens/blocks_screen.dart';
 import 'package:pace/presentation/screens/focus_screen.dart';
 import 'package:pace/presentation/screens/group_screen.dart';
 import 'package:pace/presentation/screens/usage_stats_screen.dart';
-
+import 'package:pace/presentation/screens/insights_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const GroupScreen(),
     const BlocksScreen(),
     const UsageStatsScreen(),
+    const InsightsScreen(),
   ];
 
   @override
@@ -61,6 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Blocks',
           ),
           // Index 3
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Usage',
+          ),
+          // Index 4
           NavigationDestination(
             icon: Icon(Icons.insights_outlined),
             selectedIcon: Icon(Icons.insights),
