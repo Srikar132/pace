@@ -68,6 +68,13 @@ class FocusSessionManager private constructor(private val context: Context) {
     private var eventSink: EventChannel.EventSink? = null
     private val eventQueue = ConcurrentHashMap<String, Any>()
 
+    // Lifecycle callbacks for MainActivity to keep FocusMonitoringService in sync,
+    // fired regardless of whether the transition came from a method-channel call
+    // (manual pause/resume/end) or internally (timer auto-completion).
+    var onSessionEnded: (() -> Unit)? = null
+    var onSessionPaused: (() -> Unit)? = null
+    var onSessionResumed: (() -> Unit)? = null
+
     init {
         restoreSessionFromPreferences()
     }
@@ -150,6 +157,8 @@ class FocusSessionManager private constructor(private val context: Context) {
                 "elapsedTime" to pausedElapsedTime
             ))
 
+            onSessionPaused?.invoke()
+
             Log.d(TAG, "✅ Session paused")
             true
 
@@ -186,6 +195,8 @@ class FocusSessionManager private constructor(private val context: Context) {
                 "timestamp" to System.currentTimeMillis(),
                 "elapsedTime" to pausedElapsedTime
             ))
+
+            onSessionResumed?.invoke()
 
             Log.d(TAG, "✅ Session resumed")
             true
@@ -239,6 +250,8 @@ class FocusSessionManager private constructor(private val context: Context) {
             isPaused = false
             sessionStartTime = 0
             pausedElapsedTime = 0
+
+            onSessionEnded?.invoke()
 
             Log.d(TAG, "✅ Session ended")
             true

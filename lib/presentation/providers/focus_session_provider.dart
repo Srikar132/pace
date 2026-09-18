@@ -41,6 +41,10 @@ class FocusSessionState {
   final bool isPaused;
   final String? error;
   final Map<String, dynamic>? nativeSessionData;
+  // Authoritative completion data from native's 'session_completed'/'session_auto_completed'
+  // event (actualDuration, completionRate, totalElapsed) - captured whenever the event
+  // arrives, regardless of whether it triggers auto-completion navigation.
+  final Map<String, dynamic>? completionData;
 
   FocusSessionState({
     this.status = FocusSessionStatus.idle,
@@ -52,6 +56,7 @@ class FocusSessionState {
     this.isPaused = false,
     this.error,
     this.nativeSessionData,
+    this.completionData,
   });
 
   FocusSessionState copyWith({
@@ -64,6 +69,7 @@ class FocusSessionState {
     bool? isPaused,
     String? error,
     Map<String, dynamic>? nativeSessionData,
+    Map<String, dynamic>? completionData,
   }) {
     return FocusSessionState(
       status: status ?? this.status,
@@ -75,6 +81,7 @@ class FocusSessionState {
       isPaused: isPaused ?? this.isPaused,
       error: error,
       nativeSessionData: nativeSessionData ?? this.nativeSessionData,
+      completionData: completionData ?? this.completionData,
     );
   }
 
@@ -92,7 +99,7 @@ class FocusSessionState {
 class FocusSessionNotifier extends Notifier<FocusSessionState> {
   StreamSubscription? _eventSubscription;
   Timer? _localTimer;
-  
+
   // KEY FIX: Single source of truth for manual ending
   bool _isManuallyEnding = false;
 
@@ -113,7 +120,9 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
           final eventType = event['event'] as String?;
           final data = _safeConvertToMap(event['data']);
 
-          debugPrint('📡 Native event: $eventType | Manual ending: $_isManuallyEnding');
+          debugPrint(
+            '📡 Native event: $eventType | Manual ending: $_isManuallyEnding',
+          );
 
           switch (eventType) {
             case 'session_started':
@@ -127,11 +136,19 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
               break;
             case 'session_completed':
             case 'session_auto_completed':
+              // Always capture native's authoritative completion data (actualDuration,
+              // completionRate) so the eventual save - manual or auto - uses real
+              // wall-clock time instead of the Dart-side local timer.
+              if (data != null) {
+                state = state.copyWith(completionData: data);
+              }
               // KEY FIX: Only auto-save if not manually ending
               if (!_isManuallyEnding) {
                 _handleAutoCompletion(data);
               } else {
-                debugPrint('🛑 Ignoring auto-completion - manual ending in progress');
+                debugPrint(
+                  '🛑 Ignoring auto-completion navigation - manual ending in progress (data captured)',
+                );
               }
               break;
             case 'timer_update':
@@ -362,25 +379,42 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
     }
 
     debugPrint('🎯 Manual end session initiated');
-    
+
     // Set flag FIRST to block any incoming auto-completion events
     _isManuallyEnding = true;
-    
+
     try {
       // Stop native session
       final success = await NativeService.endFocusSession();
-      
+
       if (success) {
         // Stop timer
         _stopLocalTimer();
-        
+
         // Set state to trigger navigation to save screen
         state = state.copyWith(status: FocusSessionStatus.endingWithSave);
-        
+
         debugPrint('✅ Session ended - navigating to save screen');
-      } else {
-        throw Exception('Failed to end native session');
+        return;
       }
+
+      // Native returned false - this can legitimately happen if its own timer
+      // auto-completed in the narrow window between our isActive check and this
+      // call landing. Check whether native actually has no active session left;
+      // if so, treat this as a completed session instead of losing it to an error.
+      final status = await NativeService.getCurrentSessionStatus();
+      final stillActiveNatively = status != null && status['isActive'] == true;
+
+      if (!stillActiveNatively) {
+        debugPrint(
+          '⚠️ Native session already completed (race) - treating as ended',
+        );
+        _stopLocalTimer();
+        state = state.copyWith(status: FocusSessionStatus.endingWithSave);
+        return;
+      }
+
+      throw Exception('Failed to end native session');
     } catch (e) {
       debugPrint('❌ Error ending session: $e');
       _isManuallyEnding = false;
@@ -414,8 +448,12 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
       final user = ref.read(currentUserProvider).value;
       if (user == null || state.sessionId == null) return;
 
-      final actualDuration = state.elapsedMinutes;
+      // Prefer native's wall-clock actualDuration over the Dart local timer,
+      // which can drift if the engine was throttled/backgrounded mid-session.
+      final actualDuration =
+          _safeInt(data['actualDuration']) ?? state.elapsedMinutes;
       final todayDate = _getTodayDateString();
+      final completionRate = _computeCompletionRate(actualDuration);
 
       await ref
           .read(sessionRepositoryProvider)
@@ -423,6 +461,7 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
             sessionId: state.sessionId!,
             userId: user.uid,
             actualDuration: actualDuration,
+            completionRate: completionRate,
             date: todayDate,
           );
 
@@ -430,6 +469,12 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
     } catch (e) {
       debugPrint('❌ Error saving completed session: $e');
     }
+  }
+
+  double _computeCompletionRate(int actualDuration) {
+    final plannedDuration = state.plannedDuration ?? 0;
+    if (plannedDuration <= 0) return 100.0;
+    return (actualDuration / plannedDuration * 100).clamp(0, 100).toDouble();
   }
 
   Map<String, dynamic> getCurrentSessionData() {
@@ -450,13 +495,20 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
       final user = ref.read(currentUserProvider).value;
       if (user == null || state.sessionId == null) return;
 
-      final actualDuration = state.elapsedMinutes;
+      // Prefer native's wall-clock actualDuration (captured from the
+      // session_completed event, even when its navigation was ignored during
+      // manual ending) over the Dart local timer.
+      final actualDuration =
+          _safeInt(state.completionData?['actualDuration']) ??
+          state.elapsedMinutes;
       final todayDate = _getTodayDateString();
+      final completionRate = _computeCompletionRate(actualDuration);
 
       await ref
           .read(sessionRepositoryProvider)
           .updateSession(state.sessionId!, {
             'actualDuration': actualDuration,
+            'completionRate': completionRate,
             'endTime': Timestamp.now(),
             'status': 'completed',
             'notes': notes ?? '',
@@ -480,9 +532,23 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
   // KEY FIX: Reset flag when discarding
   void discardSession() {
     try {
+      final sessionId = state.sessionId;
+
       _isManuallyEnding = false;
       state = FocusSessionState(status: FocusSessionStatus.idle);
       _stopLocalTimer();
+
+      // startSession() creates the Firestore doc up front (status: 'active');
+      // discarding must clean it up, or it lingers forever as a stale active
+      // session in streak/insights queries. Fire-and-forget - don't block the
+      // UI reset on it.
+      if (sessionId != null) {
+        ref.read(sessionRepositoryProvider).deleteSession(sessionId).catchError(
+          (e) {
+            debugPrint('❌ Error deleting discarded session: $e');
+          },
+        );
+      }
 
       debugPrint('✅ Session discarded without saving');
     } catch (e) {

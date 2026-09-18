@@ -119,6 +119,19 @@ class MainActivity: FlutterActivity() {
             shortFormBlockManager = ShortFormBlockManager.getInstance(this)
             websiteBlockManager = WebsiteBlockManager.getInstance(this)
 
+            // Keep FocusMonitoringService lifecycle in sync with session state,
+            // regardless of whether the session ended via method-channel call
+            // (manual stop) or internally (timer auto-completion).
+            sessionManager.onSessionEnded = {
+                FocusMonitoringService.stop(this)
+            }
+            sessionManager.onSessionPaused = {
+                FocusMonitoringService.pause(this)
+            }
+            sessionManager.onSessionResumed = {
+                FocusMonitoringService.resume(this)
+            }
+
             Log.d(TAG, "All managers initialized successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Error initializing managers", e)
@@ -364,12 +377,10 @@ class MainActivity: FlutterActivity() {
                     "endFocusSession" -> {
                         scope.launch {
                             try {
+                                // sessionManager.onSessionEnded (wired in initializeManagers)
+                                // stops FocusMonitoringService for both this manual path and
+                                // internal timer auto-completion - no direct call needed here.
                                 val success = sessionManager.endSession()
-
-                                // Stop monitoring service when session ends
-                                if (success) {
-                                    FocusMonitoringService.stop(this@MainActivity)
-                                }
 
                                 withContext(Dispatchers.Main) {
                                     result.success(success)
