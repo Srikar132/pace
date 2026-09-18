@@ -1,7 +1,7 @@
 name: pace
 description: "PACE is a smart focus and study companion designed to help users enter a distraction-free study mode."
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.0+1
 
 environment:
   sdk: ^3.10.0

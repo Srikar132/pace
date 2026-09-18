@@ -168,6 +168,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276612873176:android:5621e904856f0a082d50ad",
+        "android_client_info": {
+          "package_name": "dev.srikar.pace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276612873176-0f83fdm29agqtufq1utl52d7usge8abg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcoTRyWGb7Y8S7KMWqH99lobyrd3VOiv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276612873176-0f83fdm29agqtufq1utl52d7usge8abg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "276612873176-5lbtmngcsm0vm8c49agvg3dnvfg5k74u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lockIn"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
