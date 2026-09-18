@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/data/models/group_model.dart';
 import 'package:pace/presentation/providers/group_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
@@ -39,19 +40,19 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2D2D2D),
+        backgroundColor: AppColors.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                color: AppColors.accent.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
                 Icons.share,
-                color: Color(0xFF82D65D),
+                color: AppColors.accent,
                 size: 20,
               ),
             ),
@@ -82,7 +83,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.link, color: Color(0xFF82D65D), size: 16),
+                  const Icon(Icons.link, color: AppColors.accent, size: 16),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -110,7 +111,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               _shareToWhatsApp(groupId, groupName);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF25D366),
+              backgroundColor: const Color(0xFF25D366), // WhatsApp brand color, not app theme
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -181,7 +182,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                 Expanded(child: Text('Group "$groupName" created!')),
               ],
             ),
-            backgroundColor: const Color(0xFF82D65D),
+            backgroundColor: AppColors.accent,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -221,9 +222,9 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A1A),
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
@@ -250,14 +251,14 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xFF82D65D),
-                      const Color(0xFF82D65D).withValues(alpha: 0.6),
+                      AppColors.accent,
+                      AppColors.accent.withValues(alpha: 0.6),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF82D65D).withValues(alpha: 0.3),
+                      color: AppColors.accent.withValues(alpha: 0.3),
                       blurRadius: 15,
                       spreadRadius: 3,
                     ),
@@ -315,7 +316,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                   width: 4,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF82D65D),
+                    color: AppColors.accent,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -361,10 +362,10 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF2D2D2D),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                  color: AppColors.accent.withValues(alpha: 0.2),
                 ),
               ),
               child: Column(
@@ -375,12 +376,12 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                          color: AppColors.accent.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
                           Icons.flag,
-                          color: Color(0xFF82D65D),
+                          color: AppColors.accent,
                           size: 20,
                         ),
                       ),
@@ -404,7 +405,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                           min: 0,
                           max: 480,
                           divisions: 48,
-                          activeColor: const Color(0xFF82D65D),
+                          activeColor: AppColors.accent,
                           inactiveColor: Colors.white24,
                           onChanged: (value) {
                             setState(() => _focusGoalMinutes = value.toInt());
@@ -417,7 +418,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                          color: AppColors.accent.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -427,7 +428,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                               ? '${_focusGoalMinutes}m'
                               : '${_focusGoalMinutes ~/ 60}h ${_focusGoalMinutes % 60}m',
                           style: const TextStyle(
-                            color: Color(0xFF82D65D),
+                            color: AppColors.accent,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -445,7 +446,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _createGroup,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF82D65D),
+                  backgroundColor: AppColors.accent,
                   disabledBackgroundColor: const Color(
                     0xFF82D65D,
                   ).withValues(alpha: 0.5),
@@ -498,7 +499,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       children: [
         Row(
           children: [
-            Icon(icon, color: const Color(0xFF82D65D), size: 20),
+            Icon(icon, color: AppColors.accent, size: 20),
             const SizedBox(width: 8),
             Text(
               label,
@@ -520,14 +521,14 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             hintText: hint,
             hintStyle: const TextStyle(color: Colors.white38),
             filled: true,
-            fillColor: const Color(0xFF2D2D2D),
+            fillColor: AppColors.surfaceElevated,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF82D65D), width: 2),
+              borderSide: const BorderSide(color: AppColors.accent, width: 2),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -551,11 +552,11 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D2D2D),
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: value
-              ? const Color(0xFF82D65D).withValues(alpha: 0.3)
+              ? AppColors.accent.withValues(alpha: 0.3)
               : Colors.white.withValues(alpha: 0.1),
         ),
       ),
@@ -564,10 +565,10 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+              color: AppColors.accent.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: const Color(0xFF82D65D), size: 20),
+            child: Icon(icon, color: AppColors.accent, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -593,8 +594,8 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: const Color(0xFF82D65D),
-            activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.5),
+            activeThumbColor: AppColors.accent,
+            activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
           ),
         ],
       ),

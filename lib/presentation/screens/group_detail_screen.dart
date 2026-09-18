@@ -1,33 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/data/models/group_memeber_model.dart';
 import 'package:pace/data/models/group_model.dart';
 import 'package:pace/presentation/providers/group_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:share_plus/share_plus.dart';
-
-/// Generate consistent color for group based on name
-Color _getGroupColor(String groupName) {
-  final colors = [
-    const Color(0xFF82D65D), // Green
-    const Color(0xFF6B9BD6), // Blue
-    const Color(0xFFE57373), // Red
-    const Color(0xFFFFB74D), // Orange
-    const Color(0xFF9575CD), // Purple
-    const Color(0xFF4DB6AC), // Teal
-    const Color(0xFFFFD54F), // Yellow
-    const Color(0xFFFF8A65), // Deep Orange
-    const Color(0xFF81C784), // Light Green
-    const Color(0xFF64B5F6), // Light Blue
-  ];
-
-  int hash = 0;
-  for (int i = 0; i < groupName.length; i++) {
-    hash = groupName.codeUnitAt(i) + ((hash << 5) - hash);
-  }
-
-  return colors[hash.abs() % colors.length];
-}
 
 /// Detailed view of a specific group with members and leaderboard
 class GroupDetailScreen extends ConsumerStatefulWidget {
@@ -62,7 +40,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     final user = ref.watch(authStateProvider).value;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: AppColors.background,
       body: groupAsync.when(
         data: (group) {
           if (group == null) return _buildErrorState('Group not found');
@@ -78,7 +56,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                   expandedHeight: 220,
                   pinned: true,
                   stretch: true,
-                  backgroundColor: const Color(0xFF1A1A1A),
+                  backgroundColor: AppColors.background,
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () => Navigator.pop(context),
@@ -92,7 +70,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                     if (isAdmin)
                       PopupMenuButton<String>(
                         icon: const Icon(Icons.more_vert, color: Colors.white),
-                        color: const Color(0xFF2D2D2D),
+                        color: AppColors.surfaceElevated,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -126,8 +104,8 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            const Color(0xFF82D65D).withValues(alpha: 0.3),
-                            const Color(0xFF1A1A1A),
+                            AppColors.accent.withValues(alpha: 0.3),
+                            AppColors.background,
                           ],
                         ),
                       ),
@@ -148,8 +126,8 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                       colors: [
-                                        _getGroupColor(group.name),
-                                        _getGroupColor(
+                                        AppColors.groupColor(group.name),
+                                        AppColors.groupColor(
                                           group.name,
                                         ).withValues(alpha: 0.7),
                                       ],
@@ -157,7 +135,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: _getGroupColor(
+                                        color: AppColors.groupColor(
                                           group.name,
                                         ).withValues(alpha: 0.4),
                                         blurRadius: 15,
@@ -243,14 +221,14 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                                           children: [
                                             Icon(
                                               Icons.public,
-                                              color: Color(0xFF82D65D),
+                                              color: AppColors.accent,
                                               size: 12,
                                             ),
                                             SizedBox(width: 4),
                                             Text(
                                               'Public',
                                               style: TextStyle(
-                                                color: Color(0xFF82D65D),
+                                                color: AppColors.accent,
                                                 fontSize: 11,
                                                 fontWeight: FontWeight.w600,
                                               ),
@@ -279,7 +257,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                             icon: Icons.access_time,
                             label: 'Total Focus',
                             value: group.getFormattedFocusTime(),
-                            color: const Color(0xFF82D65D),
+                            color: AppColors.accent,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -304,7 +282,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2D2D2D),
+                        color: AppColors.surfaceElevated,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: Colors.white.withValues(alpha: 0.1),
@@ -325,7 +303,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                                 ),
                                 child: const Icon(
                                   Icons.description,
-                                  color: Color(0xFF82D65D),
+                                  color: AppColors.accent,
                                   size: 16,
                                 ),
                               ),
@@ -363,12 +341,12 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                 return Column(
                   children: [
                     Container(
-                      color: const Color(0xFF1A1A1A),
+                      color: AppColors.background,
                       child: TabBar(
                         controller: _tabController,
-                        labelColor: const Color(0xFF82D65D),
+                        labelColor: AppColors.accent,
                         unselectedLabelColor: Colors.white54,
-                        indicatorColor: const Color(0xFF82D65D),
+                        indicatorColor: AppColors.accent,
                         indicatorWeight: 3,
                         tabs: const [
                           Tab(
@@ -396,7 +374,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                 );
               },
               loading: () => const Center(
-                child: CircularProgressIndicator(color: Color(0xFF82D65D)),
+                child: CircularProgressIndicator(color: AppColors.accent),
               ),
               error: (error, stack) =>
                   _buildErrorState('Error loading members: $error'),
@@ -404,7 +382,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF82D65D)),
+          child: CircularProgressIndicator(color: AppColors.accent),
         ),
         error: (error, stack) => _buildErrorState('Error: $error'),
       ),
@@ -437,7 +415,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D2D2D),
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
@@ -491,11 +469,11 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           margin: const EdgeInsets.only(bottom: 10),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D2D2D),
+            color: AppColors.surfaceElevated,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isCreator
-                  ? const Color(0xFF82D65D).withValues(alpha: 0.3)
+                  ? AppColors.accent.withValues(alpha: 0.3)
                   : Colors.white.withValues(alpha: 0.1),
             ),
           ),
@@ -511,7 +489,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                     child: Text(
                       member.displayName[0].toUpperCase(),
                       style: const TextStyle(
-                        color: Color(0xFF82D65D),
+                        color: AppColors.accent,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -524,10 +502,10 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D),
+                          color: AppColors.accent,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFF2D2D2D),
+                            color: AppColors.surfaceElevated,
                             width: 2,
                           ),
                         ),
@@ -574,7 +552,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                             child: const Text(
                               'CREATOR',
                               style: TextStyle(
-                                color: Color(0xFF82D65D),
+                                color: AppColors.accent,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -677,7 +655,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           margin: const EdgeInsets.only(bottom: 10),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D2D2D),
+            color: AppColors.surfaceElevated,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: rank <= 3
@@ -702,7 +680,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                             : rank == 2
                             ? Colors.grey.withValues(alpha: 0.2)
                             : Colors.brown.withValues(alpha: 0.2))
-                      : const Color(0xFF82D65D).withValues(alpha: 0.2),
+                      : AppColors.accent.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -711,7 +689,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                       : Text(
                           '#$rank',
                           style: const TextStyle(
-                            color: Color(0xFF82D65D),
+                            color: AppColors.accent,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -737,14 +715,14 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                       children: [
                         const Icon(
                           Icons.access_time,
-                          color: Color(0xFF82D65D),
+                          color: AppColors.accent,
                           size: 14,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           member.getFormattedFocusTime(),
                           style: const TextStyle(
-                            color: Color(0xFF82D65D),
+                            color: AppColors.accent,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -777,7 +755,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
       child: ElevatedButton(
         onPressed: () => _joinGroup(group),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF82D65D),
+          backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -854,7 +832,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF82D65D),
+              backgroundColor: AppColors.accent,
             ),
             child: const Text('Go Back', style: TextStyle(color: Colors.black)),
           ),
@@ -899,7 +877,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                 Expanded(child: Text('Successfully joined "${group.name}"!')),
               ],
             ),
-            backgroundColor: const Color(0xFF82D65D),
+            backgroundColor: AppColors.accent,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -920,7 +898,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2D2D2D),
+        backgroundColor: AppColors.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'Leave Group?',
@@ -958,7 +936,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Left group successfully'),
-            backgroundColor: Color(0xFF82D65D),
+            backgroundColor: AppColors.accent,
           ),
         );
       }
@@ -976,7 +954,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2D2D2D),
+        backgroundColor: AppColors.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: const EdgeInsets.all(24),
         title: Column(
@@ -1047,7 +1025,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
               child: Text(
                 '"${group.name}"',
                 style: const TextStyle(
-                  color: Color(0xFF82D65D),
+                  color: AppColors.accent,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -1102,13 +1080,13 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFF2D2D2D),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(color: Color(0xFF82D65D)),
+                  CircularProgressIndicator(color: AppColors.accent),
                   SizedBox(height: 16),
                   Text(
                     'Deleting group...',
@@ -1145,7 +1123,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
                     ),
                   ],
                 ),
-                backgroundColor: const Color(0xFF82D65D),
+                backgroundColor: AppColors.accent,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),

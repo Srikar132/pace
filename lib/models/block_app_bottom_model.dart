@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/data/models/installed_app_model.dart';
 import 'package:pace/presentation/providers/app_management_provide.dart';
 import 'package:pace/presentation/providers/blocked_content_provider.dart';
@@ -114,9 +115,9 @@ class _BlockAppsSheetState extends ConsumerState<BlockAppsSheet> {
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search apps',
-          prefixIcon: const Icon(Icons.search, color: Color(0xFF6A6A6A)),
+          prefixIcon: const Icon(Icons.search, color: AppColors.textDisabled),
           filled: true,
-          fillColor: const Color(0xFF2A2A2A),
+          fillColor: AppColors.surfaceElevated,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
@@ -197,13 +198,13 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                        color: AppColors.accent.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         '$blockedCount',
                         style: const TextStyle(
-                          color: Color(0xFF82D65D),
+                          color: AppColors.accent,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -213,8 +214,8 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                     scale: 0.8,
                     child: Switch(
                       value: areAllBlocked,
-                      activeThumbColor: const Color(0xFF82D65D),
-                      inactiveTrackColor: const Color(0xFF3A3A3A),
+                      activeThumbColor: AppColors.accent,
+                      inactiveTrackColor: AppColors.border,
                       onChanged: (bool value) async {
                         if (user == null) return;
 
@@ -447,8 +448,8 @@ class _AppListTile extends ConsumerWidget {
                     scale: 0.8,
                     child: Switch(
                       value: isBlocked,
-                      activeThumbColor: const Color(0xFF82D65D),
-                      inactiveTrackColor: const Color(0xFF3A3A3A),
+                      activeThumbColor: AppColors.accent,
+                      inactiveTrackColor: AppColors.border,
                       onChanged: (bool value) async {
                         if (user == null) return;
 
@@ -548,7 +549,7 @@ class _AppIcon extends ConsumerWidget {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(

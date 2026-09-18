@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 
 /// Pure loading/error gate. All routing decisions (auth, onboarding,
@@ -38,7 +39,7 @@ class _ErrorScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF1A4D3E), Color(0xFF82D65D)],
+            colors: [AppColors.accentMuted, AppColors.accent],
           ),
         ),
         padding: const EdgeInsets.all(24.0),
@@ -95,7 +96,7 @@ class _ErrorScreen extends StatelessWidget {
                 label: const Text('Try Again'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF1A4D3E),
+                  foregroundColor: AppColors.accentMuted,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 16,
@@ -149,18 +150,14 @@ class _LoadingScreenState extends State<_LoadingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Center(
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            child: Icon(
-              Icons.hourglass_full,
-              size: 50,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          child: const Image(
+            image: AssetImage('assets/icons/icon_foreground.png'),
+            width: 96,
+            height: 96,
           ),
         ),
       ),

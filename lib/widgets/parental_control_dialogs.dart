@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pace/core/theme/app_theme.dart';
 
 /// Dialog for creating a new parental control password
 class CreatePasswordDialog extends StatefulWidget {
@@ -57,7 +58,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -83,7 +84,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
             // Create Password Field
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF2A2A2A),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -130,7 +131,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
             // Confirm Password Field
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF2A2A2A),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -192,7 +193,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
                     onPressed: () => Navigator.of(context).pop(),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: const Color(0xFF2A2A2A),
+                      backgroundColor: AppColors.surfaceElevated,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -295,7 +296,7 @@ class _VerifyPasswordDialogState extends State<VerifyPasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -323,7 +324,7 @@ class _VerifyPasswordDialogState extends State<VerifyPasswordDialog> {
             // Password Field
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF2A2A2A),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -386,7 +387,7 @@ class _VerifyPasswordDialogState extends State<VerifyPasswordDialog> {
                     onPressed: () => Navigator.of(context).pop(),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: const Color(0xFF2A2A2A),
+                      backgroundColor: AppColors.surfaceElevated,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

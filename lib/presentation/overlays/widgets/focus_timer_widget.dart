@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_theme.dart';
 
 class FocusTimerWidget extends StatelessWidget {
   final int elapsedMinutes;
@@ -18,12 +19,12 @@ class FocusTimerWidget extends StatelessWidget {
       padding: EdgeInsets.all(compact ? 12 : 16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
+          colors: [AppColors.accent, AppColors.accentMuted],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.3),
+            color: AppColors.accent.withValues(alpha: 0.3),
             blurRadius: 15,
             spreadRadius: 2,
           ),

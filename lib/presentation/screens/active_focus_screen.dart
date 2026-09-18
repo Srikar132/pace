@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pace/core/router/app_router.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/focus_session_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/background_image_provider.dart';
@@ -569,13 +570,13 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
   Color _getProgressColor(String sessionType) {
     switch (sessionType.toLowerCase()) {
       case 'timer':
-        return const Color(0xFF4CAF50);
+        return AppColors.success;
       case 'stopwatch':
-        return const Color(0xFF2196F3);
+        return AppColors.info;
       case 'pomodoro':
-        return const Color(0xFFFF5722);
+        return AppColors.warning;
       default:
-        return const Color(0xFF4CAF50);
+        return AppColors.success;
     }
   }
 

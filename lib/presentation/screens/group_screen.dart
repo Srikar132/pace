@@ -1,33 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/group_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/screens/group_detail_screen.dart';
 import 'package:pace/presentation/screens/create_group_screen.dart';
-
-/// Generate consistent color for group based on name
-Color _getGroupColor(String groupName) {
-  final colors = [
-    const Color(0xFF82D65D), // Green
-    const Color(0xFF6B9BD6), // Blue
-    const Color(0xFFE57373), // Red
-    const Color(0xFFFFB74D), // Orange
-    const Color(0xFF9575CD), // Purple
-    const Color(0xFF4DB6AC), // Teal
-    const Color(0xFFFFD54F), // Yellow
-    const Color(0xFFFF8A65), // Deep Orange
-    const Color(0xFF81C784), // Light Green
-    const Color(0xFF64B5F6), // Light Blue
-  ];
-
-  // Generate consistent index from group name
-  int hash = 0;
-  for (int i = 0; i < groupName.length; i++) {
-    hash = groupName.codeUnitAt(i) + ((hash << 5) - hash);
-  }
-
-  return colors[hash.abs() % colors.length];
-}
 
 /// Main Groups screen showing user's groups and search functionality
 class GroupScreen extends ConsumerWidget {
@@ -39,7 +16,7 @@ class GroupScreen extends ConsumerWidget {
 
     if (user == null) {
       return const Scaffold(
-        backgroundColor: Color(0xFF1A1A1A),
+        backgroundColor: AppColors.background,
         body: Center(
           child: Text(
             'Please login to view groups',
@@ -52,9 +29,9 @@ class GroupScreen extends ConsumerWidget {
     final groupsAsync = ref.watch(userGroupsProvider(user.uid));
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A1A),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A1A),
+        backgroundColor: AppColors.background,
         elevation: 0,
         title: const Text(
           'Groups',
@@ -88,7 +65,7 @@ class GroupScreen extends ConsumerWidget {
                       width: 3,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF82D65D),
+                        color: AppColors.accent,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -129,7 +106,7 @@ class GroupScreen extends ConsumerWidget {
                             width: 3,
                             height: 20,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF82D65D),
+                              color: AppColors.accent,
                               borderRadius: BorderRadius.circular(2),
                             ),
                           ),
@@ -157,7 +134,7 @@ class GroupScreen extends ConsumerWidget {
                             child: const Text(
                               'PUBLIC',
                               style: TextStyle(
-                                color: Color(0xFF82D65D),
+                                color: AppColors.accent,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -172,7 +149,7 @@ class GroupScreen extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF2D2D2D),
+                                color: AppColors.surfaceElevated,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: Colors.white.withValues(alpha: 0.1),
@@ -217,7 +194,7 @@ class GroupScreen extends ConsumerWidget {
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: CircularProgressIndicator(
-                      color: Color(0xFF82D65D),
+                      color: AppColors.accent,
                       strokeWidth: 2,
                     ),
                   ),
@@ -228,7 +205,7 @@ class GroupScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF82D65D)),
+          child: CircularProgressIndicator(color: AppColors.accent),
         ),
         error: (error, stack) => Center(
           child: Column(
@@ -255,7 +232,7 @@ class GroupScreen extends ConsumerWidget {
             MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
           );
         },
-        backgroundColor: const Color(0xFF82D65D),
+        backgroundColor: AppColors.accent,
         icon: const Icon(Icons.add, color: Colors.black, size: 20),
         label: const Text(
           'Create Group',
@@ -278,13 +255,13 @@ class GroupScreen extends ConsumerWidget {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: const Color(0xFF82D65D).withValues(alpha: 0.1),
+              color: AppColors.accent.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.group_outlined,
               size: 60,
-              color: Color(0xFF82D65D),
+              color: AppColors.accent,
             ),
           ),
           const SizedBox(height: 32),
@@ -309,7 +286,7 @@ class GroupScreen extends ConsumerWidget {
           ElevatedButton.icon(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF82D65D),
+              backgroundColor: AppColors.accent,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -340,7 +317,7 @@ class _GroupCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      color: const Color(0xFF2D2D2D),
+      color: AppColors.surfaceElevated,
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -367,14 +344,14 @@ class _GroupCard extends ConsumerWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      _getGroupColor(group.name),
-                      _getGroupColor(group.name).withValues(alpha: 0.7),
+                      AppColors.groupColor(group.name),
+                      AppColors.groupColor(group.name).withValues(alpha: 0.7),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: _getGroupColor(group.name).withValues(alpha: 0.3),
+                      color: AppColors.groupColor(group.name).withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -431,14 +408,14 @@ class _GroupCard extends ConsumerWidget {
                       children: [
                         const Icon(
                           Icons.access_time,
-                          color: Color(0xFF82D65D),
+                          color: AppColors.accent,
                           size: 16,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           group.getFormattedFocusTime(),
                           style: const TextStyle(
-                            color: Color(0xFF82D65D),
+                            color: AppColors.accent,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -463,7 +440,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF1A1A1A),
+        backgroundColor: AppColors.background,
         elevation: 0,
       ),
       inputDecorationTheme: const InputDecorationTheme(
@@ -510,7 +487,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
 
   Widget _buildSearchResults(BuildContext context) {
     return Container(
-      color: const Color(0xFF1A1A1A),
+      color: AppColors.background,
       child: Consumer(
         builder: (context, ref, child) {
           if (query.isEmpty) {
@@ -558,7 +535,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
               );
             },
             loading: () => const Center(
-              child: CircularProgressIndicator(color: Color(0xFF82D65D)),
+              child: CircularProgressIndicator(color: AppColors.accent),
             ),
             error: (error, stack) => Center(
               child: Text(

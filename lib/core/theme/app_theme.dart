@@ -3,147 +3,155 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Exact reGain app colors
+  // Obsidian x Ice/Silver — PACE design system
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: const ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF82D65D),
-      onPrimary: Color(0xFF1A1A1A),
-      secondary: Color(0xFF8FD66E), // Lighter green for accents
-      onSecondary: Color(0xFF1A1A1A),
-      tertiary: Color(0xFF5CAF3C), // Darker green
-      onTertiary: Colors.white,
-      error: Color(0xFFFF5252),
-      onError: Colors.white,
-      surface: Color(0xFF1E1E1E), // Card/elevated surface
-      onSurface: Color(0xFFFFFFFF), // White text
-      surfaceContainerHighest: Color(0xFF2A2A2A), // Slightly elevated
-      outline: Color(0xFF3A3A3A), // Border color
+      primary: AppColors.accent,
+      onPrimary: AppColors.background,
+      secondary: AppColors.accentHighlight,
+      onSecondary: AppColors.background,
+      tertiary: AppColors.accentMuted,
+      onTertiary: AppColors.textPrimary,
+      error: AppColors.error,
+      onError: AppColors.background,
+      surface: AppColors.surface,
+      onSurface: AppColors.textPrimary,
+      surfaceContainerHighest: AppColors.surfaceElevated,
+      outline: AppColors.accentMuted,
       shadow: Color(0xFF000000),
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: AppColors.textPrimary,
         letterSpacing: -0.5,
       ),
       displayMedium: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: AppColors.textPrimary,
         letterSpacing: -0.5,
       ),
       displaySmall: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       headlineLarge: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       headlineMedium: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       headlineSmall: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       titleLarge: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       titleMedium: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: Colors.white,
+        color: AppColors.textPrimary,
       ),
       titleSmall: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: Color(0xFFB0B0B0),
+        color: AppColors.textSecondary,
       ),
-      bodyLarge: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0), height: 1.5),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: Color(0xFFB0B0B0),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: AppColors.textSecondary,
         height: 1.5,
       ),
-      bodySmall: TextStyle(fontSize: 12, color: Color(0xFF8A8A8A), height: 1.4),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: AppColors.textSecondary,
+        height: 1.5,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        color: AppColors.textMuted,
+        height: 1.4,
+      ),
       labelLarge: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Color(0xFFB0B0B0),
+        color: AppColors.textSecondary,
         letterSpacing: 0.3,
       ),
       labelMedium: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF8A8A8A),
+        color: AppColors.textMuted,
         letterSpacing: 0.3,
       ),
       labelSmall: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF6A6A6A),
+        color: AppColors.textMuted,
         letterSpacing: 0.3,
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF0F0F0F),
+      backgroundColor: AppColors.background,
       elevation: 0,
       centerTitle: false,
       titleTextStyle: TextStyle(
-        color: Colors.white,
+        color: AppColors.textPrimary,
         fontSize: 22,
         fontWeight: FontWeight.w600,
         letterSpacing: -0.3,
       ),
-      iconTheme: IconThemeData(color: Colors.white, size: 24),
-      actionsIconTheme: IconThemeData(color: Colors.white, size: 24),
+      iconTheme: IconThemeData(color: AppColors.textPrimary, size: 24),
+      actionsIconTheme: IconThemeData(color: AppColors.textPrimary, size: 24),
       surfaceTintColor: Colors.transparent,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF2A2A2A),
+      fillColor: AppColors.surfaceElevated,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF3A3A3A), width: 1.5),
+        borderSide: const BorderSide(color: AppColors.border, width: 1.5),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF3A3A3A), width: 1.5),
+        borderSide: const BorderSide(color: AppColors.border, width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF7ED957), width: 2),
+        borderSide: const BorderSide(color: AppColors.accent, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFFF5252), width: 1.5),
+        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFFF5252), width: 2),
+        borderSide: const BorderSide(color: AppColors.error, width: 2),
       ),
-      labelStyle: const TextStyle(color: Color(0xFF8A8A8A), fontSize: 14),
-      hintStyle: const TextStyle(color: Color(0xFF6A6A6A), fontSize: 14),
+      labelStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+      hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF1A1A1A),
-        disabledBackgroundColor: const Color(0xFF3A3A3A),
-        disabledForegroundColor: const Color(0xFF6A6A6A),
+        backgroundColor: AppColors.buttonFill,
+        foregroundColor: AppColors.background,
+        disabledBackgroundColor: AppColors.surfaceElevated,
+        disabledForegroundColor: AppColors.textMuted,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
         elevation: 0,
@@ -157,9 +165,9 @@ class AppTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.textPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        side: const BorderSide(color: Color(0xFF3A3A3A), width: 1.5),
+        side: const BorderSide(color: AppColors.border, width: 1.5),
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
         textStyle: const TextStyle(
           fontSize: 16,
@@ -170,7 +178,7 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: const Color(0xFF7ED957),
+        foregroundColor: AppColors.accent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         textStyle: const TextStyle(
@@ -181,49 +189,49 @@ class AppTheme {
       ),
     ),
     cardTheme: CardThemeData(
-      color: const Color(0xFF1E1E1E),
+      color: AppColors.surface,
       elevation: 0,
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: Color(0xFF2A2A2A), width: 1),
+        side: const BorderSide(color: AppColors.border, width: 1),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
     dialogTheme: DialogThemeData(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surfaceElevated,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       titleTextStyle: const TextStyle(
-        color: Colors.white,
+        color: AppColors.textPrimary,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
       contentTextStyle: const TextStyle(
-        color: Color(0xFFB0B0B0),
+        color: AppColors.textSecondary,
         fontSize: 16,
         height: 1.5,
       ),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Color(0xFF1E1E1E),
-      modalBackgroundColor: Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
+      modalBackgroundColor: AppColors.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: const Color(0xFF2A2A2A),
-      selectedColor: const Color(0xFF7ED957),
-      disabledColor: const Color(0xFF1A1A1A),
+      backgroundColor: AppColors.surfaceElevated,
+      selectedColor: AppColors.accent,
+      disabledColor: AppColors.background,
       labelStyle: const TextStyle(
-        color: Colors.white,
+        color: AppColors.textPrimary,
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
       secondaryLabelStyle: const TextStyle(
-        color: Color(0xFF1A1A1A),
+        color: AppColors.background,
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
@@ -234,42 +242,42 @@ class AppTheme {
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(0xFF1A1A1A);
+          return AppColors.accentHighlight;
         }
-        return const Color(0xFF6A6A6A);
+        return AppColors.accentMuted;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(0xFF7ED957);
+          return AppColors.accent;
         }
-        return const Color(0xFF3A3A3A);
+        return AppColors.surfaceElevated;
       }),
     ),
     sliderTheme: const SliderThemeData(
-      activeTrackColor: Color(0xFF7ED957),
-      inactiveTrackColor: Color(0xFF3A3A3A),
-      thumbColor: Color(0xFF7ED957),
-      overlayColor: Color(0x337ED957),
-      valueIndicatorColor: Color(0xFF7ED957),
+      activeTrackColor: AppColors.accent,
+      inactiveTrackColor: AppColors.surfaceElevated,
+      thumbColor: AppColors.accent,
+      overlayColor: Color(0x33B8C0C8),
+      valueIndicatorColor: AppColors.accent,
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: Color(0xFF7ED957),
-      linearTrackColor: Color(0xFF3A3A3A),
-      circularTrackColor: Color(0xFF3A3A3A),
+      color: AppColors.accent,
+      linearTrackColor: AppColors.surfaceElevated,
+      circularTrackColor: AppColors.surfaceElevated,
     ),
     dividerTheme: const DividerThemeData(
-      color: Color(0xFF2A2A2A),
+      color: AppColors.divider,
       thickness: 1,
       space: 1,
     ),
-    scaffoldBackgroundColor: const Color(0xFF0F0F0F),
-    dividerColor: const Color(0xFF2A2A2A),
-    splashColor: const Color(0x1A7ED957),
-    highlightColor: const Color(0x0D7ED957),
-    iconTheme: const IconThemeData(color: Colors.white, size: 24),
+    scaffoldBackgroundColor: AppColors.background,
+    dividerColor: AppColors.divider,
+    splashColor: const Color(0x1AB8C0C8),
+    highlightColor: const Color(0x0DB8C0C8),
+    iconTheme: const IconThemeData(color: AppColors.textPrimary, size: 24),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFF7ED957),
-      foregroundColor: Color(0xFF1A1A1A),
+      backgroundColor: AppColors.accent,
+      foregroundColor: AppColors.background,
       elevation: 0,
       highlightElevation: 2,
       shape: RoundedRectangleBorder(
@@ -277,8 +285,8 @@ class AppTheme {
       ),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: const Color(0xFF0F0F0F),
-      indicatorColor: const Color(0xFF7ED957).withValues(alpha: 0.15),
+      backgroundColor: AppColors.background,
+      indicatorColor: AppColors.accent.withValues(alpha: 0.15),
       elevation: 0,
       height: 70,
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
@@ -286,80 +294,104 @@ class AppTheme {
           return const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF7ED957),
+            color: AppColors.accent,
           );
         }
         return const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Color(0xFF6A6A6A),
+          color: AppColors.accentMuted,
         );
       }),
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const IconThemeData(color: Color(0xFF7ED957), size: 26);
+          return const IconThemeData(color: AppColors.accent, size: 26);
         }
-        return const IconThemeData(color: Color(0xFF6A6A6A), size: 26);
+        return const IconThemeData(color: AppColors.accentMuted, size: 26);
       }),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: const Color(0xFF2A2A2A),
-      contentTextStyle: const TextStyle(color: Colors.white, fontSize: 14),
+      backgroundColor: AppColors.surfaceElevated,
+      contentTextStyle: const TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: 14,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       behavior: SnackBarBehavior.floating,
       elevation: 0,
     ),
     listTileTheme: const ListTileThemeData(
-      tileColor: Color(0xFF1E1E1E),
-      textColor: Colors.white,
-      iconColor: Color(0xFF7ED957),
+      tileColor: AppColors.surface,
+      textColor: AppColors.textPrimary,
+      iconColor: AppColors.accent,
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
     ),
     badgeTheme: const BadgeThemeData(
-      backgroundColor: Color(0xFF7ED957),
-      textColor: Color(0xFF1A1A1A),
+      backgroundColor: AppColors.accent,
+      textColor: AppColors.background,
       textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
     ),
   );
 }
 
-// Optional: Color constants file
 // File: lib/core/theme/app_colors.dart
+//
+// Obsidian x Ice/Silver palette. `accent` is the single interactive accent
+// (PACE Silver); success/warning/error are reserved for genuine semantic
+// states and shouldn't be reused for decoration or navigation.
 class AppColors {
-  // Brand Colors
-  static const primaryGreen = Color(0xFF82D65D); // Main lime green
-  static const lightGreen = Color(0xFF8FD66E); // Lighter variant
-  static const darkGreen = Color(0xFF5CAF3C); // Darker variant
+  // Accent (PACE Silver / Ice)
+  static const accent = Color(0xFFB8C0C8); // PACE Silver
+  static const accentHighlight = Color(0xFFD7DCE1); // Silver Highlight
+  static const accentMuted = Color(0xFF626870); // Deeper, muted accent
 
   // Background Colors
-  static const background = Color(0xFF0F0F0F); // Main dark background
-  static const surface = Color(0xFF1E1E1E); // Cards and elevated surfaces
-  static const surfaceElevated = Color(0xFF2A2A2A); // More elevated
+  static const background = Color(0xFF090A0C); // Obsidian
+  static const surface = Color(0xFF121417);
+  static const surfaceElevated = Color(0xFF181B1F); // Elevated
 
   // Text Colors
-  static const textPrimary = Color(0xFFFFFFFF); // White
-  static const textSecondary = Color(0xFFE0E0E0); // Light gray
-  static const textTertiary = Color(0xFFB0B0B0); // Medium gray
-  static const textMuted = Color(0xFF8A8A8A); // Muted gray
-  static const textDisabled = Color(0xFF6A6A6A); // Disabled gray
+  static const textPrimary = Color(0xFFF4F5F6);
+  static const textSecondary = Color(0xFF9298A0);
+  static const textMuted = Color(0xFF626870);
+  static const textDisabled = Color(0xFF626870);
 
-  // Border & Divider
-  static const border = Color(0xFF3A3A3A);
-  static const divider = Color(0xFF2A2A2A);
+  // Border & Divider — translucent accent hairlines, not a flat gray
+  static const border = Color(0x1FB8C0C8); // ~12% alpha
+  static const divider = Color(0x14B8C0C8); // ~8% alpha
 
-  // Status Colors
-  static const error = Color(0xFFFF5252);
-  static const success = Color(0xFF7ED957);
-  static const warning = Color(0xFFFFB84D);
-  static const info = Color(0xFF64B5F6);
+  // Status Colors — used only when semantically necessary
+  static const error = Color(0xFFF06A6A);
+  static const success = Color(0xFF4ADE80);
+  static const warning = Color(0xFFF5B942);
+  static const info = Color(0xFFD7DCE1); // Silver Highlight
 
   // Special
-  static const activeIndicator = Color(
-    0xFF7ED957,
-  ); // Green dot for "focusing now"
-  static const buttonWhite = Color(0xFFFFFFFF); // White buttons
-  static const proYellow = Color(0xFFFFD700); // PRO badge
+  static const activeIndicator = Color(0xFFB8C0C8); // "focusing now" dot
+  static const buttonFill = Color(0xFFD7DCE1); // solid primary-button fill
+  static const premium = Color(0xFFFFD700); // PRO badge — kept distinct
+
+  // Cycled palette for identifying items by index (group member avatars, etc.)
+  static const avatarColors = [
+    accent,
+    accentHighlight,
+    accentMuted,
+    success,
+    warning,
+    error,
+    premium,
+    textSecondary,
+  ];
+
+  /// Consistent color for a group/user, derived from its name.
+  static Color groupColor(String name) {
+    int hash = 0;
+    for (int i = 0; i < name.length; i++) {
+      hash = name.codeUnitAt(i) + ((hash << 5) - hash);
+    }
+    return avatarColors[hash.abs() % avatarColors.length];
+  }
 }

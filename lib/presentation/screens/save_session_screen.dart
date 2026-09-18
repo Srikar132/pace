@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pace/core/router/app_router.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/focus_session_provider.dart';
 import 'package:pace/core/constants/images.dart';
 
@@ -119,7 +120,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to save session: $e'),
-            backgroundColor: const Color(0xFFFF5252),
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -143,7 +144,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
       builder: (sheetContext) => Container(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
         decoration: const BoxDecoration(
-          color: Color(0xFF1E1E1E),
+          color: AppColors.surface,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
@@ -154,7 +155,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFF3A3A3A),
+                color: AppColors.border,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -175,7 +176,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
             // Subtitle
             const Text(
               'This action cannot be undone.',
-              style: TextStyle(color: Color(0xFF8A8A8A), fontSize: 14),
+              style: TextStyle(color: AppColors.textMuted, fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -193,7 +194,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                   screenContext.go(splashRoute);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF5252),
+                  backgroundColor: AppColors.error,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
@@ -273,7 +274,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                       Text(
                         _getSessionTimeRange(),
                         style: const TextStyle(
-                          color: Color(0xFFB0B0B0),
+                          color: AppColors.textSecondary,
                           fontSize: 13,
                         ),
                       ),
@@ -326,10 +327,10 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
       height: 140,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: const Color(0xFF82D65D), width: 3),
+        border: Border.all(color: AppColors.accent, width: 3),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF82D65D).withValues(alpha: 0.3),
+            color: AppColors.accent.withValues(alpha: 0.3),
             blurRadius: 16,
             spreadRadius: 2,
           ),
@@ -368,7 +369,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
       children: [
         Expanded(
           child: _buildStatCard(
-            iconColor: const Color(0xFF82D65D),
+            iconColor: AppColors.accent,
             label: 'Productive',
             value: _getProductiveTime(),
           ),
@@ -376,7 +377,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
         const SizedBox(width: 16),
         Expanded(
           child: _buildStatCard(
-            iconColor: const Color(0xFFFFB84D),
+            iconColor: AppColors.warning,
             label: 'Distracting',
             value: _getDistractingTime(),
           ),
@@ -393,9 +394,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
+        color: AppColors.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
+        border: Border.all(color: AppColors.surfaceElevated, width: 1),
       ),
       child: Row(
         children: [
@@ -420,7 +421,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                 Text(
                   label,
                   style: const TextStyle(
-                    color: Color(0xFF8A8A8A),
+                    color: AppColors.textMuted,
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                   ),
@@ -441,9 +442,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildSessionNameField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
+        color: AppColors.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
+        border: Border.all(color: AppColors.surfaceElevated, width: 1),
       ),
       child: ListTile(
         dense: true,
@@ -452,12 +453,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: const Color(0xFFFFB84D).withValues(alpha: 0.15),
+            color: AppColors.warning.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(
             Icons.wb_sunny_rounded,
-            color: Color(0xFFFFB84D),
+            color: AppColors.warning,
             size: 18,
           ),
         ),
@@ -481,9 +482,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildNotesField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
+        color: AppColors.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
+        border: Border.all(color: AppColors.surfaceElevated, width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -494,12 +495,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withValues(alpha: 0.15),
+                color: AppColors.accent.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
                 Icons.notes_rounded,
-                color: Color(0xFF82D65D),
+                color: AppColors.accent,
                 size: 18,
               ),
             ),
@@ -534,9 +535,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildTagSelection() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
+        color: AppColors.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
+        border: Border.all(color: AppColors.surfaceElevated, width: 1),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -544,12 +545,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF6A6A6A).withValues(alpha: 0.3),
+            color: AppColors.textDisabled.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(
             Icons.local_offer_rounded,
-            color: Color(0xFFB0B0B0),
+            color: AppColors.textSecondary,
             size: 20,
           ),
         ),
@@ -567,13 +568,13 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF2A2A2A),
+                color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 _selectedTag ?? 'Untagged',
                 style: const TextStyle(
-                  color: Color(0xFF8A8A8A),
+                  color: AppColors.textMuted,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -604,9 +605,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
             onPressed: _isSaving ? null : _saveSession,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF1A1A1A),
-              disabledBackgroundColor: const Color(0xFF3A3A3A),
-              disabledForegroundColor: const Color(0xFF6A6A6A),
+              foregroundColor: AppColors.background,
+              disabledBackgroundColor: AppColors.border,
+              disabledForegroundColor: AppColors.textDisabled,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -619,7 +620,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF1A1A1A),
+                        AppColors.background,
                       ),
                     ),
                   )
@@ -640,8 +641,8 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
         TextButton(
           onPressed: _isSaving ? null : _discardSession,
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFFFF5252),
-            disabledForegroundColor: const Color(0xFF6A6A6A),
+            foregroundColor: AppColors.error,
+            disabledForegroundColor: AppColors.textDisabled,
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
           child: const Text(

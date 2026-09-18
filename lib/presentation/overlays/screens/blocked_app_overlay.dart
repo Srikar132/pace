@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide OverlayState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/overlays/providers/overlay_provider.dart';
 import 'package:pace/presentation/overlays/widgets/actions_buttons.dart';
 import 'package:pace/presentation/overlays/widgets/focus_timer_widget.dart';
@@ -210,7 +211,7 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'End Focus Session?',

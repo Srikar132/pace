@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/models/usage_stats_models.dart';
 import 'package:pace/presentation/providers/usage_stats_provider.dart';
 import 'package:pace/presentation/widgets/usage_stats_widgets.dart';
@@ -62,7 +63,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
           ],
           indicatorColor: theme.colorScheme.primary,
           labelColor: Colors.white,
-          unselectedLabelColor: const Color(0xFF8A8A8A),
+          unselectedLabelColor: AppColors.textMuted,
           labelStyle: theme.textTheme.titleMedium,
           unselectedLabelStyle: theme.textTheme.titleMedium,
         ),
@@ -140,7 +141,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         decoration: BoxDecoration(
           color: isSelected
               ? theme.colorScheme.primary.withValues(alpha: 0.2)
-              : const Color(0xFF2A2A2A),
+              : AppColors.surfaceElevated,
           borderRadius: BorderRadius.circular(20),
           border: isSelected
               ? Border.all(color: theme.colorScheme.primary, width: 1)
@@ -151,7 +152,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
           style: theme.textTheme.labelMedium?.copyWith(
             color: isSelected
                 ? theme.colorScheme.primary
-                : const Color(0xFF8A8A8A),
+                : AppColors.textMuted,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
@@ -167,7 +168,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         return todayUsage.when(
           data: (data) => _buildDailyContent(data),
           loading: () => const Center(
-            child: CircularProgressIndicator(color: Color(0xFF7ED957)),
+            child: CircularProgressIndicator(color: AppColors.success),
           ),
           error: (error, _) => Center(
             child: Column(
@@ -213,7 +214,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         return weeklyUsage.when(
           data: (data) => _buildWeeklyContent(data, chartData),
           loading: () => const Center(
-            child: CircularProgressIndicator(color: Color(0xFF7ED957)),
+            child: CircularProgressIndicator(color: AppColors.success),
           ),
           error: (error, _) => Center(
             child: Column(
@@ -286,7 +287,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
                         Text(
                           'Today - ${_formatDate(DateTime.now())}',
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFF8A8A8A),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -357,7 +358,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
                         Text(
                           '${_formatWeekRange()} • + 4% vs last week',
                           style: theme.textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFF8A8A8A),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -373,7 +374,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
                       height: 200,
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF7ED957),
+                          color: AppColors.success,
                         ),
                       ),
                     ),
@@ -439,19 +440,19 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         _buildCategoryItem(
           _formatTime(distractingTime),
           'Distracting',
-          const Color(0xFFFF8C00), // Orange
+          AppColors.warning, // Orange
           theme,
         ),
         _buildCategoryItem(
           _formatTime(productiveTime),
           'Productive',
-          const Color(0xFF7ED957), // Green
+          AppColors.success, // Green
           theme,
         ),
         _buildCategoryItem(
           _formatTime(othersTime),
           'Others',
-          const Color(0xFF8A8A8A), // Grey
+          AppColors.textMuted, // Grey
           theme,
         ),
       ],
@@ -499,7 +500,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: const Color(0xFF8A8A8A),
+            color: AppColors.textMuted,
           ),
         ),
       ],
@@ -509,7 +510,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
   Widget _buildSearchBar(ThemeData theme) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
@@ -517,9 +518,9 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         decoration: InputDecoration(
           hintText: 'Search apps',
           hintStyle: theme.textTheme.bodyMedium?.copyWith(
-            color: const Color(0xFF6A6A6A),
+            color: AppColors.textDisabled,
           ),
-          prefixIcon: const Icon(Icons.search, color: Color(0xFF6A6A6A)),
+          prefixIcon: const Icon(Icons.search, color: AppColors.textDisabled),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -590,7 +591,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         title: Text(
           'Usage Stats Help',
           style: Theme.of(context).textTheme.titleLarge,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/overlays/providers/overlay_provider.dart';
 import 'package:pace/presentation/overlays/widgets/focus_timer_widget.dart';
 import 'package:pace/presentation/overlays/widgets/overlay_background.dart';
@@ -76,7 +77,7 @@ class _BlockedWebsiteOverlayState extends ConsumerState<BlockedWebsiteOverlay>
       child: Scaffold(
         body: OverlayBackground(
           gradient: const LinearGradient(
-            colors: [Color(0xFF0F1419), Color(0xFF1A1F2E)],
+            colors: [AppColors.background, AppColors.surface],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -383,7 +384,7 @@ class _BlockedWebsiteOverlayState extends ConsumerState<BlockedWebsiteOverlay>
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'End Focus Session?',

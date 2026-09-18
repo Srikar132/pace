@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pace/core/theme/app_theme.dart';
 
 /// Placeholder screen for managing blocked apps
 /// This screen will be fully implemented later with app selection functionality
@@ -8,9 +9,9 @@ class ManageBlockedAppsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F0F),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -30,13 +31,13 @@ class ManageBlockedAppsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2A2A2A),
+                  color: AppColors.surfaceElevated,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.apps,
                   size: 64,
-                  color: Color(0xFF82D65D),
+                  color: AppColors.accent,
                 ),
               ),
               const SizedBox(height: 24),
@@ -62,7 +63,7 @@ class ManageBlockedAppsScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF82D65D),
+                  backgroundColor: AppColors.accent,
                   foregroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,

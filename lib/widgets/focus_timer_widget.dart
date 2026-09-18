@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/blocked_content_provider.dart';
 import 'package:pace/presentation/providers/app_management_provide.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
@@ -381,7 +382,7 @@ class _AppIconCircle extends ConsumerWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 1),
-        color: const Color(0xFF2A2A2A),
+        color: AppColors.surfaceElevated,
       ),
       child: ClipOval(
         child: iconAsync.when(

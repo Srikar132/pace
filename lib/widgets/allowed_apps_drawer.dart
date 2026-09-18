@@ -40,7 +40,7 @@ class AllowedAppsDrawer extends ConsumerWidget {
                 Icon(
                   Icons.apps_rounded,
                   size: 28,
-                  color: AppColors.primaryGreen,
+                  color: AppColors.accent,
                 ),
                 const SizedBox(width: 12),
                 Text('Allowed Apps', style: theme.textTheme.headlineMedium),
@@ -112,7 +112,7 @@ class AllowedAppsDrawer extends ConsumerWidget {
                 );
               },
               loading: () => Center(
-                child: CircularProgressIndicator(color: AppColors.primaryGreen),
+                child: CircularProgressIndicator(color: AppColors.accent),
               ),
               error: (error, stack) => Center(
                 child: Padding(
@@ -227,8 +227,8 @@ class _AppIconTile extends ConsumerWidget {
     return InkWell(
       onTap: () => _launchApp(context, ref),
       borderRadius: BorderRadius.circular(16),
-      splashColor: AppColors.primaryGreen.withValues(alpha: 0.1),
-      highlightColor: AppColors.primaryGreen.withValues(alpha: 0.05),
+      splashColor: AppColors.accent.withValues(alpha: 0.1),
+      highlightColor: AppColors.accent.withValues(alpha: 0.05),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -263,7 +263,7 @@ class _AppIconTile extends ConsumerWidget {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primaryGreen.withValues(alpha: 0.5),
+                    color: AppColors.accent.withValues(alpha: 0.5),
                   ),
                 ),
               ),
