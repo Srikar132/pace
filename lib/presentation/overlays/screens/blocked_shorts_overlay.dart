@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/overlays/providers/overlay_provider.dart';
 import 'package:pace/presentation/overlays/widgets/focus_timer_widget.dart';
 import 'package:pace/presentation/overlays/widgets/overlay_background.dart';
@@ -329,32 +330,13 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
   }
 
   LinearGradient _getPlatformGradient(String platform) {
-    switch (platform.toLowerCase()) {
-      case 'youtube':
-        return const LinearGradient(
-          colors: [Color(0xFF1A1A1A), Color(0xFF2D1B1B)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-      case 'instagram':
-        return const LinearGradient(
-          colors: [Color(0xFF1A1A1A), Color(0xFF2A1A2A)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-      case 'tiktok':
-        return const LinearGradient(
-          colors: [Color(0xFF000000), Color(0xFF0D0D0D)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-      default:
-        return const LinearGradient(
-          colors: [Color(0xFF1A1A1A), Color(0xFF0F0F0F)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        );
-    }
+    // Same dark-green theme regardless of platform — the app's look, not the
+    // blocked app's branding.
+    return const LinearGradient(
+      colors: [AppColors.background, AppColors.surface],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
   }
 
   Color _getPlatformColor(String platform) {

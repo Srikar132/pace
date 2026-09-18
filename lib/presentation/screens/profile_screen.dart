@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/parental_control_provider.dart';
 import 'package:pace/presentation/providers/profile_provider.dart';
@@ -31,7 +32,7 @@ class ProfileScreen extends ConsumerWidget {
         final achievementsAsync = ref.watch(achievementsProvider(user.uid));
 
         return Scaffold(
-          backgroundColor: const Color(0xFF0F0F0F),
+          backgroundColor: AppColors.background,
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -109,7 +110,7 @@ class ProfileScreen extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF82D65D), Color(0xFF6BB84D)],
+          colors: [AppColors.accent, AppColors.accentMuted],
         ),
       ),
       child: Column(
@@ -140,7 +141,7 @@ class ProfileScreen extends ConsumerWidget {
             height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF5CAF3C),
+              color: AppColors.accentMuted,
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.3),
                 width: 3,
@@ -235,7 +236,7 @@ class ProfileScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -261,7 +262,7 @@ class ProfileScreen extends ConsumerWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFD700),
+                        color: AppColors.premium,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
@@ -289,9 +290,9 @@ class ProfileScreen extends ConsumerWidget {
                     'Upgrade to Pro',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF82D65D),
+                      color: AppColors.accent,
                       decoration: TextDecoration.underline,
-                      decorationColor: Color(0xFF82D65D),
+                      decorationColor: AppColors.accent,
                     ),
                   ),
                 ),
@@ -303,7 +304,7 @@ class ProfileScreen extends ConsumerWidget {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: const Color(0xFF82D65D),
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(
@@ -337,7 +338,7 @@ class ProfileScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -352,14 +353,14 @@ class ProfileScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: parentalControl.isEnabled
-                        ? const Color(0xFF82D65D).withValues(alpha: 0.2)
-                        : const Color(0xFF2A2A2A),
+                        ? AppColors.accent.withValues(alpha: 0.2)
+                        : AppColors.surfaceElevated,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     Icons.lock,
                     color: parentalControl.isEnabled
-                        ? const Color(0xFF82D65D)
+                        ? AppColors.accent
                         : Colors.white54,
                     size: 24,
                   ),
@@ -379,13 +380,13 @@ class ProfileScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 13,
                     color: parentalControl.isEnabled
-                        ? const Color(0xFF82D65D)
+                        ? AppColors.accent
                         : Colors.white54,
                   ),
                 ),
                 trailing: Switch(
                   value: parentalControl.isEnabled,
-                  activeThumbColor: const Color(0xFF82D65D),
+                  activeThumbColor: AppColors.accent,
                   onChanged: (value) async {
                     if (value) {
                       // Enabling parental mode
@@ -407,7 +408,7 @@ class ProfileScreen extends ConsumerWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Parental mode enabled'),
-                                        backgroundColor: Color(0xFF82D65D),
+                                        backgroundColor: AppColors.accent,
                                       ),
                                     );
                                   }
@@ -475,7 +476,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
 
-              const Divider(color: Color(0xFF2A2A2A), height: 1),
+              const Divider(color: AppColors.surfaceElevated, height: 1),
 
               // Change Password
               ListTile(
@@ -486,7 +487,7 @@ class ProfileScreen extends ConsumerWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2A2A2A),
+                    color: AppColors.surfaceElevated,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.key, color: Colors.white54, size: 24),
@@ -557,7 +558,7 @@ class ProfileScreen extends ConsumerWidget {
                                     content: Text(
                                       'Password changed successfully',
                                     ),
-                                    backgroundColor: Color(0xFF82D65D),
+                                    backgroundColor: AppColors.accent,
                                   ),
                                 );
                               }
@@ -579,7 +580,7 @@ class ProfileScreen extends ConsumerWidget {
                 },
               ),
 
-              const Divider(color: Color(0xFF2A2A2A), height: 1),
+              const Divider(color: AppColors.surfaceElevated, height: 1),
             ],
           ),
         ),
@@ -609,7 +610,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 _buildStatCard(
                   icon: Icons.access_time,
-                  iconColor: const Color(0xFF82D65D),
+                  iconColor: AppColors.accent,
                   title: 'Total Time Saved',
                   value: stats.totalTimeSaved > 0
                       ? stats.getFormattedTimeSaved()
@@ -619,7 +620,7 @@ class ProfileScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E1E1E),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -627,12 +628,12 @@ class ProfileScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                          color: AppColors.accent.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
                           Icons.center_focus_strong,
-                          color: Color(0xFF82D65D),
+                          color: AppColors.accent,
                           size: 24,
                         ),
                       ),
@@ -653,7 +654,7 @@ class ProfileScreen extends ConsumerWidget {
                               'Come back tomorrow to see your progress! ✨',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Color(0xFF82D65D),
+                                color: AppColors.accent,
                               ),
                             ),
                           ],
@@ -681,7 +682,7 @@ class ProfileScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -738,7 +739,7 @@ class ProfileScreen extends ConsumerWidget {
               },
               child: const Text(
                 'View all',
-                style: TextStyle(color: Color(0xFF82D65D), fontSize: 14),
+                style: TextStyle(color: AppColors.accent, fontSize: 14),
               ),
             ),
           ],
@@ -777,7 +778,7 @@ class ProfileScreen extends ConsumerWidget {
       width: 110,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -788,8 +789,8 @@ class ProfileScreen extends ConsumerWidget {
             height: 60,
             decoration: BoxDecoration(
               color: isLocked
-                  ? const Color(0xFF2A2A2A)
-                  : const Color(0xFF82D65D).withValues(alpha: 0.2),
+                  ? AppColors.surfaceElevated
+                  : AppColors.accent.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -847,7 +848,7 @@ class ProfileScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -891,7 +892,7 @@ class ProfileScreen extends ConsumerWidget {
                   icon: const Icon(Icons.share),
                   label: const Text('Invite friends'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF82D65D),
+                    backgroundColor: AppColors.accent,
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
@@ -917,8 +918,8 @@ class ProfileScreen extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
               color: isActive
-                  ? const Color(0xFF82D65D)
-                  : const Color(0xFF2A2A2A),
+                  ? AppColors.accent
+                  : AppColors.surfaceElevated,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -960,7 +961,7 @@ class ProfileScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -968,12 +969,12 @@ class ProfileScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF82D65D).withValues(alpha: 0.2),
+                  color: AppColors.accent.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.description,
-                  color: Color(0xFF82D65D),
+                  color: AppColors.accent,
                   size: 24,
                 ),
               ),

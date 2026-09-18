@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/app_limits_provider.dart';
 import 'package:pace/presentation/providers/blocked_content_provider.dart';
@@ -36,7 +37,7 @@ Future<bool> _checkAndRequestPermissions(
       final shouldRequest = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -64,7 +65,7 @@ Future<bool> _checkAndRequestPermissions(
               },
               child: const Text(
                 'Open Settings',
-                style: TextStyle(color: Color(0xFF82D65D)),
+                style: TextStyle(color: AppColors.accent),
               ),
             ),
           ],
@@ -105,11 +106,11 @@ Future<bool> _checkAndRequestUsageStatsPermission(BuildContext context) async {
     final shouldRequest = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Row(
           children: [
-            Icon(Icons.access_time, color: Color(0xFF82D65D), size: 28),
+            Icon(Icons.access_time, color: AppColors.accent, size: 28),
             SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -136,7 +137,7 @@ Future<bool> _checkAndRequestUsageStatsPermission(BuildContext context) async {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF82D65D),
+              backgroundColor: AppColors.accent,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -219,7 +220,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Row(
           children: [
@@ -244,7 +245,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
             SizedBox(height: 16),
             Text(
               'Take a break and focus on your goals! 🎯',
-              style: TextStyle(color: Color(0xFF82D65D), fontSize: 14),
+              style: TextStyle(color: AppColors.accent, fontSize: 14),
               textAlign: TextAlign.center,
             ),
           ],
@@ -254,7 +255,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'OK',
-              style: TextStyle(color: Color(0xFF82D65D), fontSize: 16),
+              style: TextStyle(color: AppColors.accent, fontSize: 16),
             ),
           ),
         ],
@@ -318,7 +319,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -542,7 +543,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isExceeded
@@ -625,7 +626,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   scale: 0.8,
                   child: Switch(
                     value: widget.limit.isActive,
-                    activeThumbColor: const Color(0xFF82D65D),
+                    activeThumbColor: AppColors.accent,
                     activeTrackColor: const Color(
                       0xFF82D65D,
                     ).withValues(alpha: 0.3),
@@ -679,7 +680,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                             ? Colors.red
                             : isNearLimit
                             ? Colors.orange
-                            : const Color(0xFF82D65D),
+                            : AppColors.accent,
                       ),
                     ),
                   ),
@@ -765,7 +766,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                 ? '✅ ${widget.limit.appName} limit enabled'
                 : '🔓 ${widget.limit.appName} limit disabled',
           ),
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
           duration: const Duration(seconds: 2),
         ),
       );
@@ -784,7 +785,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
   void _showOptionsMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -828,7 +829,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text(
           'Edit ${widget.limit.appName}',
@@ -876,7 +877,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('✅ Limit updated'),
-                        backgroundColor: Color(0xFF1E1E1E),
+                        backgroundColor: AppColors.surface,
                       ),
                     );
                   }
@@ -888,7 +889,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
             child: const Text(
               'Save',
               style: TextStyle(
-                color: Color(0xFF82D65D),
+                color: AppColors.accent,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -902,7 +903,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text(
           'Remove Limit?',
@@ -933,7 +934,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('✅ ${widget.limit.appName} limit removed'),
-                      backgroundColor: const Color(0xFF1E1E1E),
+                      backgroundColor: AppColors.surface,
                     ),
                   );
                 }
@@ -1166,7 +1167,7 @@ class _ShortFormBlocksSection extends ConsumerWidget {
                   ? '🚫 $platform $feature blocked'
                   : '✅ $platform $feature unblocked',
             ),
-            backgroundColor: const Color(0xFF1E1E1E),
+            backgroundColor: AppColors.surface,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -1254,7 +1255,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
@@ -1262,7 +1263,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         secondary: Icon(
           widget.icon,
-          color: displayValue ? const Color(0xFF82D65D) : Colors.grey,
+          color: displayValue ? AppColors.accent : Colors.grey,
         ),
         title: Text(
           widget.title,
@@ -1276,8 +1277,8 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
           style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         ),
         value: displayValue,
-        activeThumbColor: const Color(0xFF82D65D),
-        activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.3),
+        activeThumbColor: AppColors.accent,
+        activeTrackColor: AppColors.accent.withValues(alpha: 0.3),
         inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
         onChanged: _isUpdating
             ? null
@@ -1377,7 +1378,7 @@ class _WebsiteBlockingSection extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text(
           'Block Website',
@@ -1475,7 +1476,7 @@ class _WebsiteBlockingSection extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('✅ $name blocked'),
-                        backgroundColor: const Color(0xFF1E1E1E),
+                        backgroundColor: AppColors.surface,
                       ),
                     );
                   }
@@ -1495,7 +1496,7 @@ class _WebsiteBlockingSection extends ConsumerWidget {
             child: const Text(
               'Block',
               style: TextStyle(
-                color: Color(0xFF82D65D),
+                color: AppColors.accent,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1517,7 +1518,7 @@ class _WebsiteTile extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
@@ -1535,7 +1536,7 @@ class _WebsiteTile extends ConsumerWidget {
               scale: 0.8,
               child: Switch(
                 value: website.isActive,
-                activeThumbColor: const Color(0xFF82D65D),
+                activeThumbColor: AppColors.accent,
                 activeTrackColor: const Color(
                   0xFF82D65D,
                 ).withValues(alpha: 0.3),
@@ -1642,7 +1643,7 @@ class _WebsiteTile extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('✅ ${website.name} unblocked'),
-                        backgroundColor: const Color(0xFF1E1E1E),
+                        backgroundColor: AppColors.surface,
                       ),
                     );
                   }
@@ -1687,7 +1688,7 @@ class _NotificationBlockingSectionState
         children: [
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
@@ -1699,7 +1700,7 @@ class _NotificationBlockingSectionState
               secondary: Icon(
                 Icons.notifications_off,
                 color: _blockAllNotifications
-                    ? const Color(0xFF82D65D)
+                    ? AppColors.accent
                     : Colors.grey,
               ),
               title: const Text(
@@ -1711,8 +1712,8 @@ class _NotificationBlockingSectionState
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
               value: _blockAllNotifications,
-              activeThumbColor: const Color(0xFF82D65D),
-              activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.3),
+              activeThumbColor: AppColors.accent,
+              activeTrackColor: AppColors.accent.withValues(alpha: 0.3),
               inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
               onChanged: (value) {
                 setState(() => _blockAllNotifications = value);
@@ -1752,10 +1753,10 @@ class _BlockSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withValues(alpha: 0.1),
+                color: AppColors.accent.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: const Color(0xFF82D65D), size: 24),
+              child: Icon(icon, color: AppColors.accent, size: 24),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -1802,8 +1803,8 @@ class _DiagnosticsButton extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF82D65D),
-          side: const BorderSide(color: Color(0xFF82D65D)),
+          foregroundColor: AppColors.accent,
+          side: const BorderSide(color: AppColors.accent),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -1915,7 +1916,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -1938,7 +1939,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
               onPressed: () => Navigator.pop(context),
               child: const Text(
                 'Close',
-                style: TextStyle(color: Color(0xFF82D65D)),
+                style: TextStyle(color: AppColors.accent),
               ),
             ),
           ],
@@ -1951,7 +1952,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
           title: const Text('Error', style: TextStyle(color: Colors.white)),
           content: Text(
             'Failed to run diagnostics: $e',
@@ -1962,7 +1963,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
               onPressed: () => Navigator.pop(context),
               child: const Text(
                 'OK',
-                style: TextStyle(color: Color(0xFF82D65D)),
+                style: TextStyle(color: AppColors.accent),
               ),
             ),
           ],
@@ -1991,7 +1992,7 @@ class _EmptyState extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
@@ -2021,7 +2022,7 @@ class _ErrorState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
@@ -2155,7 +2156,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.7,
@@ -2245,7 +2246,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
@@ -2309,7 +2310,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
                                   fontSize: 12,
                                 ),
                               ),
-                              activeColor: const Color(0xFF82D65D),
+                              activeColor: AppColors.accent,
                               contentPadding: EdgeInsets.zero,
                             ),
                           )
@@ -2337,7 +2338,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
               child: const Text(
                 'Add Limit',
                 style: TextStyle(
-                  color: Color(0xFF82D65D),
+                  color: AppColors.accent,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -2382,7 +2383,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('✅ Limit added for ${app.name}'),
-          backgroundColor: const Color(0xFF1E1E1E),
+          backgroundColor: AppColors.surface,
         ),
       );
     } catch (e) {
@@ -2513,7 +2514,7 @@ class AppLimitExceededOverlay extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF82D65D),
+                      backgroundColor: AppColors.accent,
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 48,

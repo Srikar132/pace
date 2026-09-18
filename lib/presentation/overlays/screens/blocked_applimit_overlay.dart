@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_theme.dart';
 import '../providers/overlay_provider.dart';
 import '../widgets/overlay_background.dart';
 
@@ -74,7 +75,7 @@ class _AppLimitOverlayState extends ConsumerState<AppLimitOverlay>
       child: Scaffold(
         body: OverlayBackground(
           gradient: const LinearGradient(
-            colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
+            colors: [AppColors.background, AppColors.surface],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -327,7 +328,7 @@ class _AppLimitOverlayState extends ConsumerState<AppLimitOverlay>
   void _showAlternativeApps(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -390,7 +391,7 @@ class _AppLimitOverlayState extends ConsumerState<AppLimitOverlay>
   void _showUsageStats(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/data/models/installed_app_model.dart';
 import 'package:pace/models/block_app_bottom_model.dart';
 import 'package:pace/models/model_manager.dart';
@@ -181,7 +182,7 @@ class _AppIconCircle extends ConsumerWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: backgroundColor, width: 2),
-        color: const Color(0xFF2A2A2A),
+        color: AppColors.surfaceElevated,
       ),
       child: ClipOval(
         child: iconAsync.when(
@@ -627,7 +628,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFB800),
+                      color: AppColors.premium,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Text(

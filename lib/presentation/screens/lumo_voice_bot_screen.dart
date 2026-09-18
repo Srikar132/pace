@@ -1,6 +1,7 @@
 import 'dart:math' show pi, sin, cos;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/theme/app_theme.dart';
 import '../../models/voice_state.dart';
 import '../providers/voice_session_provider.dart';
 
@@ -73,17 +74,17 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
   Color _getDotColor(VoiceSessionState state) {
     switch (state) {
       case VoiceSessionState.idle:
-        return const Color(0xFF388E3C); // Dark green - ready
+        return AppColors.accentMuted; // ready
       case VoiceSessionState.listening:
-        return const Color(0xFF00E676); // Bright neon green - listening
+        return AppColors.success; // listening
       case VoiceSessionState.thinking:
-        return const Color(0xFFFFB74D); // Orange - processing
+        return AppColors.warning; // processing
       case VoiceSessionState.speaking:
-        return const Color(0xFF4CAF50); // Medium green - bot speaking
+        return AppColors.accent; // bot speaking
       case VoiceSessionState.error:
-        return const Color(0xFFFF5252); // Red - error
+        return AppColors.error;
       default:
-        return const Color(0xFF4CAF50);
+        return AppColors.accent;
     }
   }
 
@@ -212,37 +213,37 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
       case VoiceSessionState.listening:
         text = 'Listening';
         subText = 'Tap to stop';
-        textColor = const Color(0xFF00E676);
+        textColor = AppColors.success;
         showDots = true;
         break;
       case VoiceSessionState.thinking:
         text = 'Processing';
         subText = 'Tap to stop';
-        textColor = const Color(0xFFFFB74D);
+        textColor = AppColors.warning;
         showDots = true;
         break;
       case VoiceSessionState.speaking:
         text = 'Lumo';
         subText = 'Tap to stop';
-        textColor = const Color(0xFF4CAF50);
+        textColor = AppColors.accent;
         showDots = true;
         break;
       case VoiceSessionState.idle:
         text = 'Tap to speak';
         subText = '';
-        textColor = const Color(0xFF388E3C);
+        textColor = AppColors.accentMuted;
         showDots = false;
         break;
       case VoiceSessionState.error:
         text = 'Tap to retry';
         subText = '';
-        textColor = const Color(0xFFFF5252);
+        textColor = AppColors.error;
         showDots = false;
         break;
       default:
         text = 'Tap to speak';
         subText = '';
-        textColor = const Color(0xFF388E3C);
+        textColor = AppColors.accentMuted;
         showDots = false;
     }
 

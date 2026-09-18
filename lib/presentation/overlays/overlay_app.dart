@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/theme/app_theme.dart';
 import 'overlay_router.dart';
 
 class OverlayApp extends ConsumerWidget {
@@ -12,16 +13,7 @@ class OverlayApp extends ConsumerWidget {
       title: 'Pace Overlay',
       debugShowCheckedModeBanner: false,
       routerConfig:  OverlayRouter.router,
-      theme:  ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF6366F1),
-          secondary: Color(0xFF8B5CF6),
-          surface:  Color(0xFF0F0F0F), // Use same as surface to avoid flash
-        ),
-        fontFamily: 'Inter',
-      ),
+      theme: AppTheme.darkTheme,
       builder: (context, child) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value:  const SystemUiOverlayStyle(

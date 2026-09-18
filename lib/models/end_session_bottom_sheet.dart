@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pace/core/theme/app_theme.dart';
 class EndSessionBottomSheet extends StatelessWidget {
   const EndSessionBottomSheet({super.key});
 
@@ -21,7 +22,7 @@ class EndSessionBottomSheet extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: const Color(0xFF3A3A3A),
+              color: AppColors.border,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -42,7 +43,7 @@ class EndSessionBottomSheet extends StatelessWidget {
           Text(
             'Take a deep breath before you decide!',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF8A8A8A),
+              color: AppColors.textMuted,
             ),
             textAlign: TextAlign.center,
           ),
@@ -56,7 +57,7 @@ class EndSessionBottomSheet extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context, true),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3A3A3A),
+                    backgroundColor: AppColors.border,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(

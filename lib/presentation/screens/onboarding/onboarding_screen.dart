@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/onboarding_provider.dart';
 import 'package:pace/presentation/screens/onboarding/welcome_back_screen.dart';
@@ -31,17 +32,9 @@ class OnboardingScreen extends ConsumerWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient background
+          // Background
           Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF0A2A1E), Color(0xFF0F0F0F)],
-                ),
-              ),
-            ),
+            child: Container(color: AppColors.background),
           ),
 
           // Progress bar
