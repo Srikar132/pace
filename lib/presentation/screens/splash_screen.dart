@@ -111,6 +111,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           });
         }
 
+        // Don't judge allGranted off the default-false constructor values -
+        // wait for the real sweep to resolve first, or every cold start
+        // flashes PermissionScreen for a moment even when everything is
+        // actually granted.
+        if (!permissionState.hasCheckedOnce) {
+          return const _LoadingScreen();
+        }
+
         // If ANY permission is not granted, show permission screen
         // User must grant ALL permissions before proceeding
         if (!permissionState.allGranted) {

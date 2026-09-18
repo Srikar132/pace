@@ -432,8 +432,47 @@ class FocusSessionNotifier extends Notifier<FocusSessionState> {
 
       if (status != null && status['isActive'] == true) {
         final mappedData = _safeConvertToMap(status);
-        _handleSessionStarted(mappedData);
-        debugPrint('🔄 Focus session synchronized from Native');
+        if (mappedData == null) return;
+
+        // Unlike a fresh session_started event (always 0 elapsed),
+        // getCurrentSessionStatus() reports how far into the session we
+        // actually are (key is 'elapsedTime', in ms - different from the
+        // 'elapsed' key timer_update events use). Thread it through instead
+        // of falling back to _handleSessionStarted, which always resets to
+        // 0:00 and would ignore whatever time already passed before this
+        // cold start / process restart picked the session back up.
+        final plannedDuration = _safeInt(mappedData['plannedDuration']);
+        final elapsedMs = _safeInt(mappedData['elapsedTime']);
+        final elapsedSeconds = elapsedMs != null ? elapsedMs ~/ 1000 : 0;
+        final remainingSeconds = plannedDuration != null
+            ? ((plannedDuration * 60) - elapsedSeconds).clamp(
+                0,
+                plannedDuration * 60,
+              )
+            : null;
+        final isPaused = mappedData['isPaused'] == true;
+
+        state = state.copyWith(
+          status: isPaused
+              ? FocusSessionStatus.paused
+              : FocusSessionStatus.active,
+          sessionId: mappedData['sessionId'] as String?,
+          sessionType: mappedData['sessionType'] as String?,
+          plannedDuration: plannedDuration,
+          elapsedSeconds: elapsedSeconds,
+          remainingSeconds: remainingSeconds,
+          isPaused: isPaused,
+          nativeSessionData: mappedData,
+        );
+
+        if (!isPaused) {
+          _startLocalTimer();
+        }
+
+        debugPrint(
+          '🔄 Focus session synchronized from Native '
+          '(elapsed: ${elapsedSeconds}s, type: ${mappedData['sessionType']})',
+        );
       } else if (state.isActive) {
         state = FocusSessionState(status: FocusSessionStatus.idle);
         _stopLocalTimer();
