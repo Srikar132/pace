@@ -49,9 +49,7 @@ class _BlockAppsSheetState extends ConsumerState<BlockAppsSheet> {
           _buildHeader(context),
           _buildSearchBar(context, ref),
           if (isLoading)
-            const Expanded(
-              child: Center(child: CircularProgressIndicator()),
-            )
+            const Expanded(child: Center(child: CircularProgressIndicator()))
           else
             Expanded(
               child: RepaintBoundary(
@@ -85,9 +83,9 @@ class _BlockAppsSheetState extends ConsumerState<BlockAppsSheet> {
         children: [
           Text(
             'Select Apps to Block',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           IconButton(
             icon: Container(
@@ -149,7 +147,6 @@ class _CategorySection extends ConsumerStatefulWidget {
 
 class _CategorySectionState extends ConsumerState<_CategorySection>
     with AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
 
@@ -160,7 +157,7 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
     super.build(context);
 
     final user = ref.watch(currentUserProvider).value;
-    final blockedAppsAsync = user != null 
+    final blockedAppsAsync = user != null
         ? ref.watch(permanentlyBlockedAppsProvider(user.uid))
         : const AsyncValue<List<String>>.data([]);
 
@@ -169,9 +166,9 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
       orElse: () => <String>{},
     );
 
-    final blockedCount = widget.apps.where((app) =>
-        blockedSet.contains(app.packageName)
-    ).length;
+    final blockedCount = widget.apps
+        .where((app) => blockedSet.contains(app.packageName))
+        .length;
     final areAllBlocked = blockedCount == widget.apps.length;
 
     return Container(
@@ -200,7 +197,7 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF82D65D).withOpacity(0.2),
+                        color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -220,19 +217,21 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                       inactiveTrackColor: const Color(0xFF3A3A3A),
                       onChanged: (bool value) async {
                         if (user == null) return;
-                        
+
                         // Check if trying to unblock and parental mode is enabled
                         if (!value && areAllBlocked) {
                           // Check parental control status
-                          final parentalControlDoc = await FirebaseFirestore.instance
+                          final parentalControlDoc = await FirebaseFirestore
+                              .instance
                               .collection('parental_controls')
                               .doc(user.uid)
                               .get();
-                          
+
                           if (parentalControlDoc.exists) {
                             final data = parentalControlDoc.data();
-                            final isEnabled = data?['isEnabled'] as bool? ?? false;
-                            
+                            final isEnabled =
+                                data?['isEnabled'] as bool? ?? false;
+
                             if (isEnabled && context.mounted) {
                               // Show PIN dialog
                               final verified = await showDialog<bool>(
@@ -257,7 +256,9 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('❌ Incorrect PIN or cancelled'),
+                                      content: Text(
+                                        '❌ Incorrect PIN or cancelled',
+                                      ),
                                       backgroundColor: Colors.red,
                                       duration: Duration(seconds: 2),
                                     ),
@@ -268,21 +269,29 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
                             }
                           }
                         }
-                        
-                        final notifier = ref.read(blockedContentNotifierProvider.notifier);
-                        
+
+                        final notifier = ref.read(
+                          blockedContentNotifierProvider.notifier,
+                        );
+
                         if (value) {
                           // Add all apps in this category
                           for (var app in widget.apps) {
                             if (!blockedSet.contains(app.packageName)) {
-                              await notifier.addPermanentlyBlockedApp(user.uid, app.packageName);
+                              await notifier.addPermanentlyBlockedApp(
+                                user.uid,
+                                app.packageName,
+                              );
                             }
                           }
                         } else {
                           // Remove all apps in this category
                           for (var app in widget.apps) {
                             if (blockedSet.contains(app.packageName)) {
-                              await notifier.removePermanentlyBlockedApp(user.uid, app.packageName);
+                              await notifier.removePermanentlyBlockedApp(
+                                user.uid,
+                                app.packageName,
+                              );
                             }
                           }
                         }
@@ -307,13 +316,13 @@ class _CategorySectionState extends ConsumerState<_CategorySection>
             curve: Curves.easeInOut,
             child: _isExpanded
                 ? Column(
-              children: widget.apps.map((app) {
-                return _AppListTile(
-                  key: ValueKey(app.packageName),
-                  app: app,
-                );
-              }).toList(),
-            )
+                    children: widget.apps.map((app) {
+                      return _AppListTile(
+                        key: ValueKey(app.packageName),
+                        app: app,
+                      );
+                    }).toList(),
+                  )
                 : const SizedBox.shrink(),
           ),
         ],
@@ -333,7 +342,7 @@ class _AppListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).value;
-    final blockedAppsAsync = user != null 
+    final blockedAppsAsync = user != null
         ? ref.watch(permanentlyBlockedAppsProvider(user.uid))
         : const AsyncValue<List<String>>.data([]);
 
@@ -350,7 +359,7 @@ class _AppListTile extends ConsumerWidget {
           child: InkWell(
             onTap: () async {
               if (user == null) return;
-              
+
               // Check if trying to unblock and parental mode is enabled
               if (isBlocked) {
                 // Check parental control status
@@ -358,11 +367,11 @@ class _AppListTile extends ConsumerWidget {
                     .collection('parental_controls')
                     .doc(user.uid)
                     .get();
-                
+
                 if (parentalControlDoc.exists) {
                   final data = parentalControlDoc.data();
                   final isEnabled = data?['isEnabled'] as bool? ?? false;
-                  
+
                   if (isEnabled && context.mounted) {
                     // Show PIN dialog
                     final verified = await showDialog<bool>(
@@ -398,12 +407,20 @@ class _AppListTile extends ConsumerWidget {
                   }
                 }
               }
-              
-              final notifier = ref.read(blockedContentNotifierProvider.notifier);
+
+              final notifier = ref.read(
+                blockedContentNotifierProvider.notifier,
+              );
               if (isBlocked) {
-                await notifier.removePermanentlyBlockedApp(user.uid, app.packageName);
+                await notifier.removePermanentlyBlockedApp(
+                  user.uid,
+                  app.packageName,
+                );
               } else {
-                await notifier.addPermanentlyBlockedApp(user.uid, app.packageName);
+                await notifier.addPermanentlyBlockedApp(
+                  user.uid,
+                  app.packageName,
+                );
               }
             },
             borderRadius: BorderRadius.circular(12),
@@ -434,19 +451,21 @@ class _AppListTile extends ConsumerWidget {
                       inactiveTrackColor: const Color(0xFF3A3A3A),
                       onChanged: (bool value) async {
                         if (user == null) return;
-                        
+
                         // Check if trying to unblock and parental mode is enabled
                         if (!value && isBlocked) {
                           // Check parental control status
-                          final parentalControlDoc = await FirebaseFirestore.instance
+                          final parentalControlDoc = await FirebaseFirestore
+                              .instance
                               .collection('parental_controls')
                               .doc(user.uid)
                               .get();
-                          
+
                           if (parentalControlDoc.exists) {
                             final data = parentalControlDoc.data();
-                            final isEnabled = data?['isEnabled'] as bool? ?? false;
-                            
+                            final isEnabled =
+                                data?['isEnabled'] as bool? ?? false;
+
                             if (isEnabled && context.mounted) {
                               // Show PIN dialog
                               final verified = await showDialog<bool>(
@@ -454,7 +473,8 @@ class _AppListTile extends ConsumerWidget {
                                 barrierDismissible: false,
                                 builder: (context) => VerifyPasswordDialog(
                                   title: 'Parental Control',
-                                  description: 'Enter PIN to unblock ${app.appName}',
+                                  description:
+                                      'Enter PIN to unblock ${app.appName}',
                                   onVerify: (password) async {
                                     final service = ref.read(
                                       parentalControlServiceProvider,
@@ -471,7 +491,9 @@ class _AppListTile extends ConsumerWidget {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('❌ Incorrect PIN or cancelled'),
+                                      content: Text(
+                                        '❌ Incorrect PIN or cancelled',
+                                      ),
                                       backgroundColor: Colors.red,
                                       duration: Duration(seconds: 2),
                                     ),
@@ -482,12 +504,20 @@ class _AppListTile extends ConsumerWidget {
                             }
                           }
                         }
-                        
-                        final notifier = ref.read(blockedContentNotifierProvider.notifier);
+
+                        final notifier = ref.read(
+                          blockedContentNotifierProvider.notifier,
+                        );
                         if (value) {
-                          await notifier.addPermanentlyBlockedApp(user.uid, app.packageName);
+                          await notifier.addPermanentlyBlockedApp(
+                            user.uid,
+                            app.packageName,
+                          );
                         } else {
-                          await notifier.removePermanentlyBlockedApp(user.uid, app.packageName);
+                          await notifier.removePermanentlyBlockedApp(
+                            user.uid,
+                            app.packageName,
+                          );
                         }
                       },
                     ),
@@ -525,18 +555,11 @@ class _AppIcon extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         child: iconAsync.when(
           loading: () => const SizedBox.shrink(),
-          error: (err, stack) => const Icon(
-            Icons.android,
-            color: Colors.white,
-            size: 24,
-          ),
+          error: (err, stack) =>
+              const Icon(Icons.android, color: Colors.white, size: 24),
           data: (iconBytes) {
             if (iconBytes == null) {
-              return const Icon(
-                Icons.android,
-                color: Colors.white,
-                size: 24,
-              );
+              return const Icon(Icons.android, color: Colors.white, size: 24);
             }
             return Image.memory(
               iconBytes,
@@ -544,11 +567,7 @@ class _AppIcon extends ConsumerWidget {
               gaplessPlayback: true,
               filterQuality: FilterQuality.medium,
               errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.android,
-                  color: Colors.white,
-                  size: 24,
-                );
+                return const Icon(Icons.android, color: Colors.white, size: 24);
               },
             );
           },

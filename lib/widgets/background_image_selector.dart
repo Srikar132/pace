@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/presentation/providers/background_image_provider.dart';
 import 'package:pace/widgets/bottom_sheet_darg_handler.dart';
+
 class BackgroundImageSelector extends ConsumerWidget {
   const BackgroundImageSelector({super.key});
 
@@ -95,7 +96,7 @@ class BackgroundImageSelector extends ConsumerWidget {
                                       end: Alignment.bottomCenter,
                                       colors: [
                                         Colors.transparent,
-                                        Colors.black.withOpacity(0.7),
+                                        Colors.black.withValues(alpha: 0.7),
                                       ],
                                     ),
                                   ),
@@ -130,7 +131,7 @@ class BackgroundImageSelector extends ConsumerWidget {
                                   ),
                                 if (backgroundState.isLoading)
                                   Container(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withValues(alpha: 0.3),
                                     child: const Center(
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,

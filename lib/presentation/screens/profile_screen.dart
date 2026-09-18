@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/parental_control_provider.dart';
 import 'package:pace/presentation/providers/profile_provider.dart';
+import 'package:pace/data/models/achievement_model.dart';
 import 'package:pace/models/parental_control.dart';
 import 'package:pace/widgets/parental_control_dialogs.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,8 +61,7 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                           loading: () =>
                               const Center(child: CircularProgressIndicator()),
-                          error: (_, __) =>
-                              const Text('Error loading settings'),
+                          error: (_, _) => const Text('Error loading settings'),
                         ),
 
                         const SizedBox(height: 24),
@@ -142,7 +142,7 @@ class ProfileScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               color: const Color(0xFF5CAF3C),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 3,
               ),
             ),
@@ -183,7 +183,7 @@ class ProfileScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -221,7 +221,7 @@ class ProfileScreen extends ConsumerWidget {
             'Focusing since $focusingSince',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
 
@@ -352,7 +352,7 @@ class ProfileScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: parentalControl.isEnabled
-                        ? const Color(0xFF82D65D).withOpacity(0.2)
+                        ? const Color(0xFF82D65D).withValues(alpha: 0.2)
                         : const Color(0xFF2A2A2A),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -627,7 +627,7 @@ class ProfileScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withOpacity(0.2),
+                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -666,7 +666,7 @@ class ProfileScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Text('Error loading stats'),
+          error: (_, _) => const Text('Error loading stats'),
         ),
       ],
     );
@@ -689,7 +689,7 @@ class ProfileScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.2),
+              color: iconColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -716,7 +716,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildAchievementsSection(
     BuildContext context,
-    AsyncValue<dynamic> achievementsAsync,
+    AsyncValue<List<AchievementModel>> achievementsAsync,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -764,13 +764,13 @@ class ProfileScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Text('Error loading achievements'),
+          error: (_, _) => const Text('Error loading achievements'),
         ),
       ],
     );
   }
 
-  Widget _buildAchievementCard(achievement) {
+  Widget _buildAchievementCard(AchievementModel achievement) {
     final isLocked = !achievement.isUnlocked;
 
     return Container(
@@ -789,7 +789,7 @@ class ProfileScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               color: isLocked
                   ? const Color(0xFF2A2A2A)
-                  : const Color(0xFF82D65D).withOpacity(0.2),
+                  : const Color(0xFF82D65D).withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -968,7 +968,7 @@ class ProfileScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF82D65D).withOpacity(0.2),
+                  color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(

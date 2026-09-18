@@ -44,7 +44,7 @@ class WelcomeBackScreen extends ConsumerWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: theme.colorScheme.primary.withOpacity(0.3),
+                color: theme.colorScheme.primary.withValues(alpha: 0.3),
                 width: 3,
               ),
             ),
@@ -54,7 +54,7 @@ class WelcomeBackScreen extends ConsumerWidget {
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: theme.colorScheme.primary.withOpacity(0.2),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.2),
                     child: Icon(
                       Icons.person,
                       size: 100,

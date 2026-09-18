@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:record/record.dart';
 import '../config/voice_api_config.dart';
+import 'package:flutter/foundation.dart';
 
 class AudioStreamService {
   final _recorder = AudioRecorder();
@@ -21,7 +21,7 @@ class AudioStreamService {
     try {
       // Check permissions
       if (!await _recorder.hasPermission()) {
-        print('❌ Microphone permission denied');
+        debugPrint('❌ Microphone permission denied');
         return false;
       }
 
@@ -46,15 +46,15 @@ class AudioStreamService {
           }
         },
         onError: (error) {
-          print('❌ Audio stream error: $error');
+          debugPrint('❌ Audio stream error: $error');
         },
       );
 
       _isRecording = true;
-      print('🎤 Recording started');
+      debugPrint('🎤 Recording started');
       return true;
     } catch (e) {
-      print('❌ Failed to start recording: $e');
+      debugPrint('❌ Failed to start recording: $e');
       return false;
     }
   }
@@ -66,7 +66,7 @@ class AudioStreamService {
     await _recorder.stop();
     _isRecording = false;
     _audioLevelController.add(0.0);
-    print('🛑 Recording stopped');
+    debugPrint('🛑 Recording stopped');
   }
 
   void _calculateAudioLevel(Uint8List chunk) {

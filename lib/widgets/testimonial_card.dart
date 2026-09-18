@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-
 @immutable
 class TrustItem extends StatelessWidget {
-
-  
   final String title;
   final String value;
   final String subtitle;
@@ -28,7 +25,7 @@ class TrustItem extends StatelessWidget {
             Text(
               title,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
             RichText(
@@ -44,7 +41,7 @@ class TrustItem extends StatelessWidget {
                   TextSpan(
                     text: " $subtitle",
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     ),
                   ),
                 ],

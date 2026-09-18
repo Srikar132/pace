@@ -67,13 +67,13 @@ class _FocusTimerWidgetState extends ConsumerState<FocusTimerWidget> {
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 30,
               spreadRadius: 5,
               offset: const Offset(0, 10),
             ),
             BoxShadow(
-              color: Colors.cyan.withOpacity(0.005),
+              color: Colors.cyan.withValues(alpha: 0.005),
               blurRadius: 20,
               spreadRadius: -5,
               offset: const Offset(0, 0),
@@ -87,9 +87,9 @@ class _FocusTimerWidgetState extends ConsumerState<FocusTimerWidget> {
               child: CircularProgressIndicator(
                 value: _totalSeconds > 0 ? _currentSeconds / _totalSeconds : 0,
                 strokeWidth: 4,
-                backgroundColor: Colors.white.withOpacity(0.05),
+                backgroundColor: Colors.white.withValues(alpha: 0.05),
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.white.withOpacity(0.3),
+                  Colors.white.withValues(alpha: 0.3),
                 ),
               ),
             ),
@@ -126,10 +126,10 @@ class _FocusTimerWidgetState extends ConsumerState<FocusTimerWidget> {
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      color: Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
@@ -138,14 +138,14 @@ class _FocusTimerWidgetState extends ConsumerState<FocusTimerWidget> {
                       children: [
                         Icon(
                           Icons.edit_outlined,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           size: 12,
                         ),
                         const SizedBox(width: 6),
                         Text(
                           'Edit',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -179,7 +179,9 @@ class _BlockedAppsIndicator extends ConsumerWidget {
           return const SizedBox();
         }
 
-        final blockedAppsAsync = ref.watch(permanentlyBlockedAppsProvider(user.uid));
+        final blockedAppsAsync = ref.watch(
+          permanentlyBlockedAppsProvider(user.uid),
+        );
 
         return blockedAppsAsync.when(
           data: (blockedPackages) {
@@ -190,17 +192,17 @@ class _BlockedAppsIndicator extends ConsumerWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
                 child: Text(
                   'No apps blocked',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
@@ -208,18 +210,17 @@ class _BlockedAppsIndicator extends ConsumerWidget {
               );
             }
 
-            return _BlockedAppsPreview(blockedPackages: blockedPackages.toSet());
+            return _BlockedAppsPreview(
+              blockedPackages: blockedPackages.toSet(),
+            );
           },
           loading: () => Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 width: 1,
               ),
             ),
@@ -232,11 +233,11 @@ class _BlockedAppsIndicator extends ConsumerWidget {
               ),
             ),
           ),
-          error: (_, __) => const SizedBox(),
+          error: (_, _) => const SizedBox(),
         );
       },
       loading: () => const SizedBox(),
-      error: (_, __) => const SizedBox(),
+      error: (_, _) => const SizedBox(),
     );
   }
 }
@@ -261,15 +262,12 @@ class _BlockedAppsPreview extends ConsumerWidget {
             .toList();
 
         return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 6,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -283,7 +281,7 @@ class _BlockedAppsPreview extends ConsumerWidget {
               Text(
                 '${blockedPackages.length} app${blockedPackages.length != 1 ? 's' : ''} blocked',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
                 ),
@@ -293,15 +291,12 @@ class _BlockedAppsPreview extends ConsumerWidget {
         );
       },
       loading: () => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 6,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
@@ -314,23 +309,20 @@ class _BlockedAppsPreview extends ConsumerWidget {
           ),
         ),
       ),
-      error: (_, __) => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 6,
-        ),
+      error: (_, _) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
         child: Text(
           'Error loading apps',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
             fontSize: 11,
             fontWeight: FontWeight.w500,
           ),
@@ -362,9 +354,7 @@ class _AppIconStack extends StatelessWidget {
           final app = displayApps[index];
           return Positioned(
             left: index * overlap,
-            child: _AppIconCircle(
-              packageName: app.packageName,
-            ),
+            child: _AppIconCircle(packageName: app.packageName),
           );
         }),
       ),
@@ -379,9 +369,7 @@ class _AppIconCircle extends ConsumerWidget {
   final String packageName;
   static const double iconSize = 16.0;
 
-  const _AppIconCircle({
-    required this.packageName,
-  });
+  const _AppIconCircle({required this.packageName});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -409,7 +397,7 @@ class _AppIconCircle extends ConsumerWidget {
             return const Icon(Icons.android, size: 8, color: Colors.white);
           },
           loading: () => const SizedBox(),
-          error: (_, __) =>
+          error: (_, _) =>
               const Icon(Icons.android, size: 8, color: Colors.white),
         ),
       ),

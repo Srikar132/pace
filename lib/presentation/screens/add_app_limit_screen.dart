@@ -451,40 +451,50 @@ class _AddAppLimitScreenState extends ConsumerState<AddAppLimitScreen> {
           ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
         ),
         const SizedBox(height: 16),
-        _ActionOption(
-          value: 'block',
+        RadioGroup<String>(
           groupValue: _actionOnExceed,
-          title: 'Block App',
-          description: 'Hard block - app cannot be opened',
-          icon: Icons.block,
-          color: Colors.red,
           onChanged: (value) {
             setState(() => _actionOnExceed = value!);
           },
-        ),
-        const SizedBox(height: 12),
-        _ActionOption(
-          value: 'warn',
-          groupValue: _actionOnExceed,
-          title: 'Show Warning',
-          description: 'Show warning overlay that can be dismissed',
-          icon: Icons.warning,
-          color: Colors.orange,
-          onChanged: (value) {
-            setState(() => _actionOnExceed = value!);
-          },
-        ),
-        const SizedBox(height: 12),
-        _ActionOption(
-          value: 'notify',
-          groupValue: _actionOnExceed,
-          title: 'Notify Only',
-          description: 'Send notification but allow app to open',
-          icon: Icons.notifications,
-          color: Colors.blue,
-          onChanged: (value) {
-            setState(() => _actionOnExceed = value!);
-          },
+          child: Column(
+            children: [
+              _ActionOption(
+                value: 'block',
+                groupValue: _actionOnExceed,
+                title: 'Block App',
+                description: 'Hard block - app cannot be opened',
+                icon: Icons.block,
+                color: Colors.red,
+                onChanged: (value) {
+                  setState(() => _actionOnExceed = value!);
+                },
+              ),
+              const SizedBox(height: 12),
+              _ActionOption(
+                value: 'warn',
+                groupValue: _actionOnExceed,
+                title: 'Show Warning',
+                description: 'Show warning overlay that can be dismissed',
+                icon: Icons.warning,
+                color: Colors.orange,
+                onChanged: (value) {
+                  setState(() => _actionOnExceed = value!);
+                },
+              ),
+              const SizedBox(height: 12),
+              _ActionOption(
+                value: 'notify',
+                groupValue: _actionOnExceed,
+                title: 'Notify Only',
+                description: 'Send notification but allow app to open',
+                icon: Icons.notifications,
+                color: Colors.blue,
+                onChanged: (value) {
+                  setState(() => _actionOnExceed = value!);
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -602,7 +612,7 @@ class _ActionOption extends StatelessWidget {
 
     return Card(
       elevation: isSelected ? 3 : 1,
-      color: isSelected ? color.withOpacity(0.1) : null,
+      color: isSelected ? color.withValues(alpha: 0.1) : null,
       child: InkWell(
         onTap: () => onChanged(value),
         borderRadius: BorderRadius.circular(12),
@@ -610,17 +620,12 @@ class _ActionOption extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Radio<String>(
-                value: value,
-                groupValue: groupValue,
-                onChanged: onChanged,
-                activeColor: color,
-              ),
+              Radio<String>(value: value, activeColor: color),
               const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 28),

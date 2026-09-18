@@ -8,14 +8,14 @@ class ActionButtons extends StatelessWidget {
   const ActionButtons({
     super.key,
     required this.onGoHome,
-    required this. onEndSession,
+    required this.onEndSession,
     this.onShowEducation,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children:  [
+      children: [
         Row(
           children: [
             Expanded(
@@ -24,12 +24,14 @@ class ActionButtons extends StatelessWidget {
                 icon: const Icon(Icons.home),
                 label: const Text('Go Home'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.withOpacity(0.2),
+                  backgroundColor: Colors.green.withValues(alpha: 0.2),
                   foregroundColor: Colors.green,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: Colors. green.withOpacity(0.5)),
+                    side: BorderSide(
+                      color: Colors.green.withValues(alpha: 0.5),
+                    ),
                   ),
                 ),
               ),
@@ -41,13 +43,15 @@ class ActionButtons extends StatelessWidget {
                   onPressed: onShowEducation,
                   icon: const Icon(Icons.school),
                   label: const Text('Learn'),
-                  style:  ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.withOpacity(0.2),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.withValues(alpha: 0.2),
                     foregroundColor: Colors.blue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(color: Colors.blue.withOpacity(0.5)),
+                      side: BorderSide(
+                        color: Colors.blue.withValues(alpha: 0.5),
+                      ),
                     ),
                   ),
                 ),
@@ -58,13 +62,13 @@ class ActionButtons extends StatelessWidget {
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          child: OutlinedButton. icon(
+          child: OutlinedButton.icon(
             onPressed: onEndSession,
-            icon:  const Icon(Icons.stop_circle_outlined),
+            icon: const Icon(Icons.stop_circle_outlined),
             label: const Text('End Focus Session'),
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors. red,
-              side:  BorderSide(color: Colors.red. withOpacity(0.5)),
+              foregroundColor: Colors.red,
+              side: BorderSide(color: Colors.red.withValues(alpha: 0.5)),
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

@@ -16,6 +16,7 @@ class AppLimitsScreen extends ConsumerStatefulWidget {
 class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
   final _nativeService = AppLimitNativeService();
   Map<String, Map<String, dynamic>> _usageStats = {};
+  // ignore: unused_field
   bool _isLoadingUsage = false;
 
   @override
@@ -162,12 +163,11 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
       ),
     );
 
-    if (result == true && mounted) {
-      _loadUsageStats();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('App limit added successfully')),
-      );
-    }
+    if (result != true || !context.mounted) return;
+    _loadUsageStats();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('App limit added successfully')),
+    );
   }
 
   Future<void> _navigateToEditLimit(
@@ -183,12 +183,11 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
       ),
     );
 
-    if (result == true && mounted) {
-      _loadUsageStats();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('App limit updated successfully')),
-      );
-    }
+    if (result != true || !context.mounted) return;
+    _loadUsageStats();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('App limit updated successfully')),
+    );
   }
 
   Future<void> _toggleLimit(
@@ -251,17 +250,15 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
 
       _loadUsageStats();
 
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('App limit deleted')));
-      }
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('App limit deleted')));
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error deleting limit: $e')));
-      }
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error deleting limit: $e')));
     }
   }
 
@@ -288,13 +285,13 @@ class _AppLimitsScreenState extends ConsumerState<AppLimitsScreen> {
               title: const Text('Clear Warnings'),
               subtitle: const Text('Reset all warning notifications'),
               onTap: () async {
+                final messenger = ScaffoldMessenger.of(context);
                 Navigator.pop(context);
                 await _nativeService.clearAllWarnings();
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Warnings cleared')),
-                  );
-                }
+                if (!mounted) return;
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Warnings cleared')),
+                );
               },
             ),
           ],
@@ -515,7 +512,7 @@ class _ActionChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color, width: 1),
       ),

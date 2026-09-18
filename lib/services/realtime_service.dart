@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:io';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import '../config/voice_api_config.dart';
+import 'package:flutter/foundation.dart';
 
 class RealtimeService {
   WebSocketChannel? _channel;
@@ -27,7 +27,7 @@ class RealtimeService {
     if (_isConnected) return true;
 
     try {
-      print('🔄 Connecting to Realtime API...');
+      debugPrint('🔄 Connecting to Realtime API...');
 
       // Build WebSocket URI with authentication and model
       final uri = Uri.parse(
@@ -83,21 +83,21 @@ class RealtimeService {
       _channel!.stream.listen(
         _handleMessage,
         onError: (error) {
-          print('❌ WebSocket error: $error');
+          debugPrint('❌ WebSocket error: $error');
           _isConnected = false;
         },
         onDone: () {
-          print('🔌 WebSocket disconnected');
+          debugPrint('🔌 WebSocket disconnected');
           _isConnected = false;
         },
       );
 
       _isConnected = true;
       _stateController.add('connected');
-      print('✅ Realtime API connected');
+      debugPrint('✅ Realtime API connected');
       return true;
     } catch (e) {
-      print('❌ Failed to connect: $e');
+      debugPrint('❌ Failed to connect: $e');
       return false;
     }
   }
@@ -109,23 +109,23 @@ class RealtimeService {
 
       switch (type) {
         case 'session.created':
-          print('🟢 Session created');
+          debugPrint('🟢 Session created');
           break;
 
         case 'input_audio_buffer.speech_started':
           _stateController.add('speech_started');
-          print('🎤 Speech detected');
+          debugPrint('🎤 Speech detected');
           break;
 
         case 'input_audio_buffer.speech_stopped':
           _stateController.add('speech_stopped');
-          print('🔇 Speech stopped');
+          debugPrint('🔇 Speech stopped');
           break;
 
         case 'conversation.item.input_audio_transcription.completed':
           final transcript = data['transcript'] as String;
           _transcriptController.add(transcript);
-          print('📝 Transcript: $transcript');
+          debugPrint('📝 Transcript: $transcript');
           break;
 
         case 'response.created':
@@ -134,11 +134,11 @@ class RealtimeService {
           break;
 
         case 'response.output_item.added':
-          print('💬 Response item added');
+          debugPrint('💬 Response item added');
           break;
 
         case 'response.content_part.added':
-          print('📄 Content part added');
+          debugPrint('📄 Content part added');
           break;
 
         case 'response.audio_transcript.delta':
@@ -154,31 +154,33 @@ class RealtimeService {
               final audioBytes = base64Decode(audioBase64);
               if (audioBytes.isNotEmpty) {
                 _audioResponseController.add(audioBytes);
-                print('🎵 Audio chunk received: ${audioBytes.length} bytes');
+                debugPrint(
+                  '🎵 Audio chunk received: ${audioBytes.length} bytes',
+                );
               }
             } catch (e) {
-              print('❌ Error decoding audio: $e');
+              debugPrint('❌ Error decoding audio: $e');
             }
           }
           break;
 
         case 'response.audio.done':
-          print('🔊 Audio response complete');
+          debugPrint('🔊 Audio response complete');
           _stateController.add('response_complete');
           break;
 
         case 'response.done':
-          print('✅ Response done');
+          debugPrint('✅ Response done');
           break;
 
         case 'error':
           final error = data['error'];
-          print('❌ API Error: $error');
+          debugPrint('❌ API Error: $error');
           _stateController.add('error');
           break;
       }
     } catch (e) {
-      print('❌ Error handling message: $e');
+      debugPrint('❌ Error handling message: $e');
     }
   }
 
@@ -186,7 +188,9 @@ class RealtimeService {
     if (!_isConnected || _channel == null) {
       // Only print once to avoid spam
       if (!_reconnecting) {
-        print('⚠️ Cannot send audio - not connected, attempting reconnect...');
+        debugPrint(
+          '⚠️ Cannot send audio - not connected, attempting reconnect...',
+        );
         _attemptReconnect();
       }
       return;
@@ -199,10 +203,10 @@ class RealtimeService {
       );
       // Log occasionally to avoid spam
       if (audioChunk.isNotEmpty) {
-        print('📤 Sent audio chunk: ${audioChunk.length} bytes');
+        debugPrint('📤 Sent audio chunk: ${audioChunk.length} bytes');
       }
     } catch (e) {
-      print('❌ Error sending audio: $e');
+      debugPrint('❌ Error sending audio: $e');
       _isConnected = false;
     }
   }
@@ -211,13 +215,13 @@ class RealtimeService {
     if (_reconnecting) return;
     _reconnecting = true;
 
-    print('🔄 Attempting to reconnect...');
+    debugPrint('🔄 Attempting to reconnect...');
     final success = await connect();
 
     if (success) {
-      print('✅ Reconnected successfully');
+      debugPrint('✅ Reconnected successfully');
     } else {
-      print('❌ Reconnect failed');
+      debugPrint('❌ Reconnect failed');
     }
 
     _reconnecting = false;
@@ -225,15 +229,15 @@ class RealtimeService {
 
   void commitAudio() {
     if (!_isConnected || _channel == null) {
-      print('⚠️ Cannot commit audio - not connected');
+      debugPrint('⚠️ Cannot commit audio - not connected');
       return;
     }
 
-    print('📨 Committing audio buffer...');
+    debugPrint('📨 Committing audio buffer...');
     _channel!.sink.add(jsonEncode({'type': 'input_audio_buffer.commit'}));
 
     // Explicitly trigger response creation
-    print('📨 Requesting response...');
+    debugPrint('📨 Requesting response...');
     _channel!.sink.add(jsonEncode({'type': 'response.create'}));
   }
 
@@ -243,7 +247,7 @@ class RealtimeService {
     _channel!.sink.add(jsonEncode({'type': 'response.cancel'}));
 
     _accumulatedResponse = '';
-    print('⏹️ Response cancelled');
+    debugPrint('⏹️ Response cancelled');
   }
 
   Future<void> disconnect() async {
@@ -252,7 +256,7 @@ class RealtimeService {
     await _channel?.sink.close();
     _isConnected = false;
     _stateController.add('disconnected');
-    print('🔌 Disconnected from Realtime API');
+    debugPrint('🔌 Disconnected from Realtime API');
   }
 
   Future<void> dispose() async {

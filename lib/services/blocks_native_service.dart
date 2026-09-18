@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 
 /// Native service for managing blocks (apps, websites, short-form content)
 ///
@@ -30,7 +31,7 @@ class BlocksNativeService {
       });
       return result ?? false;
     } catch (e) {
-      print('Error setting app limit: $e');
+      debugPrint('Error setting app limit: $e');
       return false;
     }
   }
@@ -43,7 +44,7 @@ class BlocksNativeService {
       });
       return result ?? false;
     } catch (e) {
-      print('Error removing app limit: $e');
+      debugPrint('Error removing app limit: $e');
       return false;
     }
   }
@@ -57,7 +58,7 @@ class BlocksNativeService {
       );
       return result ?? 0;
     } catch (e) {
-      print('Error getting remaining time: $e');
+      debugPrint('Error getting remaining time: $e');
       return 0;
     }
   }
@@ -71,7 +72,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error checking if limit exceeded: $e');
+      debugPrint('Error checking if limit exceeded: $e');
       return false;
     }
   }
@@ -84,7 +85,7 @@ class BlocksNativeService {
       });
       return result ?? 0;
     } catch (e) {
-      print('Error getting today usage: $e');
+      debugPrint('Error getting today usage: $e');
       return 0;
     }
   }
@@ -95,7 +96,7 @@ class BlocksNativeService {
       final result = await _methodChannel.invokeMethod<bool>('resetDailyUsage');
       return result ?? false;
     } catch (e) {
-      print('Error resetting daily usage: $e');
+      debugPrint('Error resetting daily usage: $e');
       return false;
     }
   }
@@ -115,7 +116,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error adding blocked website: $e');
+      debugPrint('Error adding blocked website: $e');
       return false;
     }
   }
@@ -129,7 +130,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error removing blocked website: $e');
+      debugPrint('Error removing blocked website: $e');
       return false;
     }
   }
@@ -143,7 +144,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error toggling blocked website: $e');
+      debugPrint('Error toggling blocked website: $e');
       return false;
     }
   }
@@ -156,7 +157,7 @@ class BlocksNativeService {
       );
       return result?.cast<Map<String, dynamic>>() ?? [];
     } catch (e) {
-      print('Error getting blocked websites: $e');
+      debugPrint('Error getting blocked websites: $e');
       return [];
     }
   }
@@ -169,7 +170,7 @@ class BlocksNativeService {
       });
       return result ?? false;
     } catch (e) {
-      print('Error checking if URL is blocked: $e');
+      debugPrint('Error checking if URL is blocked: $e');
       return false;
     }
   }
@@ -189,7 +190,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error setting short-form block: $e');
+      debugPrint('Error setting short-form block: $e');
       return false;
     }
   }
@@ -202,7 +203,7 @@ class BlocksNativeService {
       );
       return result?.cast<Map<String, dynamic>>() ?? [];
     } catch (e) {
-      print('Error getting short-form blocks: $e');
+      debugPrint('Error getting short-form blocks: $e');
       return [];
     }
   }
@@ -215,7 +216,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error checking accessibility service: $e');
+      debugPrint('Error checking accessibility service: $e');
       return false;
     }
   }
@@ -228,12 +229,12 @@ class BlocksNativeService {
       );
 
       if (result == null) {
-        print('Native method returned null');
+        debugPrint('Native method returned null');
         return {};
       }
 
-      print('Raw result type: ${result.runtimeType}');
-      print('Raw result: $result');
+      debugPrint('Raw result type: ${result.runtimeType}');
+      debugPrint('Raw result: $result');
 
       // Handle different possible return types
       if (result is Map<String, dynamic>) {
@@ -249,12 +250,12 @@ class BlocksNativeService {
         });
         return convertedMap;
       } else {
-        print('Unexpected result type: ${result.runtimeType}');
+        debugPrint('Unexpected result type: ${result.runtimeType}');
         return {};
       }
     } catch (e, stackTrace) {
-      print('Error getting short-form blocking status: $e');
-      print('Stack trace: $stackTrace');
+      debugPrint('Error getting short-form blocking status: $e');
+      debugPrint('Stack trace: $stackTrace');
       return {};
     }
   }
@@ -271,7 +272,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error checking if short-form is blocked: $e');
+      debugPrint('Error checking if short-form is blocked: $e');
       return false;
     }
   }
@@ -314,9 +315,9 @@ class BlocksNativeService {
         );
       }
 
-      print('Successfully synced blocks with native Android');
+      debugPrint('Successfully synced blocks with native Android');
     } catch (e) {
-      print('Error syncing blocks with native: $e');
+      debugPrint('Error syncing blocks with native: $e');
     }
   }
 
@@ -330,7 +331,7 @@ class BlocksNativeService {
       );
       return result?.cast<String, dynamic>() ?? {};
     } catch (e) {
-      print('Error getting website blocking diagnostics: $e');
+      debugPrint('Error getting website blocking diagnostics: $e');
       return {'error': 'Failed to get diagnostics', 'details': e.toString()};
     }
   }
@@ -344,7 +345,7 @@ class BlocksNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error testing website blocking: $e');
+      debugPrint('Error testing website blocking: $e');
       return false;
     }
   }
@@ -357,7 +358,7 @@ class BlocksNativeService {
       );
       return result?.cast<String>() ?? [];
     } catch (e) {
-      print('Error getting supported browsers: $e');
+      debugPrint('Error getting supported browsers: $e');
       return [];
     }
   }
@@ -370,7 +371,7 @@ class BlocksNativeService {
       );
       return Map<String, dynamic>.from(result ?? {});
     } catch (e) {
-      print('Error checking battery optimization status: $e');
+      debugPrint('Error checking battery optimization status: $e');
       return {
         'isIgnoringBatteryOptimizations': false,
         'shouldRequest': false,
@@ -387,7 +388,7 @@ class BlocksNativeService {
       );
       return Map<String, dynamic>.from(result ?? {});
     } catch (e) {
-      print('Error requesting battery optimization exemption: $e');
+      debugPrint('Error requesting battery optimization exemption: $e');
       return {
         'granted': false,
         'message': 'Error requesting battery optimization exemption',

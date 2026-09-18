@@ -80,39 +80,43 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
 
       final settingsAsync = ref.read(userSettingsProvider(user.uid));
       final settings = settingsAsync.value;
-      
+
       if (settings == null) return;
 
       // Get blocked content from the proper blocked content provider
       final blockedContentAsync = ref.read(blockedContentProvider(user.uid));
       final blockedContent = blockedContentAsync.value;
-      
+
       // Get permanently blocked apps from blocked content provider
       final allBlockedApps = blockedContent?.permanentlyBlockedApps ?? [];
 
       // Get blocked websites from blocked content provider
-      final blockedWebsites = blockedContent?.blockedWebsites
-          .where((w) => w.isActive)
-          .map((w) => {
-                'url': w.url,
-                'name': w.name,
-                'isActive': w.isActive,
-              })
-          .toList() ?? [];
+      final blockedWebsites =
+          blockedContent?.blockedWebsites
+              .where((w) => w.isActive)
+              .map(
+                (w) => {'url': w.url, 'name': w.name, 'isActive': w.isActive},
+              )
+              .toList() ??
+          [];
 
       // Get short form blocks
       final shortFormBlocks = blockedContent?.shortFormBlocks ?? {};
-      final shortFormBlocked = shortFormBlocks.values.any((block) => block.isBlocked);
+      final shortFormBlocked = shortFormBlocks.values.any(
+        (block) => block.isBlocked,
+      );
 
       // Start the focus session using the provider
-      await ref.read(focusSessionProvider.notifier).startSession(
-        plannedDuration: settings.defaultDuration,
-        sessionType: settings.timerMode,
-        blockedApps: allBlockedApps,
-        blockedWebsites: blockedWebsites,
-        shortFormBlocked: shortFormBlocked,
-        notificationsBlocked: true, // Default to blocking notifications
-      );
+      await ref
+          .read(focusSessionProvider.notifier)
+          .startSession(
+            plannedDuration: settings.defaultDuration,
+            sessionType: settings.timerMode,
+            blockedApps: allBlockedApps,
+            blockedWebsites: blockedWebsites,
+            shortFormBlocked: shortFormBlocked,
+            notificationsBlocked: true, // Default to blocking notifications
+          );
 
       // Navigate to active focus screen
       if (mounted) {
@@ -137,9 +141,9 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
         );
       }
     }
-  } 
-  
-   @override
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userAsync = ref.watch(currentUserProvider);
 
@@ -155,7 +159,9 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
             Positioned.fill(
               child: Consumer(
                 builder: (context, ref, child) {
-                  final currentBackground = ref.watch(currentBackgroundImageProvider);
+                  final currentBackground = ref.watch(
+                    currentBackgroundImageProvider,
+                  );
                   return Image.asset(
                     currentBackground,
                     fit: BoxFit.cover,
@@ -192,9 +198,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                           const SizedBox(height: 100),
 
                           // Focus Timer Widget - now handles its own settings
-                          FocusTimerWidget(
-                            onTap: _showFocusModeModal,
-                          ),
+                          FocusTimerWidget(onTap: _showFocusModeModal),
 
                           const Spacer(),
 
@@ -235,7 +239,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
       },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (_, __) =>
+      error: (_, _) =>
           const Scaffold(body: Center(child: Text('Error loading user data'))),
     );
   }
@@ -267,7 +271,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
           children: [
             Icon(
               Icons.format_quote,
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               size: 24,
             ),
             const SizedBox(width: 12),
@@ -275,7 +279,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
               child: Text(
                 _quotes[_currentQuoteIndex],
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                   height: 1.4,
@@ -286,7 +290,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
             const SizedBox(width: 12),
             Icon(
               Icons.format_quote,
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               size: 24,
             ),
           ],
@@ -302,7 +306,8 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const ProfileScreen())
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
             );
           },
           child: Container(
@@ -311,13 +316,13 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
                 width: 1.5,
               ),
             ),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               backgroundImage: user.photoURL != null
                   ? NetworkImage(user.photoURL!)
                   : null,
@@ -341,20 +346,22 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
         Consumer(
           builder: (context, ref, child) {
             final todayUsageAsync = ref.watch(todayUsageStatsProvider);
-            
+
             return todayUsageAsync.when(
               data: (usageStats) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const UsageStatsScreen())
+                      MaterialPageRoute(
+                        builder: (context) => const UsageStatsScreen(),
+                      ),
                     );
                   },
                   child: _buildStatCard(
                     label: 'Usage',
                     value: usageStats.formattedTotalTimeExcludingSelf,
-                    backgroundColor: Colors.white.withOpacity(0.15),
+                    backgroundColor: Colors.white.withValues(alpha: 0.15),
                   ),
                 );
               },
@@ -362,33 +369,35 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const UsageStatsScreen())
+                    MaterialPageRoute(
+                      builder: (context) => const UsageStatsScreen(),
+                    ),
                   );
                 },
                 child: _buildStatCard(
                   label: 'Usage',
                   value: '...',
-                  backgroundColor: Colors.white.withOpacity(0.15),
+                  backgroundColor: Colors.white.withValues(alpha: 0.15),
                 ),
               ),
-              error: (_, __) => GestureDetector(
+              error: (_, _) => GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const UsageStatsScreen())
+                    MaterialPageRoute(
+                      builder: (context) => const UsageStatsScreen(),
+                    ),
                   );
                 },
                 child: _buildStatCard(
                   label: 'Usage',
                   value: '0m',
-                  backgroundColor: Colors.white.withOpacity(0.15),
+                  backgroundColor: Colors.white.withValues(alpha: 0.15),
                 ),
               ),
             );
           },
         ),
-
-      
 
         const Spacer(),
 
@@ -439,7 +448,10 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.2),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -448,7 +460,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 9,
               fontWeight: FontWeight.w500,
             ),

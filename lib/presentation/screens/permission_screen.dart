@@ -14,8 +14,6 @@ class PermissionScreen extends ConsumerStatefulWidget {
 
 class _PermissionScreenState extends ConsumerState<PermissionScreen>
     with WidgetsBindingObserver {
-  bool _hasCompletedPermissions = false;
-
   @override
   void initState() {
     super.initState();
@@ -47,45 +45,6 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
           ref.read(permissionProvider.notifier).checkPermissions();
         }
       });
-    }
-  }
-
-  Future<void> _handlePermissionsCompleted(
-    PermissionState permissionState,
-  ) async {
-    if (!mounted) return;
-
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      // Get current user from auth state
-      final authState = ref.read(authStateProvider);
-
-      await authState.when(
-        data: (user) async {
-          if (user != null) {
-            // Update user account with permission completion
-            await ref
-                .read(permissionProvider.notifier)
-                .completePermissions(user.uid);
-
-            // Navigate to SplashScreen after successful completion
-            if (mounted) {
-              Navigator.of(
-                context,
-              ).pushNamedAndRemoveUntil('/', (route) => false);
-            }
-          }
-        },
-        loading: () {},
-        error: (error, stack) {},
-      );
-    } catch (e) {
-      if (mounted) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(content: Text('Failed to update account: $e')),
-        );
-      }
     }
   }
 
@@ -216,11 +175,11 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
                             .completePermissions(user.uid);
 
                         // Navigate to SplashScreen after successful completion
-                        if (mounted) {
-                          Navigator.of(
-                            context,
-                          ).pushNamedAndRemoveUntil('/', (route) => false);
-                        }
+                        if (!context.mounted) return;
+                        
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil('/', (route) => false);
                       } catch (e) {
                         if (mounted) {
                           scaffoldMessenger.showSnackBar(
@@ -279,11 +238,6 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
     // User must manually confirm completion via the button
     ref.listen(permissionProvider, (previous, current) {
       if (!mounted) return;
-
-      // Reset completion status if permissions are no longer all granted
-      if (previous != null && previous.allGranted && !current.allGranted) {
-        _hasCompletedPermissions = false;
-      }
 
       // Log permission status for debugging
       debugPrint('Permissions updated - All granted: ${current.allGranted}');
@@ -432,7 +386,9 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
-                            color: theme.colorScheme.primary.withOpacity(0.3),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.3,
+                            ),
                             child: Icon(
                               Icons.android,
                               size: 30,
@@ -481,10 +437,10 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
               //   margin: const EdgeInsets.only(bottom: 16),
               //   padding: const EdgeInsets.all(16),
               //   decoration: BoxDecoration(
-              //     color: theme.colorScheme.errorContainer.withOpacity(0.3),
+              //     color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
               //     borderRadius: BorderRadius.circular(12),
               //     border: Border.all(
-              //       color: theme.colorScheme.error.withOpacity(0.5),
+              //       color: theme.colorScheme.error.withValues(alpha: 0.5),
               //       width: 1,
               //     ),
               //   ),
@@ -547,8 +503,8 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
               //         ),
               //         decoration: BoxDecoration(
               //           color: permissionState.allGranted
-              //               ? Colors.green.withOpacity(0.2)
-              //               : Colors.orange.withOpacity(0.2),
+              //               ? Colors.green.withValues(alpha: 0.2)
+              //               : Colors.orange.withValues(alpha: 0.2),
               //           borderRadius: BorderRadius.circular(6),
               //         ),
               //         child: Text(

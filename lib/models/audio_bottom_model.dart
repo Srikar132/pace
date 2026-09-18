@@ -15,43 +15,41 @@ class AudioBottomSheet extends ConsumerStatefulWidget {
 class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
   Audio? selectedAudio;
   Timer? _stateCheckTimer;
-  
+
   @override
   void initState() {
     super.initState();
-    _stateCheckTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    _stateCheckTimer = Timer.periodic(const Duration(milliseconds: 500), (
+      timer,
+    ) {
       if (mounted) {
         setState(() {});
       }
     });
   }
-  
+
   @override
   void dispose() {
     _stateCheckTimer?.cancel();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
-    
+
     return Container(
       height: screenHeight * 0.88,
       decoration: BoxDecoration(
         color: const Color(0xFF0F0F0F),
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(32),
-        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
         children: [
           _buildDragHandle(),
           _buildHeader(theme),
-          Expanded(
-            child: _buildAudioGrid(theme),
-          ),
+          Expanded(child: _buildAudioGrid(theme)),
         ],
       ),
     );
@@ -80,10 +78,10 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF82D65D).withOpacity(0.15),
+                  color: const Color(0xFF82D65D).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: const Color(0xFF82D65D).withOpacity(0.3),
+                    color: const Color(0xFF82D65D).withValues(alpha: 0.3),
                     width: 1.5,
                   ),
                 ),
@@ -127,9 +125,7 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(32),
-        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
@@ -160,9 +156,15 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                 itemCount: AudioConstants.audioList.length,
                 itemBuilder: (context, index) {
                   final audio = AudioConstants.audioList[index];
-                  final isSelected = selectedAudio?.songAssetUrl == audio.songAssetUrl;
+                  final isSelected =
+                      selectedAudio?.songAssetUrl == audio.songAssetUrl;
                   final audioService = ref.read(audioServiceProvider);
-                  return _buildAudioCard(audio, isSelected, theme, audioService);
+                  return _buildAudioCard(
+                    audio,
+                    isSelected,
+                    theme,
+                    audioService,
+                  );
                 },
               ),
             ),
@@ -172,37 +174,50 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
     );
   }
 
-  Widget _buildAudioCard(Audio audio, bool isSelected, ThemeData theme, AudioService audioService) {
+  Widget _buildAudioCard(
+    Audio audio,
+    bool isSelected,
+    ThemeData theme,
+    AudioService audioService,
+  ) {
     final isMusic = audio.songAssetUrl.endsWith('.mp3');
     final audioType = isMusic ? AudioType.song : AudioType.sound;
     final isCurrentlyPlaying = audioService.isPlaying(audioType) && isSelected;
-    
+
     return GestureDetector(
-      onTap: () => _handleAudioTap(audio, isSelected, isCurrentlyPlaying, audioType, isMusic),
+      onTap: () => _handleAudioTap(
+        audio,
+        isSelected,
+        isCurrentlyPlaying,
+        audioType,
+        isMusic,
+      ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isSelected 
-              ? const Color(0xFF82D65D)
-              : const Color(0xFF3A3A3A),
+            color: isSelected
+                ? const Color(0xFF82D65D)
+                : const Color(0xFF3A3A3A),
             width: isSelected ? 2.5 : 1.5,
           ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: const Color(0xFF82D65D).withOpacity(0.25),
-              blurRadius: 24,
-              offset: const Offset(0, 8),
-            ),
-          ] : [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF82D65D).withValues(alpha: 0.25),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ]
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(22),
@@ -220,22 +235,24 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          const Color(0xFF82D65D).withOpacity(0.3),
-                          const Color(0xFF5CAF3C).withOpacity(0.2),
+                          const Color(0xFF82D65D).withValues(alpha: 0.3),
+                          const Color(0xFF5CAF3C).withValues(alpha: 0.2),
                         ],
                       ),
                     ),
                     child: Center(
                       child: Icon(
-                        isMusic ? Icons.music_note_rounded : Icons.volume_up_rounded,
-                        color: const Color(0xFF82D65D).withOpacity(0.6),
+                        isMusic
+                            ? Icons.music_note_rounded
+                            : Icons.volume_up_rounded,
+                        color: const Color(0xFF82D65D).withValues(alpha: 0.6),
                         size: 48,
                       ),
                     ),
                   );
                 },
               ),
-              
+
               // Dark gradient overlay
               Container(
                 decoration: BoxDecoration(
@@ -243,13 +260,13 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withOpacity(0.3),
-                      Colors.black.withOpacity(0.75),
+                      Colors.black.withValues(alpha: 0.3),
+                      Colors.black.withValues(alpha: 0.75),
                     ],
                   ),
                 ),
               ),
-              
+
               // Selected state overlay
               if (isSelected)
                 Container(
@@ -258,13 +275,13 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        const Color(0xFF82D65D).withOpacity(0.15),
-                        const Color(0xFF82D65D).withOpacity(0.05),
+                        const Color(0xFF82D65D).withValues(alpha: 0.15),
+                        const Color(0xFF82D65D).withValues(alpha: 0.05),
                       ],
                     ),
                   ),
                 ),
-              
+
               // Content overlay
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -277,14 +294,19 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               color: isSelected
-                                ? const Color(0xFF82D65D).withOpacity(0.6)
-                                : Colors.white.withOpacity(0.2),
+                                  ? const Color(
+                                      0xFF82D65D,
+                                    ).withValues(alpha: 0.6)
+                                  : Colors.white.withValues(alpha: 0.2),
                               width: 1,
                             ),
                           ),
@@ -292,11 +314,13 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                isMusic ? Icons.album_rounded : Icons.graphic_eq_rounded,
+                                isMusic
+                                    ? Icons.album_rounded
+                                    : Icons.graphic_eq_rounded,
                                 size: 12,
                                 color: isSelected
-                                  ? const Color(0xFF82D65D)
-                                  : Colors.white,
+                                    ? const Color(0xFF82D65D)
+                                    : Colors.white,
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -306,8 +330,8 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                                   fontSize: 10,
                                   letterSpacing: 0.5,
                                   color: isSelected
-                                    ? const Color(0xFF82D65D)
-                                    : Colors.white,
+                                      ? const Color(0xFF82D65D)
+                                      : Colors.white,
                                 ),
                               ),
                             ],
@@ -315,7 +339,7 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                         ),
                       ],
                     ),
-                    
+
                     // Bottom section - Play button and name
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,30 +349,33 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                           width: 52,
                           height: 52,
                           decoration: BoxDecoration(
-                            color: isSelected 
-                              ? const Color(0xFF82D65D)
-                              : Colors.white,
+                            color: isSelected
+                                ? const Color(0xFF82D65D)
+                                : Colors.white,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: (isSelected ? const Color(0xFF82D65D) : Colors.white)
-                                    .withOpacity(0.5),
+                                color:
+                                    (isSelected
+                                            ? const Color(0xFF82D65D)
+                                            : Colors.white)
+                                        .withValues(alpha: 0.5),
                                 blurRadius: 16,
                                 offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: Icon(
-                            (isSelected && isCurrentlyPlaying) 
-                              ? Icons.pause_rounded 
-                              : Icons.play_arrow_rounded,
+                            (isSelected && isCurrentlyPlaying)
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
                             color: const Color(0xFF1A1A1A),
                             size: 30,
                           ),
                         ),
-                        
+
                         const SizedBox(height: 12),
-                        
+
                         // Audio Name
                         Text(
                           audio.name,
@@ -359,7 +386,7 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
                             letterSpacing: -0.3,
                             shadows: [
                               Shadow(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -397,7 +424,7 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
       setState(() {
         selectedAudio = audio;
       });
-      
+
       await AudioServiceMethods.stopAll(ref);
       await AudioServiceMethods.playAsset(
         ref,
@@ -406,7 +433,7 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
         trackName: audio.name,
         loop: isMusic,
       );
-      
+
       _showSnackBar('Playing ${audio.name}', Icons.music_note_rounded);
     }
   }
@@ -433,17 +460,10 @@ class _AudioBottomSheetState extends ConsumerState<AudioBottomSheet> {
         backgroundColor: const Color(0xFF2A2A2A),
         duration: const Duration(milliseconds: 1500),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(
-          bottom: 100,
-          left: 20,
-          right: 20,
-        ),
+        margin: const EdgeInsets.only(bottom: 100, left: 20, right: 20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(
-            color: Color(0xFF3A3A3A),
-            width: 1,
-          ),
+          side: const BorderSide(color: Color(0xFF3A3A3A), width: 1),
         ),
       ),
     );

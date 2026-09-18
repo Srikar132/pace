@@ -13,18 +13,9 @@ class ProcrastinationScreen extends ConsumerWidget {
     final onboardingNotifier = ref.read(onboardingProvider.notifier);
 
     final procrastinationLevels = [
-      {
-        'id': 'struggle',
-        'text': 'I struggle to get started',
-      },
-      {
-        'id': 'few_bad_days',
-        'text': 'I have a few bad days',
-      },
-      {
-        'id': 'consistent',
-        'text': "I'm fairly consistent",
-      },
+      {'id': 'struggle', 'text': 'I struggle to get started'},
+      {'id': 'few_bad_days', 'text': 'I have a few bad days'},
+      {'id': 'consistent', 'text': "I'm fairly consistent"},
     ];
 
     return Padding(
@@ -44,7 +35,7 @@ class ProcrastinationScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -54,7 +45,7 @@ class ProcrastinationScreen extends ConsumerWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
                         child: Icon(
                           Icons.person,
                           size: 30,
@@ -95,8 +86,9 @@ class ProcrastinationScreen extends ConsumerWidget {
                 text: level['text'] as String,
                 isSelected: isSelected,
                 onTap: () {
-                  onboardingNotifier
-                      .setProcrastinationLevel(level['id'] as String);
+                  onboardingNotifier.setProcrastinationLevel(
+                    level['id'] as String,
+                  );
                 },
               ),
             );
@@ -118,7 +110,9 @@ class ProcrastinationScreen extends ConsumerWidget {
                           if (user == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: const Text('User not found. Please sign in again.'),
+                                content: const Text(
+                                  'User not found. Please sign in again.',
+                                ),
                                 backgroundColor: theme.colorScheme.error,
                               ),
                             );
@@ -126,13 +120,14 @@ class ProcrastinationScreen extends ConsumerWidget {
                           }
 
                           try {
-                            await onboardingNotifier.completeOnboarding(user.uid);
+                            await onboardingNotifier.completeOnboarding(
+                              user.uid,
+                            );
 
                             // Navigate to permissions screen
                             if (context.mounted) {
                               Navigator.of(context).pushReplacementNamed('/');
                             }
-
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -193,7 +188,7 @@ class _ProcrastinationOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         decoration: BoxDecoration(
           color: isSelected
-              ? theme.colorScheme.primary.withOpacity(0.15)
+              ? theme.colorScheme.primary.withValues(alpha: 0.15)
               : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -210,8 +205,7 @@ class _ProcrastinationOption extends StatelessWidget {
                 text,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: isSelected ? Colors.white : Colors.white70,
-                  fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ),

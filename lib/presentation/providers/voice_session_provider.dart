@@ -5,6 +5,7 @@ import '../../models/voice_state.dart';
 import '../../services/audio_stream_service.dart';
 import '../../services/realtime_service.dart';
 import '../../services/audio_player_service.dart';
+import 'package:flutter/foundation.dart';
 
 final voiceSessionProvider =
     NotifierProvider<VoiceSessionNotifier, VoiceSessionStateModel>(() {
@@ -35,7 +36,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
       try {
         state = update(state);
       } catch (e) {
-        print('⚠️ State update error: $e');
+        debugPrint('⚠️ State update error: $e');
       }
     }
   }
@@ -50,19 +51,19 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
 
   Future<bool> initialize() async {
     try {
-      print('🚀 Initializing voice session...');
+      debugPrint('🚀 Initializing voice session...');
 
       // Auto-restart listening when playback finishes (continuous mode)
       _playerService.onPlaybackComplete = () {
         if (_mounted && _continuousMode) {
-          print('🔄 Playback done, auto-restarting listening...');
+          debugPrint('🔄 Playback done, auto-restarting listening...');
           // Auto-restart listening for continuous conversation
           _autoRestartListening();
         }
       };
 
       final connected = await _realtimeService.connect();
-      print('🔌 Connection result: $connected');
+      debugPrint('🔌 Connection result: $connected');
 
       if (!connected) {
         _updateState(
@@ -78,7 +79,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
       _transcriptSubscription = _realtimeService.transcriptStream.listen((
         transcript,
       ) {
-        print('📝 Got transcript: $transcript');
+        debugPrint('📝 Got transcript: $transcript');
         final message = VoiceMessage(
           id: _uuid.v4(),
           role: 'user',
@@ -97,7 +98,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
       _responseSubscription = _realtimeService.responseStream.listen((
         response,
       ) {
-        print('💬 Got response text: $response');
+        debugPrint('💬 Got response text: $response');
         _updateState((s) => s.copyWith(partialResponse: response));
       });
 
@@ -105,13 +106,13 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
       _audioResponseSubscription = _realtimeService.audioResponseStream.listen((
         chunk,
       ) {
-        print('🎵 Got audio chunk: ${chunk.length} bytes');
+        debugPrint('🎵 Got audio chunk: ${chunk.length} bytes');
         _playerService.queueAudioChunk(chunk);
       });
 
       // API state changes
       _stateSubscription = _realtimeService.stateStream.listen((apiState) {
-        print('📡 API state changed: $apiState');
+        debugPrint('📡 API state changed: $apiState');
         switch (apiState) {
           case 'speech_started':
             _updateState((s) => s.copyWith(state: VoiceSessionState.listening));
@@ -173,7 +174,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
 
       return true;
     } catch (e) {
-      print('❌ Init error: $e');
+      debugPrint('❌ Init error: $e');
       _updateState(
         (s) => s.copyWith(
           state: VoiceSessionState.error,
@@ -218,7 +219,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
     });
 
     _updateState((s) => s.copyWith(state: VoiceSessionState.listening));
-    print('🎤 Started continuous listening mode');
+    debugPrint('🎤 Started continuous listening mode');
   }
 
   /// TAP TO STOP SPEAKING (sends audio for processing)
@@ -230,19 +231,19 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
     _realtimeService.commitAudio();
 
     _updateState((s) => s.copyWith(state: VoiceSessionState.thinking));
-    print('⏹️ Stopped listening, processing...');
+    debugPrint('⏹️ Stopped listening, processing...');
   }
 
   /// Pause listening (stop mic) but keep continuous mode enabled
   void _pauseListening() {
     _audioSubscription?.cancel();
     _audioService.stopRecording();
-    print('⏸️ Paused listening (bot is speaking)');
+    debugPrint('⏸️ Paused listening (bot is speaking)');
   }
 
   /// TAP TO INTERRUPT (stops playback, goes to idle)
   void interrupt() {
-    print('🛑 Stopping voice session...');
+    debugPrint('🛑 Stopping voice session...');
 
     // Stop continuous mode
     _continuousMode = false;
@@ -284,7 +285,7 @@ class VoiceSessionNotifier extends Notifier<VoiceSessionStateModel> {
     });
 
     _updateState((s) => s.copyWith(state: VoiceSessionState.listening));
-    print('🎤 Auto-restarted listening');
+    debugPrint('🎤 Auto-restarted listening');
   }
 
   /// Stop continuous mode (when leaving screen)

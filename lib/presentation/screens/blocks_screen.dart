@@ -21,18 +21,18 @@ Future<bool> _checkAndRequestPermissions(
   BuildContext context,
   WidgetRef ref,
 ) async {
-  print('🔐 Checking accessibility permission...');
+  debugPrint('🔐 Checking accessibility permission...');
 
   // Check accessibility permission using provider
   final permissionNotifier = ref.read(permissionProvider.notifier);
   await permissionNotifier.checkPermissions();
 
   final hasAccessibility = ref.read(permissionProvider).accessibilityPermission;
-  print('🔐 Accessibility permission: $hasAccessibility');
+  debugPrint('🔐 Accessibility permission: $hasAccessibility');
 
   if (!hasAccessibility) {
     if (context.mounted) {
-      print('🔐 Showing permission dialog...');
+      debugPrint('🔐 Showing permission dialog...');
       final shouldRequest = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
@@ -52,14 +52,14 @@ Future<bool> _checkAndRequestPermissions(
           actions: [
             TextButton(
               onPressed: () {
-                print('🔐 User cancelled permission request');
+                debugPrint('🔐 User cancelled permission request');
                 Navigator.pop(context, false);
               },
               child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
             ),
             TextButton(
               onPressed: () {
-                print('🔐 User accepted - opening settings');
+                debugPrint('🔐 User accepted - opening settings');
                 Navigator.pop(context, true);
               },
               child: const Text(
@@ -72,7 +72,7 @@ Future<bool> _checkAndRequestPermissions(
       );
 
       if (shouldRequest == true) {
-        print('🔐 Requesting accessibility permission...');
+        debugPrint('🔐 Requesting accessibility permission...');
         await permissionNotifier.requestAccessibilityPermission();
         // Wait a bit for user to potentially grant permission
         await Future.delayed(const Duration(seconds: 2));
@@ -81,25 +81,25 @@ Future<bool> _checkAndRequestPermissions(
         final finalPermission = ref
             .read(permissionProvider)
             .accessibilityPermission;
-        print('🔐 Final permission status: $finalPermission');
+        debugPrint('🔐 Final permission status: $finalPermission');
         return finalPermission;
       } else {
-        print('🔐 User did not request permission');
+        debugPrint('🔐 User did not request permission');
       }
     }
     return false;
   }
 
-  print('🔐 Permission already granted');
+  debugPrint('🔐 Permission already granted');
   return true;
 }
 
 // Check and request Usage Stats permission (required for app limits)
 Future<bool> _checkAndRequestUsageStatsPermission(BuildContext context) async {
-  print('📊 Checking usage stats permission...');
+  debugPrint('📊 Checking usage stats permission...');
 
   final hasPermission = await NativeService.hasUsageStatsPermission();
-  print('📊 Usage stats permission: $hasPermission');
+  debugPrint('📊 Usage stats permission: $hasPermission');
 
   if (!hasPermission && context.mounted) {
     final shouldRequest = await showDialog<bool>(
@@ -149,11 +149,11 @@ Future<bool> _checkAndRequestUsageStatsPermission(BuildContext context) async {
     );
 
     if (shouldRequest == true) {
-      print('📊 Opening usage stats settings...');
+      debugPrint('📊 Opening usage stats settings...');
       await NativeService.requestUsageStatsPermission();
       await Future.delayed(const Duration(seconds: 2));
       final finalPermission = await NativeService.hasUsageStatsPermission();
-      print('📊 Final usage stats permission: $finalPermission');
+      debugPrint('📊 Final usage stats permission: $finalPermission');
       return finalPermission;
     }
   }
@@ -186,7 +186,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
 
   void _setupAppLimitEventListener() {
     _appLimitNativeService.initLimitEventsHandler((packageName) {
-      print('⚠️ App limit reached for: $packageName');
+      debugPrint('⚠️ App limit reached for: $packageName');
       if (mounted) {
         _showAppLimitReachedDialog(packageName);
       }
@@ -207,10 +207,10 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
           }
         }
         await _appLimitNativeService.updateLimits(limitsMap);
-        print('✅ Synced ${limitsMap.length} app limits to native');
+        debugPrint('✅ Synced ${limitsMap.length} app limits to native');
       });
     } catch (e) {
-      print('Error syncing limits to native: $e');
+      debugPrint('Error syncing limits to native: $e');
     }
   }
 
@@ -267,10 +267,10 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
       final nativeService = ref.read(blocksNativeServiceProvider);
       _blockingEventsSubscription = nativeService.blockingEventsStream.listen(
         (event) => _handleBlockingEvent(event),
-        onError: (error) => print('Blocking events stream error: $error'),
+        onError: (error) => debugPrint('Blocking events stream error: $error'),
       );
     } catch (e) {
-      print('Error setting up blocking event listener: $e');
+      debugPrint('Error setting up blocking event listener: $e');
     }
   }
 
@@ -286,7 +286,7 @@ class _BlocksScreenState extends ConsumerState<BlocksScreen> {
         }
       }
     } catch (e) {
-      print('Error handling blocking event: $e');
+      debugPrint('Error handling blocking event: $e');
     }
   }
 
@@ -453,6 +453,7 @@ class _AppLimitsSection extends ConsumerWidget {
       return;
     }
 
+    if (!context.mounted) return;
     await showDialog(
       context: context,
       builder: (context) => const _AppSelectionDialog(),
@@ -493,15 +494,15 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
           }
           final nativeService = AppLimitNativeService();
           await nativeService.updateLimits(limitsMap);
-          print('✅ Synced ${limitsMap.length} limits to native');
+          debugPrint('✅ Synced ${limitsMap.length} limits to native');
         },
         loading: () async {},
         error: (e, _) async {
-          print('Error syncing limits: $e');
+          debugPrint('Error syncing limits: $e');
         },
       );
     } catch (e) {
-      print('Error in _syncAllLimitsToNative: $e');
+      debugPrint('Error in _syncAllLimitsToNative: $e');
     }
   }
 
@@ -519,7 +520,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
         });
       }
     } catch (e) {
-      print('Error loading usage: $e');
+      debugPrint('Error loading usage: $e');
       if (mounted) {
         setState(() => _isLoadingUsage = false);
       }
@@ -545,10 +546,10 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isExceeded
-              ? Colors.red.withOpacity(0.3)
+              ? Colors.red.withValues(alpha: 0.3)
               : isNearLimit
-              ? Colors.orange.withOpacity(0.3)
-              : Colors.white.withOpacity(0.05),
+              ? Colors.orange.withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.05),
         ),
       ),
       child: Column(
@@ -559,10 +560,10 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: isExceeded
-                    ? Colors.red.withOpacity(0.1)
+                    ? Colors.red.withValues(alpha: 0.1)
                     : isNearLimit
-                    ? Colors.orange.withOpacity(0.1)
-                    : Colors.white.withOpacity(0.05),
+                    ? Colors.orange.withValues(alpha: 0.1)
+                    : Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -595,7 +596,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                               ? Colors.red
                               : isNearLimit
                               ? Colors.orange
-                              : Colors.white.withOpacity(0.5),
+                              : Colors.white.withValues(alpha: 0.5),
                           fontSize: 12,
                         ),
                       ),
@@ -603,7 +604,9 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   )
                 : Text(
                     'Inactive',
-                    style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                    ),
                   ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -612,7 +615,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   IconButton(
                     icon: Icon(
                       Icons.refresh,
-                      color: Colors.white.withOpacity(0.4),
+                      color: Colors.white.withValues(alpha: 0.4),
                       size: 20,
                     ),
                     onPressed: _isLoadingUsage ? null : _loadUsage,
@@ -623,15 +626,17 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   child: Switch(
                     value: widget.limit.isActive,
                     activeThumbColor: const Color(0xFF82D65D),
-                    activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
-                    inactiveTrackColor: Colors.grey.withOpacity(0.2),
+                    activeTrackColor: const Color(
+                      0xFF82D65D,
+                    ).withValues(alpha: 0.3),
+                    inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
                     onChanged: (value) => _handleToggle(value),
                   ),
                 ),
                 IconButton(
                   icon: Icon(
                     Icons.more_vert,
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                   ),
                   onPressed: () => _showOptionsMenu(context),
                 ),
@@ -649,14 +654,14 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                       Text(
                         '$_currentUsage min',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 11,
                         ),
                       ),
                       Text(
                         '${widget.limit.dailyLimit} min',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 11,
                         ),
                       ),
@@ -668,7 +673,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                     child: LinearProgressIndicator(
                       value: progress,
                       minHeight: 6,
-                      backgroundColor: Colors.white.withOpacity(0.1),
+                      backgroundColor: Colors.white.withValues(alpha: 0.1),
                       valueColor: AlwaysStoppedAnimation<Color>(
                         isExceeded
                             ? Colors.red
@@ -692,6 +697,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
     if (value) {
       final hasPermission = await _checkAndRequestPermissions(context, ref);
       if (!hasPermission) return;
+      if (!mounted) return;
     }
 
     // If disabling, check parental control
@@ -706,6 +712,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
         final isEnabled = data?['isEnabled'] as bool? ?? false;
 
         if (isEnabled) {
+          if (!mounted) return;
           final verified = await showDialog<bool>(
             context: context,
             barrierDismissible: false,
@@ -723,15 +730,14 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
           );
 
           if (verified != true) {
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('❌ Incorrect PIN or cancelled'),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            }
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('❌ Incorrect PIN or cancelled'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 2),
+              ),
+            );
             return;
           }
         }
@@ -751,29 +757,27 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
         _loadUsage(); // Reload usage when enabling
       }
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              value
-                  ? '✅ ${widget.limit.appName} limit enabled'
-                  : '🔓 ${widget.limit.appName} limit disabled',
-            ),
-            backgroundColor: const Color(0xFF1E1E1E),
-            duration: const Duration(seconds: 2),
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            value
+                ? '✅ ${widget.limit.appName} limit enabled'
+                : '🔓 ${widget.limit.appName} limit disabled',
           ),
-        );
-      }
+          backgroundColor: const Color(0xFF1E1E1E),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     } catch (e) {
-      print('Error toggling limit: $e');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to update limit'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      debugPrint('Error toggling limit: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update limit'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -836,9 +840,9 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             labelText: 'Daily limit (minutes)',
-            labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+            labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -877,7 +881,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                     );
                   }
                 } catch (e) {
-                  print('Error updating limit: $e');
+                  debugPrint('Error updating limit: $e');
                 }
               }
             },
@@ -934,7 +938,7 @@ class _AppLimitTileState extends ConsumerState<_AppLimitTile> {
                   );
                 }
               } catch (e) {
-                print('Error removing limit: $e');
+                debugPrint('Error removing limit: $e');
               }
             },
             child: const Text(
@@ -972,11 +976,11 @@ class _ShortFormBlocksSection extends ConsumerWidget {
           final blocks = content.shortFormBlocks;
 
           // Log what we got from Firestore
-          print(
+          debugPrint(
             '📱 ShortFormBlocksSection: Retrieved from Firestore - ${blocks.keys.toList()}',
           );
           blocks.forEach((key, block) {
-            print('   - $key: isBlocked=${block.isBlocked}');
+            debugPrint('   - $key: isBlocked=${block.isBlocked}');
           });
 
           return Column(
@@ -1077,7 +1081,9 @@ class _ShortFormBlocksSection extends ConsumerWidget {
 
     // If disabling, check parental control
     if (!isBlocked) {
-      print('🔐 Checking parental control for disabling $platform $feature');
+      debugPrint(
+        '🔐 Checking parental control for disabling $platform $feature',
+      );
 
       // Directly check Firestore for parental control
       final parentalControlDoc = await FirebaseFirestore.instance
@@ -1088,10 +1094,11 @@ class _ShortFormBlocksSection extends ConsumerWidget {
       if (parentalControlDoc.exists) {
         final data = parentalControlDoc.data();
         final isEnabled = data?['isEnabled'] as bool? ?? false;
-        print('🔐 Parental control found: isEnabled=$isEnabled');
+        debugPrint('🔐 Parental control found: isEnabled=$isEnabled');
 
         if (isEnabled) {
-          print('🔐 Showing PIN dialog');
+          debugPrint('🔐 Showing PIN dialog');
+          if (!context.mounted) return;
           // Show PIN verification dialog
           final verified = await showDialog<bool>(
             context: context,
@@ -1109,29 +1116,28 @@ class _ShortFormBlocksSection extends ConsumerWidget {
             ),
           );
 
-          print('🔐 PIN verification result: $verified');
+          debugPrint('🔐 PIN verification result: $verified');
           if (verified != true) {
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('❌ Incorrect PIN or cancelled'),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            }
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('❌ Incorrect PIN or cancelled'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 2),
+              ),
+            );
             return;
           }
         } else {
-          print('🔐 Parental control is not enabled, allowing operation');
+          debugPrint('🔐 Parental control is not enabled, allowing operation');
         }
       } else {
-        print('🔐 No parental control document found, allowing operation');
+        debugPrint('🔐 No parental control document found, allowing operation');
       }
     }
 
     try {
-      print('🔄 Updating $platform $feature to $isBlocked');
+      debugPrint('🔄 Updating $platform $feature to $isBlocked');
 
       // Update native service first
       final nativeService = ref.read(blocksNativeServiceProvider);
@@ -1140,14 +1146,14 @@ class _ShortFormBlocksSection extends ConsumerWidget {
         feature: feature,
         isBlocked: isBlocked,
       );
-      print('✅ Native service updated for $platform $feature');
+      debugPrint('✅ Native service updated for $platform $feature');
 
       // Then call the notifier method to update Firestore
       await ref
           .read(blockedContentNotifierProvider.notifier)
           .toggleShortFormBlockStatus(userId, platform, feature, isBlocked);
 
-      print(
+      debugPrint(
         '✅ Successfully updated $platform $feature to $isBlocked in Firestore',
       );
 
@@ -1166,7 +1172,7 @@ class _ShortFormBlocksSection extends ConsumerWidget {
         );
       }
     } catch (e) {
-      print('❌ Error updating short form block: $e');
+      debugPrint('❌ Error updating short form block: $e');
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1203,24 +1209,23 @@ class _ShortFormToggle extends StatefulWidget {
 class _ShortFormToggleState extends State<_ShortFormToggle> {
   bool? _optimisticValue;
   bool _isUpdating = false;
-  DateTime? _lastUpdateTime;
 
   @override
   void didUpdateWidget(_ShortFormToggle oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Clear optimistic value when Firestore confirms the change
     if (oldWidget.isBlocked != widget.isBlocked) {
-      print(
+      debugPrint(
         '🔄 Toggle ${widget.title}: Firestore updated from ${oldWidget.isBlocked} to ${widget.isBlocked}, optimistic was $_optimisticValue',
       );
       if (_optimisticValue != null && _optimisticValue == widget.isBlocked) {
-        print(
+        debugPrint(
           '✅ Toggle ${widget.title}: Clearing optimistic value (confirmed by Firestore)',
         );
         setState(() => _optimisticValue = null);
       } else if (_optimisticValue != null &&
           _optimisticValue != widget.isBlocked) {
-        print(
+        debugPrint(
           '⚠️ Toggle ${widget.title}: Firestore value conflicts with optimistic value',
         );
         // Firestore value is different from what we expected, trust Firestore
@@ -1242,7 +1247,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
   Widget build(BuildContext context) {
     // Use optimistic value if available, otherwise use actual value
     final displayValue = _optimisticValue ?? widget.isBlocked;
-    print(
+    debugPrint(
       '🎨 Toggle ${widget.title}: Rendering with displayValue=$displayValue (optimistic=$_optimisticValue, firestore=${widget.isBlocked})',
     );
 
@@ -1251,7 +1256,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: SwitchListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -1268,12 +1273,12 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
         ),
         subtitle: Text(
           widget.subtitle,
-          style: TextStyle(color: Colors.white.withOpacity(0.5)),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         ),
         value: displayValue,
         activeThumbColor: const Color(0xFF82D65D),
-        activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
-        inactiveTrackColor: Colors.grey.withOpacity(0.2),
+        activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.3),
+        inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
         onChanged: _isUpdating
             ? null
             : (value) {
@@ -1283,7 +1288,6 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
                 setState(() {
                   _optimisticValue = value;
                   _isUpdating = true;
-                  _lastUpdateTime = DateTime.now();
                 });
 
                 // Call the actual update
@@ -1295,7 +1299,7 @@ class _ShortFormToggleState extends State<_ShortFormToggle> {
                     // If optimistic value is still set after 3 seconds,
                     // it means the update failed (e.g., PIN was wrong)
                     if (widget.isBlocked != _optimisticValue) {
-                      print(
+                      debugPrint(
                         '⚠️ Toggle ${widget.title}: Reverting optimistic value (update not confirmed)',
                       );
                       _revertOptimisticValue();
@@ -1388,10 +1392,14 @@ class _WebsiteBlockingSection extends ConsumerWidget {
               decoration: InputDecoration(
                 labelText: 'Website Name',
                 hintText: 'e.g. Facebook',
-                labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                labelStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.05),
+                fillColor: Colors.white.withValues(alpha: 0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -1405,10 +1413,14 @@ class _WebsiteBlockingSection extends ConsumerWidget {
               decoration: InputDecoration(
                 labelText: 'Website URL',
                 hintText: 'e.g. facebook.com',
-                labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                labelStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.05),
+                fillColor: Colors.white.withValues(alpha: 0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -1432,6 +1444,7 @@ class _WebsiteBlockingSection extends ConsumerWidget {
                   context,
                   ref,
                 );
+                if (!context.mounted) return;
                 if (!hasPermission) {
                   Navigator.pop(context);
                   return;
@@ -1467,7 +1480,7 @@ class _WebsiteBlockingSection extends ConsumerWidget {
                     );
                   }
                 } catch (e) {
-                  print('❌ Error adding blocked website: $e');
+                  debugPrint('❌ Error adding blocked website: $e');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -1506,14 +1519,14 @@ class _WebsiteTile extends ConsumerWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: ListTile(
         leading: const Icon(Icons.public_off, color: Colors.white70),
         title: Text(website.url, style: const TextStyle(color: Colors.white)),
         subtitle: Text(
           website.name,
-          style: TextStyle(color: Colors.white.withOpacity(0.5)),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -1523,8 +1536,10 @@ class _WebsiteTile extends ConsumerWidget {
               child: Switch(
                 value: website.isActive,
                 activeThumbColor: const Color(0xFF82D65D),
-                activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
-                inactiveTrackColor: Colors.grey.withOpacity(0.2),
+                activeTrackColor: const Color(
+                  0xFF82D65D,
+                ).withValues(alpha: 0.3),
+                inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
                 onChanged: (value) async {
                   // If enabling, check permissions first
                   if (value) {
@@ -1535,6 +1550,7 @@ class _WebsiteTile extends ConsumerWidget {
                     if (!hasPermission) {
                       return;
                     }
+                    if (!context.mounted) return;
                   }
 
                   // If disabling, check parental control
@@ -1550,6 +1566,7 @@ class _WebsiteTile extends ConsumerWidget {
                       final isEnabled = data?['isEnabled'] as bool? ?? false;
 
                       if (isEnabled) {
+                        if (!context.mounted) return;
                         final verified = await showDialog<bool>(
                           context: context,
                           barrierDismissible: false,
@@ -1599,7 +1616,7 @@ class _WebsiteTile extends ConsumerWidget {
                         .read(blockedContentNotifierProvider.notifier)
                         .toggleWebsiteBlockStatus(userId, website.url, value);
                   } catch (e) {
-                    print('❌ Error toggling website: $e');
+                    debugPrint('❌ Error toggling website: $e');
                   }
                 },
               ),
@@ -1607,7 +1624,7 @@ class _WebsiteTile extends ConsumerWidget {
             IconButton(
               icon: Icon(
                 Icons.delete_outline,
-                color: Colors.white.withOpacity(0.4),
+                color: Colors.white.withValues(alpha: 0.4),
               ),
               onPressed: () async {
                 final nativeService = ref.read(blocksNativeServiceProvider);
@@ -1630,7 +1647,7 @@ class _WebsiteTile extends ConsumerWidget {
                     );
                   }
                 } catch (e) {
-                  print('❌ Error removing website: $e');
+                  debugPrint('❌ Error removing website: $e');
                 }
               },
             ),
@@ -1672,7 +1689,7 @@ class _NotificationBlockingSectionState
             decoration: BoxDecoration(
               color: const Color(0xFF1E1E1E),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: SwitchListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -1691,12 +1708,12 @@ class _NotificationBlockingSectionState
               ),
               subtitle: Text(
                 'Silence all app notifications',
-                style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
               value: _blockAllNotifications,
               activeThumbColor: const Color(0xFF82D65D),
-              activeTrackColor: const Color(0xFF82D65D).withOpacity(0.3),
-              inactiveTrackColor: Colors.grey.withOpacity(0.2),
+              activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.3),
+              inactiveTrackColor: Colors.grey.withValues(alpha: 0.2),
               onChanged: (value) {
                 setState(() => _blockAllNotifications = value);
                 // TODO: Save to backend via provider
@@ -1735,7 +1752,7 @@ class _BlockSection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withOpacity(0.1),
+                color: const Color(0xFF82D65D).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: const Color(0xFF82D65D), size: 24),
@@ -1757,7 +1774,7 @@ class _BlockSection extends StatelessWidget {
                     description,
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                     ),
                   ),
                 ],
@@ -1929,7 +1946,7 @@ Future<void> _runWebsiteBlockingDiagnostics(
       );
     }
   } catch (e) {
-    print('❌ Diagnostics error: $e');
+    debugPrint('❌ Diagnostics error: $e');
     if (context.mounted) {
       showDialog(
         context: context,
@@ -1976,15 +1993,15 @@ class _EmptyState extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         children: [
-          Icon(icon, size: 48, color: Colors.white.withOpacity(0.2)),
+          Icon(icon, size: 48, color: Colors.white.withValues(alpha: 0.2)),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(color: Colors.white.withOpacity(0.6)),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -2006,7 +2023,7 @@ class _ErrorState extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -2033,7 +2050,7 @@ class _AddButton extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.white,
-          side: BorderSide(color: Colors.white.withOpacity(0.2)),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -2062,7 +2079,6 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
   List<AppInfo> _installedApps = [];
   List<AppInfo> _filteredApps = [];
   bool _isLoading = true;
-  String _searchQuery = '';
   final _searchController = TextEditingController();
 
   Future<void> _syncAllLimitsToNative(String userId) async {
@@ -2078,15 +2094,15 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
           }
           final nativeService = AppLimitNativeService();
           await nativeService.updateLimits(limitsMap);
-          print('✅ Synced ${limitsMap.length} limits to native');
+          debugPrint('✅ Synced ${limitsMap.length} limits to native');
         },
         loading: () async {},
         error: (e, _) async {
-          print('Error syncing limits: $e');
+          debugPrint('Error syncing limits: $e');
         },
       );
     } catch (e) {
-      print('Error in _syncAllLimitsToNative: $e');
+      debugPrint('Error in _syncAllLimitsToNative: $e');
     }
   }
 
@@ -2113,7 +2129,7 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
         });
       }
     } catch (e) {
-      print('Error loading apps: $e');
+      debugPrint('Error loading apps: $e');
       if (mounted) {
         setState(() => _isLoading = false);
       }
@@ -2122,7 +2138,6 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
 
   void _filterApps(String query) {
     setState(() {
-      _searchQuery = query;
       if (query.isEmpty) {
         _filteredApps = _installedApps;
       } else {
@@ -2175,13 +2190,15 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Search apps...',
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                 ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.05),
+                fillColor: Colors.white.withValues(alpha: 0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -2198,7 +2215,9 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
                   ? Center(
                       child: Text(
                         'No apps found',
-                        style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
                       ),
                     )
                   : ListView.builder(
@@ -2244,9 +2263,11 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Daily limit (minutes)',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                  labelStyle: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.05),
+                  fillColor: Colors.white.withValues(alpha: 0.05),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -2257,35 +2278,42 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
               Text(
                 'Action on exceed:',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 14,
                 ),
               ),
               const SizedBox(height: 8),
-              ...[
-                ('warn', 'Warn', 'Show warning, can dismiss'),
-                ('block', 'Block', 'Hard block, cannot dismiss'),
-                ('notify', 'Notify', 'Notification only'),
-              ].map(
-                (option) => RadioListTile<String>(
-                  value: option.$1,
-                  groupValue: selectedAction,
-                  onChanged: (value) {
-                    setState(() => selectedAction = value!);
-                  },
-                  title: Text(
-                    option.$2,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    option.$3,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 12,
-                    ),
-                  ),
-                  activeColor: const Color(0xFF82D65D),
-                  contentPadding: EdgeInsets.zero,
+              RadioGroup<String>(
+                groupValue: selectedAction,
+                onChanged: (value) {
+                  setState(() => selectedAction = value!);
+                },
+                child: Column(
+                  children:
+                      [
+                            ('warn', 'Warn', 'Show warning, can dismiss'),
+                            ('block', 'Block', 'Hard block, cannot dismiss'),
+                            ('notify', 'Notify', 'Notification only'),
+                          ]
+                          .map(
+                            (option) => RadioListTile<String>(
+                              value: option.$1,
+                              title: Text(
+                                option.$2,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                option.$3,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.5),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              activeColor: const Color(0xFF82D65D),
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
             ],
@@ -2350,24 +2378,22 @@ class _AppSelectionDialogState extends ConsumerState<_AppSelectionDialog> {
       // Sync all limits to native
       await _syncAllLimitsToNative(user.uid);
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('✅ Limit added for ${app.name}'),
-            backgroundColor: const Color(0xFF1E1E1E),
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('✅ Limit added for ${app.name}'),
+          backgroundColor: const Color(0xFF1E1E1E),
+        ),
+      );
     } catch (e) {
-      print('Error adding limit: $e');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to add limit'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      debugPrint('Error adding limit: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to add limit'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }
@@ -2383,7 +2409,7 @@ class _AppListItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -2393,7 +2419,7 @@ class _AppListItem extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(Icons.android, color: Colors.white70),
@@ -2401,13 +2427,16 @@ class _AppListItem extends StatelessWidget {
         title: Text(app.name, style: const TextStyle(color: Colors.white)),
         subtitle: Text(
           app.packageName,
-          style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 11),
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.4),
+            fontSize: 11,
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         trailing: Icon(
           Icons.add_circle_outline,
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withValues(alpha: 0.5),
         ),
         onTap: onTap,
       ),
@@ -2447,7 +2476,7 @@ class AppLimitExceededOverlay extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.2),
+                    color: Colors.red.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.block, size: 80, color: Colors.red),
@@ -2466,7 +2495,7 @@ class AppLimitExceededOverlay extends StatelessWidget {
                 Text(
                   'You\'ve used $usedMinutes minutes of $appName today.',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
@@ -2475,7 +2504,7 @@ class AppLimitExceededOverlay extends StatelessWidget {
                 Text(
                   'Daily limit: $limitMinutes minutes',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                 ),
@@ -2510,7 +2539,7 @@ class AppLimitExceededOverlay extends StatelessWidget {
                       Text(
                         'This app is blocked for today',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),

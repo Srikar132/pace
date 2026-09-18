@@ -7,10 +7,7 @@ import 'package:pace/core/theme/app_theme.dart';
 class AllowedAppsDrawer extends ConsumerWidget {
   final String userId;
 
-  const AllowedAppsDrawer({
-    super.key,
-    required this.userId,
-  });
+  const AllowedAppsDrawer({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,10 +43,7 @@ class AllowedAppsDrawer extends ConsumerWidget {
                   color: AppColors.primaryGreen,
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  'Allowed Apps',
-                  style: theme.textTheme.headlineMedium,
-                ),
+                Text('Allowed Apps', style: theme.textTheme.headlineMedium),
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.close_rounded),
@@ -61,10 +55,7 @@ class AllowedAppsDrawer extends ConsumerWidget {
               ],
             ),
           ),
-          Divider(
-            height: 1,
-            color: theme.dividerColor,
-          ),
+          Divider(height: 1, color: theme.dividerColor),
           // Apps Grid
           Expanded(
             child: allowedAppsAsync.when(
@@ -116,16 +107,12 @@ class AllowedAppsDrawer extends ConsumerWidget {
                   itemCount: apps.length,
                   itemBuilder: (context, index) {
                     final app = apps[index];
-                    return _AppIconTile(
-                      app: app,
-                    );
+                    return _AppIconTile(app: app);
                   },
                 );
               },
               loading: () => Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryGreen,
-                ),
+                child: CircularProgressIndicator(color: AppColors.primaryGreen),
               ),
               error: (error, stack) => Center(
                 child: Padding(
@@ -177,9 +164,7 @@ class AllowedAppsDrawer extends ConsumerWidget {
 class _AppIconTile extends ConsumerWidget {
   final InstalledApp app;
 
-  const _AppIconTile({
-    required this.app,
-  });
+  const _AppIconTile({required this.app});
 
   Future<void> _launchApp(BuildContext context, WidgetRef ref) async {
     if (!app.canLaunch) {
@@ -203,7 +188,7 @@ class _AppIconTile extends ConsumerWidget {
       //   action: 'android.intent.action.MAIN',
       //   package: app.packageName,
       // ).launch();
-      
+
       // For now, showing a placeholder message
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -242,8 +227,8 @@ class _AppIconTile extends ConsumerWidget {
     return InkWell(
       onTap: () => _launchApp(context, ref),
       borderRadius: BorderRadius.circular(16),
-      splashColor: AppColors.primaryGreen.withOpacity(0.1),
-      highlightColor: AppColors.primaryGreen.withOpacity(0.05),
+      splashColor: AppColors.primaryGreen.withValues(alpha: 0.1),
+      highlightColor: AppColors.primaryGreen.withValues(alpha: 0.05),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -254,10 +239,7 @@ class _AppIconTile extends ConsumerWidget {
             decoration: BoxDecoration(
               color: AppColors.surfaceElevated,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.border,
-                width: 1,
-              ),
+              border: Border.all(color: AppColors.border, width: 1),
             ),
             child: iconAsync.when(
               data: (iconBytes) {
@@ -281,7 +263,7 @@ class _AppIconTile extends ConsumerWidget {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primaryGreen.withOpacity(0.5),
+                    color: AppColors.primaryGreen.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -307,11 +289,7 @@ class _AppIconTile extends ConsumerWidget {
 
   Widget _buildDefaultIcon() {
     return Center(
-      child: Icon(
-        Icons.android_rounded,
-        size: 32,
-        color: AppColors.textMuted,
-      ),
+      child: Icon(Icons.android_rounded, size: 32, color: AppColors.textMuted),
     );
   }
 }

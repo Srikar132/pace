@@ -7,14 +7,10 @@ import 'package:pace/presentation/screens/splash_screen.dart';
 class SaveSessionScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> sessionData;
 
-  const SaveSessionScreen({
-    super.key,
-    required this.sessionData,
-  });
+  const SaveSessionScreen({super.key, required this.sessionData});
 
   @override
   ConsumerState<SaveSessionScreen> createState() {
-    debugPrint('🎯 SaveSessionScreen: Creating state with sessionData: $sessionData');
     return _SaveSessionScreenState();
   }
 }
@@ -27,7 +23,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint('🎯 SaveSessionScreen: initState called with sessionData: ${widget.sessionData}');
+    debugPrint(
+      '🎯 SaveSessionScreen: initState called with sessionData: ${widget.sessionData}',
+    );
   }
 
   @override
@@ -46,12 +44,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   String _getFormattedDuration() {
     final startTime = widget.sessionData['startTime'] as DateTime?;
     final endTime = DateTime.now();
-    
+
     if (startTime != null) {
       final duration = endTime.difference(startTime);
       return _formatTime(duration.inSeconds);
     }
-    
+
     final elapsedSeconds = widget.sessionData['elapsedSeconds'] as int? ?? 0;
     return _formatTime(elapsedSeconds);
   }
@@ -66,7 +64,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
 
   String _getSessionName() {
     final now = DateTime.now();
-    
+
     if (now.hour < 12) {
       return 'Morning session';
     } else if (now.hour < 17) {
@@ -79,11 +77,11 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   String _getSessionTimeRange() {
     final startTime = widget.sessionData['startTime'] as DateTime?;
     final endTime = DateTime.now();
-    
+
     if (startTime != null) {
       return '${_formatDateTime(startTime)} - ${_formatDateTime(endTime)}';
     }
-    
+
     final now = DateTime.now();
     final elapsedSeconds = widget.sessionData['elapsedSeconds'] as int? ?? 0;
     final calculatedStart = now.subtract(Duration(seconds: elapsedSeconds));
@@ -95,7 +93,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
     final minute = time.minute;
     final period = hour >= 12 ? 'PM' : 'AM';
     final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-    
+
     return '$displayHour:${minute.toString().padLeft(2, '0')} $period';
   }
 
@@ -105,10 +103,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
     });
 
     try {
-      await ref.read(focusSessionProvider.notifier).completeSessionWithNotes(
-        notes: _notesController.text.trim(),
-        tag: _selectedTag,
-      );
+      await ref
+          .read(focusSessionProvider.notifier)
+          .completeSessionWithNotes(
+            notes: _notesController.text.trim(),
+            tag: _selectedTag,
+          );
 
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -157,7 +157,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            
+
             // Title
             const Text(
               'Delete this session?',
@@ -169,18 +169,15 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
-            
+
             // Subtitle
             const Text(
               'This action cannot be undone.',
-              style: TextStyle(
-                color: Color(0xFF8A8A8A),
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Color(0xFF8A8A8A), fontSize: 14),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            
+
             // Delete button
             SizedBox(
               width: double.infinity,
@@ -189,7 +186,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                   Navigator.pop(context);
                   ref.read(focusSessionProvider.notifier).discardSession();
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const SplashScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ),
                     (route) => false,
                   );
                 },
@@ -213,7 +212,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Cancel button
             SizedBox(
               width: double.infinity,
@@ -225,10 +224,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                 ),
                 child: const Text(
                   'Cancel',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -240,18 +236,13 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return PopScope(
       canPop: false,
       child: Stack(
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.asset(
-              kHomeBackgroundImage,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(kHomeBackgroundImage, fit: BoxFit.cover),
           ),
 
           // Content
@@ -260,7 +251,10 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               color: Colors.transparent,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 16.0,
+                  ),
                   child: Column(
                     children: [
                       // Header
@@ -332,13 +326,10 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
       height: 140,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color(0xFF82D65D),
-          width: 3,
-        ),
+        border: Border.all(color: const Color(0xFF82D65D), width: 3),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF82D65D).withOpacity(0.3),
+            color: const Color(0xFF82D65D).withValues(alpha: 0.3),
             blurRadius: 16,
             spreadRadius: 2,
           ),
@@ -361,7 +352,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
             Text(
               'Total focus',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
               ),
@@ -402,22 +393,16 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withOpacity(0.8),
+        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFF2A2A2A),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
       ),
       child: Row(
         children: [
           Container(
             width: 6,
             height: 6,
-            decoration: BoxDecoration(
-              color: iconColor,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: iconColor, shape: BoxShape.circle),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -445,7 +430,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           ),
           Icon(
             Icons.chevron_right,
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             size: 16,
           ),
         ],
@@ -456,12 +441,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildSessionNameField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withOpacity(0.8),
+        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFF2A2A2A),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
       ),
       child: ListTile(
         dense: true,
@@ -470,7 +452,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: const Color(0xFFFFB84D).withOpacity(0.15),
+            color: const Color(0xFFFFB84D).withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(
@@ -489,7 +471,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           size: 18,
         ),
       ),
@@ -499,12 +481,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildNotesField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withOpacity(0.8),
+        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFF2A2A2A),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -515,7 +494,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withOpacity(0.15),
+                color: const Color(0xFF82D65D).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
@@ -536,7 +515,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                 decoration: InputDecoration(
                   hintText: 'Add notes here',
                   hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 14,
                   ),
                   border: InputBorder.none,
@@ -555,12 +534,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   Widget _buildTagSelection() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withOpacity(0.8),
+        color: const Color(0xFF1E1E1E).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFF2A2A2A),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -568,7 +544,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF6A6A6A).withOpacity(0.3),
+            color: const Color(0xFF6A6A6A).withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(
@@ -607,7 +583,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withValues(alpha: 0.3),
           size: 20,
         ),
         onTap: () {
@@ -642,7 +618,9 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
                     width: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1A1A1A)),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFF1A1A1A),
+                      ),
                     ),
                   )
                 : const Text(
@@ -668,10 +646,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           ),
           child: const Text(
             'Delete',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
       ],

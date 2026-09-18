@@ -15,22 +15,22 @@ class DistractionQuestionScreen extends ConsumerWidget {
       {
         'id': 'reels',
         'text': 'I keep scrolling reels & shorts',
-        'icon': Icons.video_library_outlined
+        'icon': Icons.video_library_outlined,
       },
       {
         'id': 'notifications',
         'text': 'I get distracted by notifications',
-        'icon': Icons.notifications_outlined
+        'icon': Icons.notifications_outlined,
       },
       {
         'id': 'texting',
         'text': 'I keep texting on my phone',
-        'icon': Icons.message_outlined
+        'icon': Icons.message_outlined,
       },
       {
         'id': 'games',
         'text': 'I play a lot of games',
-        'icon': Icons.sports_esports_outlined
+        'icon': Icons.sports_esports_outlined,
       },
     ];
 
@@ -51,7 +51,7 @@ class DistractionQuestionScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -61,7 +61,7 @@ class DistractionQuestionScreen extends ConsumerWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
                         child: Icon(
                           Icons.person,
                           size: 30,
@@ -93,7 +93,9 @@ class DistractionQuestionScreen extends ConsumerWidget {
 
           // Distraction options
           ...distractions.map((distraction) {
-            final isSelected = onboardingState.distractions.contains(distraction['id']) == true;
+            final isSelected =
+                onboardingState.distractions.contains(distraction['id']) ==
+                true;
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -102,7 +104,9 @@ class DistractionQuestionScreen extends ConsumerWidget {
                 icon: distraction['icon'] as IconData,
                 isSelected: isSelected,
                 onTap: () {
-                  onboardingNotifier.toggleDistraction(distraction['id'] as String);
+                  onboardingNotifier.toggleDistraction(
+                    distraction['id'] as String,
+                  );
                 },
               ),
             );
@@ -114,7 +118,7 @@ class DistractionQuestionScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -182,7 +186,7 @@ class _DistractionOption extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: isSelected
-              ? theme.colorScheme.primary.withOpacity(0.15)
+              ? theme.colorScheme.primary.withValues(alpha: 0.15)
               : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -205,8 +209,7 @@ class _DistractionOption extends StatelessWidget {
                 title,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: isSelected ? Colors.white : Colors.white70,
-                  fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ),

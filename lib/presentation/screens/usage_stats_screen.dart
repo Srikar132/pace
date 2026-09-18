@@ -20,7 +20,7 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     // Load initial data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Invalidate the providers to trigger fresh data load
@@ -38,14 +38,14 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Usage Insights'),
         backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
-       
+
         actions: [
           IconButton(
             icon: Icon(Icons.help_outline, color: theme.iconTheme.color),
@@ -71,15 +71,12 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
         children: [
           // Category Filter Chips
           _buildFilterChips(theme),
-          
+
           // Tab Content
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                _buildDailyView(),
-                _buildWeeklyView(),
-              ],
+              children: [_buildDailyView(), _buildWeeklyView()],
             ),
           ),
         ],
@@ -87,24 +84,43 @@ class _UsageStatsScreenState extends ConsumerState<UsageStatsScreen>
     );
   }
 
-Widget _buildFilterChips(ThemeData theme) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      children: [
-        _buildFilterChip('All apps', null, theme, isSelected: _selectedFilter == null),
-        const SizedBox(width: 8),
-        _buildFilterChip('Distracting', AppCategory.distracting, theme, isSelected: _selectedFilter == AppCategory.distracting),
-        const SizedBox(width: 8),
-        _buildFilterChip('Productive', AppCategory.productive, theme, isSelected: _selectedFilter == AppCategory.productive),
-        const SizedBox(width: 8),
-        _buildFilterChip('Others', AppCategory.others, theme, isSelected: _selectedFilter == AppCategory.others),
-      ],
-    ),
-  );
-}
-
+  Widget _buildFilterChips(ThemeData theme) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          _buildFilterChip(
+            'All apps',
+            null,
+            theme,
+            isSelected: _selectedFilter == null,
+          ),
+          const SizedBox(width: 8),
+          _buildFilterChip(
+            'Distracting',
+            AppCategory.distracting,
+            theme,
+            isSelected: _selectedFilter == AppCategory.distracting,
+          ),
+          const SizedBox(width: 8),
+          _buildFilterChip(
+            'Productive',
+            AppCategory.productive,
+            theme,
+            isSelected: _selectedFilter == AppCategory.productive,
+          ),
+          const SizedBox(width: 8),
+          _buildFilterChip(
+            'Others',
+            AppCategory.others,
+            theme,
+            isSelected: _selectedFilter == AppCategory.others,
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildFilterChip(
     String label,
@@ -122,16 +138,20 @@ Widget _buildFilterChips(ThemeData theme) {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary.withOpacity(0.2) : const Color(0xFF2A2A2A),
+          color: isSelected
+              ? theme.colorScheme.primary.withValues(alpha: 0.2)
+              : const Color(0xFF2A2A2A),
           borderRadius: BorderRadius.circular(20),
-          border: isSelected 
-            ? Border.all(color: theme.colorScheme.primary, width: 1)
-            : null,
+          border: isSelected
+              ? Border.all(color: theme.colorScheme.primary, width: 1)
+              : null,
         ),
         child: Text(
           label,
           style: theme.textTheme.labelMedium?.copyWith(
-            color: isSelected ? theme.colorScheme.primary : const Color(0xFF8A8A8A),
+            color: isSelected
+                ? theme.colorScheme.primary
+                : const Color(0xFF8A8A8A),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
@@ -143,7 +163,7 @@ Widget _buildFilterChips(ThemeData theme) {
     return Consumer(
       builder: (context, ref, child) {
         final todayUsage = ref.watch(todayUsageStatsProvider);
-        
+
         return todayUsage.when(
           data: (data) => _buildDailyContent(data),
           loading: () => const Center(
@@ -189,7 +209,7 @@ Widget _buildFilterChips(ThemeData theme) {
       builder: (context, ref, child) {
         final weeklyUsage = ref.watch(weeklyUsageStatsProvider);
         final chartData = ref.watch(weeklyChartDataProvider);
-        
+
         return weeklyUsage.when(
           data: (data) => _buildWeeklyContent(data, chartData),
           loading: () => const Center(
@@ -235,9 +255,8 @@ Widget _buildFilterChips(ThemeData theme) {
     final theme = Theme.of(context);
     final filteredApps = _getFilteredApps(data);
 
-    final totalMinutesExcludingSelf = data.totalUsageExcludingSelf;
     final formattedTimeExcludingSelf = data.formattedTotalTimeExcludingSelf;
-    
+
     return RefreshIndicator(
       onRefresh: () async {
         ref.invalidate(todayUsageStatsProvider);
@@ -273,41 +292,41 @@ Widget _buildFilterChips(ThemeData theme) {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Category breakdown
                   _buildCategoryBreakdown(data, theme),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Search bar
                   _buildSearchBar(theme),
                 ],
               ),
             ),
           ),
-          
+
           // Apps list
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index >= filteredApps.length) return null;
-                final app = filteredApps[index];
-                return UsageAppListTile(app: app);
-              },
-              childCount: filteredApps.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index >= filteredApps.length) return null;
+              final app = filteredApps[index];
+              return UsageAppListTile(app: app);
+            }, childCount: filteredApps.length),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildWeeklyContent(UsageStatsResponse data, AsyncValue<List<DailyUsageChartData>> chartData) {
+  Widget _buildWeeklyContent(
+    UsageStatsResponse data,
+    AsyncValue<List<DailyUsageChartData>> chartData,
+  ) {
     final theme = Theme.of(context);
     final filteredApps = _getFilteredApps(data);
-    
+
     return RefreshIndicator(
       onRefresh: () async {
         ref.invalidate(weeklyUsageStatsProvider);
@@ -344,114 +363,119 @@ Widget _buildFilterChips(ThemeData theme) {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Weekly chart
                   chartData.when(
                     data: (chartList) => WeeklyUsageChart(data: chartList),
                     loading: () => const SizedBox(
                       height: 200,
                       child: Center(
-                        child: CircularProgressIndicator(color: Color(0xFF7ED957)),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF7ED957),
+                        ),
                       ),
                     ),
-                    error: (_, __) => const SizedBox(
+                    error: (_, _) => const SizedBox(
                       height: 200,
-                      child: Center(
-                        child: Text('Error loading chart'),
-                      ),
+                      child: Center(child: Text('Error loading chart')),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Category breakdown
                   _buildCategoryBreakdown(data, theme),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Search bar
                   _buildSearchBar(theme),
                 ],
               ),
             ),
           ),
-          
+
           // Apps list
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index >= filteredApps.length) return null;
-                final app = filteredApps[index];
-                return UsageAppListTile(app: app);
-              },
-              childCount: filteredApps.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index >= filteredApps.length) return null;
+              final app = filteredApps[index];
+              return UsageAppListTile(app: app);
+            }, childCount: filteredApps.length),
           ),
         ],
       ),
     );
   }
 
-Widget _buildCategoryBreakdown(UsageStatsResponse data, ThemeData theme) {
-  // Filter out pace app from all categories
-  final filteredApps = data.apps.where((app) => 
-    !app.packageName.contains('pace') && 
-    app.packageName != 'com.example.pace'
-  ).toList();
-  
-  // Calculate category times excluding pace
-  final distractingTime = filteredApps
-      .where((app) => app.category == AppCategory.distracting)
-      .fold(0, (sum, app) => sum + app.totalUsageMinutes);
-  
-  final productiveTime = filteredApps
-      .where((app) => app.category == AppCategory.productive)
-      .fold(0, (sum, app) => sum + app.totalUsageMinutes);
-  
-  final othersTime = filteredApps
-      .where((app) => app.category == AppCategory.others)
-      .fold(0, (sum, app) => sum + app.totalUsageMinutes);
-  
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      _buildCategoryItem(
-        _formatTime(distractingTime),
-        'Distracting',
-        const Color(0xFFFF8C00), // Orange
-        theme,
-      ),
-      _buildCategoryItem(
-        _formatTime(productiveTime),
-        'Productive',
-        const Color(0xFF7ED957), // Green
-        theme,
-      ),
-      _buildCategoryItem(
-        _formatTime(othersTime),
-        'Others',
-        const Color(0xFF8A8A8A), // Grey
-        theme,
-      ),
-    ],
-  );
-}
+  Widget _buildCategoryBreakdown(UsageStatsResponse data, ThemeData theme) {
+    // Filter out pace app from all categories
+    final filteredApps = data.apps
+        .where(
+          (app) =>
+              !app.packageName.contains('pace') &&
+              app.packageName != 'com.example.pace',
+        )
+        .toList();
 
-// Add this helper method to format time
-String _formatTime(int minutes) {
-  final hours = minutes / 60;
-  if (hours >= 1) {
-    final h = hours.floor();
-    final m = (minutes % 60);
-    if (m == 0) return '${h}h';
-    return '${h}h ${m}m';
+    // Calculate category times excluding pace
+    final distractingTime = filteredApps
+        .where((app) => app.category == AppCategory.distracting)
+        .fold(0, (sum, app) => sum + app.totalUsageMinutes);
+
+    final productiveTime = filteredApps
+        .where((app) => app.category == AppCategory.productive)
+        .fold(0, (sum, app) => sum + app.totalUsageMinutes);
+
+    final othersTime = filteredApps
+        .where((app) => app.category == AppCategory.others)
+        .fold(0, (sum, app) => sum + app.totalUsageMinutes);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildCategoryItem(
+          _formatTime(distractingTime),
+          'Distracting',
+          const Color(0xFFFF8C00), // Orange
+          theme,
+        ),
+        _buildCategoryItem(
+          _formatTime(productiveTime),
+          'Productive',
+          const Color(0xFF7ED957), // Green
+          theme,
+        ),
+        _buildCategoryItem(
+          _formatTime(othersTime),
+          'Others',
+          const Color(0xFF8A8A8A), // Grey
+          theme,
+        ),
+      ],
+    );
   }
-  return '${minutes}m';
-}
 
-  Widget _buildCategoryItem(String time, String label, Color color, ThemeData theme) {
+  // Add this helper method to format time
+  String _formatTime(int minutes) {
+    final hours = minutes / 60;
+    if (hours >= 1) {
+      final h = hours.floor();
+      final m = (minutes % 60);
+      if (m == 0) return '${h}h';
+      return '${h}h ${m}m';
+    }
+    return '${minutes}m';
+  }
+
+  Widget _buildCategoryItem(
+    String time,
+    String label,
+    Color color,
+    ThemeData theme,
+  ) {
     return Column(
       children: [
         Row(
@@ -460,10 +484,7 @@ String _formatTime(int minutes) {
             Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
             const SizedBox(width: 8),
             Text(
@@ -498,12 +519,12 @@ String _formatTime(int minutes) {
           hintStyle: theme.textTheme.bodyMedium?.copyWith(
             color: const Color(0xFF6A6A6A),
           ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: Color(0xFF6A6A6A),
-          ),
+          prefixIcon: const Icon(Icons.search, color: Color(0xFF6A6A6A)),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
         ),
         onChanged: (value) {
           // TODO: Implement search functionality
@@ -512,31 +533,48 @@ String _formatTime(int minutes) {
     );
   }
 
-List<AppUsageStats> _getFilteredApps(UsageStatsResponse data) {
-  // First filter out the pace app itself
-  var apps = data.apps.where((app) => 
-    !app.packageName.contains('pace') && 
-    app.packageName != 'com.example.pace'
-  ).toList();
-  
-  if (_selectedFilter == null) {
-    return apps;
+  List<AppUsageStats> _getFilteredApps(UsageStatsResponse data) {
+    // First filter out the pace app itself
+    var apps = data.apps
+        .where(
+          (app) =>
+              !app.packageName.contains('pace') &&
+              app.packageName != 'com.example.pace',
+        )
+        .toList();
+
+    if (_selectedFilter == null) {
+      return apps;
+    }
+
+    switch (_selectedFilter!) {
+      case AppCategory.distracting:
+        return apps
+            .where((app) => app.category == AppCategory.distracting)
+            .toList();
+      case AppCategory.productive:
+        return apps
+            .where((app) => app.category == AppCategory.productive)
+            .toList();
+      case AppCategory.others:
+        return apps.where((app) => app.category == AppCategory.others).toList();
+    }
   }
-  
-  switch (_selectedFilter!) {
-    case AppCategory.distracting:
-      return apps.where((app) => app.category == AppCategory.distracting).toList();
-    case AppCategory.productive:
-      return apps.where((app) => app.category == AppCategory.productive).toList();
-    case AppCategory.others:
-      return apps.where((app) => app.category == AppCategory.others).toList();
-  }
-}
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
@@ -544,7 +582,7 @@ List<AppUsageStats> _getFilteredApps(UsageStatsResponse data) {
   String _formatWeekRange() {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: 6));
-    
+
     return '${_formatDate(startOfWeek)} - ${_formatDate(now)}';
   }
 

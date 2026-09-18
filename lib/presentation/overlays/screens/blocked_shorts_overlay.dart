@@ -80,9 +80,6 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
         overlayState.overlayData['contentType'] as String? ?? 'Short Content';
     final platform =
         overlayState.overlayData['platform'] as String? ?? 'Unknown';
-    final educationalMessage =
-        overlayState.overlayData['educationalMessage'] as String? ??
-        'Short-form content is designed to be addictive. Stay focused!';
 
     return PopScope(
       canPop: false,
@@ -196,7 +193,7 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
                 border: Border.all(
                   color: _getPlatformColor(
                     platform,
-                  ).withOpacity(0.3 - (_waveController.value * 0.3)),
+                  ).withValues(alpha: 0.3 - (_waveController.value * 0.3)),
                   width: 2,
                 ),
               ),
@@ -216,7 +213,7 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
                 border: Border.all(
                   color: _getPlatformColor(
                     platform,
-                  ).withOpacity(0.5 - (_waveController.value * 0.5)),
+                  ).withValues(alpha: 0.5 - (_waveController.value * 0.5)),
                   width: 3,
                 ),
               ),
@@ -233,7 +230,7 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
             color: _getPlatformColor(platform),
             boxShadow: [
               BoxShadow(
-                color: _getPlatformColor(platform).withOpacity(0.6),
+                color: _getPlatformColor(platform).withValues(alpha: 0.6),
                 blurRadius: 20,
                 spreadRadius: 5,
               ),
@@ -265,9 +262,9 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.2),
+            color: Colors.red.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.red.withOpacity(0.5)),
+            border: Border.all(color: Colors.red.withValues(alpha: 0.5)),
           ),
           child: const Text(
             'Addictive Content Detected',
@@ -320,12 +317,12 @@ class _BlockedShortsOverlayState extends ConsumerState<BlockedShortsOverlay>
       icon: Icon(icon, size: 18),
       label: Text(label),
       style: ElevatedButton.styleFrom(
-        backgroundColor: color.withOpacity(0.2),
+        backgroundColor: color.withValues(alpha: 0.2),
         foregroundColor: color,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: color.withOpacity(0.5)),
+          side: BorderSide(color: color.withValues(alpha: 0.5)),
         ),
       ),
     );

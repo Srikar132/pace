@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/services/native_service.dart';
-import 'package:pace/presentation/providers/auth_provider.dart';
-import 'package:pace/data/repositories/user_repository.dart';
 
 // Permission state
 class PermissionState {
@@ -75,13 +73,11 @@ class PermissionState {
 
 // Permission notifier
 class PermissionNotifier extends Notifier<PermissionState> {
-  late UserRepository _userRepository;
   DateTime? _lastCheckTime;
   static const _checkDebounceMs = 1000; // Minimum 1 second between checks
 
   @override
   PermissionState build() {
-    _userRepository = ref.read(userRepositoryProvider);
     return PermissionState();
   }
 

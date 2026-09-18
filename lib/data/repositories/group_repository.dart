@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pace/data/models/group_memeber_model.dart';
 import 'package:pace/data/models/group_model.dart';
-
-
+import 'package:flutter/foundation.dart';
 
 /// Repository handling all group-related database operations
 class GroupRepository {
@@ -227,7 +226,7 @@ class GroupRepository {
 
       await batch.commit();
     } catch (e) {
-      print('Failed to update rankings: $e');
+      debugPrint('Failed to update rankings: $e');
     }
   }
 

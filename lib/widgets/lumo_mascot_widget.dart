@@ -8,11 +8,7 @@ class LumoMascotWidget extends StatefulWidget {
   final VoidCallback onTap;
   final double size;
 
-  const LumoMascotWidget({
-    super.key,
-    required this.onTap,
-    this.size = 50,
-  });
+  const LumoMascotWidget({super.key, required this.onTap, this.size = 50});
 
   @override
   State<LumoMascotWidget> createState() => _LumoMascotWidgetState();
@@ -31,9 +27,10 @@ class _LumoMascotWidgetState extends State<LumoMascotWidget>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.9,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _audioPlayer = AudioPlayer();
   }
@@ -69,7 +66,10 @@ class _LumoMascotWidgetState extends State<LumoMascotWidget>
     return GestureDetector(
       onTap: _handleTap,
       onLongPress: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const LumoVoiceBotScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LumoVoiceBotScreen()),
+        );
       },
       child: ScaleTransition(
         scale: _scaleAnimation,
@@ -81,7 +81,7 @@ class _LumoMascotWidgetState extends State<LumoMascotWidget>
             color: Theme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 20,
                 spreadRadius: 2,
                 offset: const Offset(0, 8),
@@ -90,12 +90,7 @@ class _LumoMascotWidgetState extends State<LumoMascotWidget>
           ),
           child: Padding(
             padding: const EdgeInsets.all(3),
-            child: ClipOval(
-              child: Image.asset(
-                KLumoIcon,
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: ClipOval(child: Image.asset(KLumoIcon, fit: BoxFit.cover)),
           ),
         ),
       ),
