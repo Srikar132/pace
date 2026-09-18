@@ -42,6 +42,8 @@ class FocusMonitoringService : Service() {
         // Actions
         const val ACTION_START = "START_FOCUS_MONITORING"
         const val ACTION_STOP = "STOP_FOCUS_MONITORING"
+        const val ACTION_PAUSE = "PAUSE_FOCUS_MONITORING"
+        const val ACTION_RESUME = "RESUME_FOCUS_MONITORING"
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun start(context: Context) {
@@ -57,6 +59,22 @@ class FocusMonitoringService : Service() {
             }
             context.startService(intent)
         }
+
+        // Pause/resume keep the foreground service (and its notification) alive -
+        // only the polling loop stops - so resume never needs startForegroundService again.
+        fun pause(context: Context) {
+            val intent = Intent(context, FocusMonitoringService::class.java).apply {
+                action = ACTION_PAUSE
+            }
+            context.startService(intent)
+        }
+
+        fun resume(context: Context) {
+            val intent = Intent(context, FocusMonitoringService::class.java).apply {
+                action = ACTION_RESUME
+            }
+            context.startService(intent)
+        }
     }
 
     // Core components
@@ -68,6 +86,7 @@ class FocusMonitoringService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private var monitoringRunnable: Runnable? = null
     private var isMonitoring = false
+    private var isPausedState = false
 
     // App tracking
     private var lastCheckedApp = ""
@@ -93,6 +112,8 @@ class FocusMonitoringService : Service() {
                 stopMonitoring()
                 stopSelf()
             }
+            ACTION_PAUSE -> pauseMonitoring()
+            ACTION_RESUME -> resumeMonitoring()
         }
         return START_STICKY
     }
@@ -105,7 +126,10 @@ class FocusMonitoringService : Service() {
 
     private fun startMonitoring() {
         if (isMonitoring) {
-            Log.d(TAG, "⚠️ Already monitoring")
+            // Defensive: never let a new session inherit a stale blocked-apps cache,
+            // even if a previous stop() was somehow missed.
+            Log.w(TAG, "⚠️ Already monitoring - refreshing blocked apps cache defensively")
+            updateBlockedAppsCache()
             return
         }
 
@@ -122,6 +146,7 @@ class FocusMonitoringService : Service() {
         updateBlockedAppsCache()
 
         // Start foreground
+        isPausedState = false
         startForeground(NOTIFICATION_ID, createNotification())
 
         // Start monitoring loop
@@ -133,12 +158,40 @@ class FocusMonitoringService : Service() {
         Log.d(TAG, "⏹️ Stopping focus monitoring")
 
         isMonitoring = false
+        isPausedState = false
         monitoringRunnable?.let {
             handler.removeCallbacks(it)
             monitoringRunnable = null
         }
 
         stopForeground(STOP_FOREGROUND_REMOVE)
+    }
+
+    private fun pauseMonitoring() {
+        if (!isMonitoring) {
+            Log.w(TAG, "⚠️ Cannot pause: not monitoring")
+            return
+        }
+
+        Log.d(TAG, "⏸️ Pausing focus monitoring")
+        isPausedState = true
+        monitoringRunnable?.let {
+            handler.removeCallbacks(it)
+            monitoringRunnable = null
+        }
+        updateNotification()
+    }
+
+    private fun resumeMonitoring() {
+        if (!isMonitoring) {
+            Log.w(TAG, "⚠️ Cannot resume: not monitoring")
+            return
+        }
+
+        Log.d(TAG, "▶️ Resuming focus monitoring")
+        isPausedState = false
+        updateNotification()
+        startMonitoringLoop()
     }
 
     private fun startMonitoringLoop() {
@@ -309,11 +362,11 @@ class FocusMonitoringService : Service() {
 
     private fun createNotification(): android.app.Notification {
         val session = sessionManager.getCurrentSession()
-        val title = "Focus Session Active"
-        val text = if (session != null) {
-            "Blocking ${session.blockedApps.size} apps"
-        } else {
-            "Monitoring in progress"
+        val title = if (isPausedState) "Focus Session Paused" else "Focus Session Active"
+        val text = when {
+            isPausedState -> "Blocking paused"
+            session != null -> "Blocking ${session.blockedApps.size} apps"
+            else -> "Monitoring in progress"
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
@@ -324,6 +377,11 @@ class FocusMonitoringService : Service() {
             .setOngoing(true)
             .setShowWhen(false)
             .build()
+    }
+
+    private fun updateNotification() {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.notify(NOTIFICATION_ID, createNotification())
     }
 
     override fun onDestroy() {

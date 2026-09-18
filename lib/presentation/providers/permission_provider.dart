@@ -13,6 +13,11 @@ class PermissionState {
   final bool isChecking;
   final bool isCompletingSetup;
   final bool hasCompletedSetup;
+  // False until the first real checkPermissions() sweep resolves. Lets
+  // callers (e.g. SplashScreen) tell "not checked yet" apart from
+  // "checked and actually denied" instead of treating the default-false
+  // constructor values as a real answer.
+  final bool hasCheckedOnce;
 
   PermissionState({
     this.usagePermission = false,
@@ -24,6 +29,7 @@ class PermissionState {
     this.isChecking = false,
     this.isCompletingSetup = false,
     this.hasCompletedSetup = false,
+    this.hasCheckedOnce = false,
   });
 
   bool get allGranted =>
@@ -53,6 +59,7 @@ class PermissionState {
     bool? isChecking,
     bool? isCompletingSetup,
     bool? hasCompletedSetup,
+    bool? hasCheckedOnce,
   }) {
     return PermissionState(
       usagePermission: usagePermission ?? this.usagePermission,
@@ -67,6 +74,7 @@ class PermissionState {
       isChecking: isChecking ?? this.isChecking,
       isCompletingSetup: isCompletingSetup ?? this.isCompletingSetup,
       hasCompletedSetup: hasCompletedSetup ?? this.hasCompletedSetup,
+      hasCheckedOnce: hasCheckedOnce ?? this.hasCheckedOnce,
     );
   }
 }
@@ -113,10 +121,11 @@ class PermissionNotifier extends Notifier<PermissionState> {
         backgroundPermission: backgroundGranted,
         displayPopupPermission: displayPopupGranted,
         isChecking: false,
+        hasCheckedOnce: true,
       );
     } catch (e) {
       debugPrint('Error checking permissions: $e');
-      state = state.copyWith(isChecking: false);
+      state = state.copyWith(isChecking: false, hasCheckedOnce: true);
     }
   }
 
