@@ -9,7 +9,7 @@ class InsightsScreen extends StatelessWidget {
   static const int _focusSessions = 3;
   static const int _blocksToday = 47;
   static const double _avgDailyHours = 4.6;
-  static const double _goalHours = 4.0;
+  // static const double _goalHours = 4.0;
 
   // Advanced Insights data
   static const int _scrollEvents = 142;
@@ -17,30 +17,30 @@ class InsightsScreen extends StatelessWidget {
   static const int _lastBedtime = 1;
   static const int _sleepDuration = 6;
 
-  static const List<double> _weeklyUsageHours = [
-    3.2,
-    3.8,
-    4.5,
-    4.8,
-    5.2,
-    4.8,
-    5.5,
-  ];
-  static const List<String> _weekDays = [
-    'Mon',
-    'Mon',
-    'Tue',
-    'Tue',
-    'Wed',
-    'Wed',
-    'Thu',
-    'Thu',
-    'Fri',
-    'Fri',
-    'Sat',
-    'Sat',
-    'Sun',
-  ];
+  // static const List<double> _weeklyUsageHours = [
+  //   3.2,
+  //   3.8,
+  //   4.5,
+  //   4.8,
+  //   5.2,
+  //   4.8,
+  //   5.5,
+  // ];
+  // static const List<String> _weekDays = [
+  //   'Mon',
+  //   'Mon',
+  //   'Tue',
+  //   'Tue',
+  //   'Wed',
+  //   'Wed',
+  //   'Thu',
+  //   'Thu',
+  //   'Fri',
+  //   'Fri',
+  //   'Sat',
+  //   'Sat',
+  //   'Sun',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class InsightsScreen extends StatelessWidget {
                     value: _focusSessions.toString(),
                     icon: Icons.access_time,
                     color: Colors.cyan,
-                    borderColor: Colors.cyan.withOpacity(0.3),
+                    borderColor: Colors.cyan.withValues(alpha: 0.3),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -81,17 +81,13 @@ class InsightsScreen extends StatelessWidget {
                     value: _blocksToday.toString(),
                     icon: Icons.block,
                     color: Colors.orange,
-                    borderColor: Colors.orange.withOpacity(0.3),
+                    borderColor: Colors.orange.withValues(alpha: 0.3),
                   ),
                 ),
               ],
             ),
 
-
-
             // Line chart
-          
-
             const SizedBox(height: 24),
             const _SectionTitle('Advanced Insights'),
             const SizedBox(height: 12),
@@ -298,7 +294,9 @@ class _Header extends StatelessWidget {
         Text(
           'Awareness first',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.5),
             fontSize: 14,
           ),
         ),
@@ -337,7 +335,7 @@ class _HeroCard extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.25),
+              color: Colors.white.withValues(alpha: 0.25),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
@@ -372,7 +370,7 @@ class _HeroCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 14,
                   ),
                 ),
@@ -408,7 +406,10 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: borderColor.withOpacity(0.5), width: 0.5),
+        border: Border.all(
+          color: borderColor.withValues(alpha: 0.5),
+          width: 0.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +418,7 @@ class _StatCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: color, size: 22),
@@ -426,7 +427,7 @@ class _StatCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: cs.onSurface.withOpacity(0.5),
+              color: cs.onSurface.withValues(alpha: 0.5),
               fontSize: 11,
               fontWeight: FontWeight.w400,
               letterSpacing: 0.1,
@@ -461,102 +462,102 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _WeeklyUsageChart extends StatelessWidget {
-  final List<double> data;
-  final double avgHours;
-  final double goalHours;
-  final List<String> days;
+// class _WeeklyUsageChart extends StatelessWidget {
+//   final List<double> data;
+//   final double avgHours;
+//   final double goalHours;
+//   final List<String> days;
 
-  const _WeeklyUsageChart({
-    required this.data,
-    required this.avgHours,
-    required this.goalHours,
-    required this.days,
-  });
+//   const _WeeklyUsageChart({
+//     required this.data,
+//     required this.avgHours,
+//     required this.goalHours,
+//     required this.days,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cs.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: cs.outline.withOpacity(0.15)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.trending_up,
-                    size: 18,
-                    color: cs.onSurface.withOpacity(0.7),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    'Avg ${avgHours}h / day',
-                    style: TextStyle(
-                      color: cs.onSurface.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'Week',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 180,
-            child: CustomPaint(
-              size: Size.infinite,
-              painter: _LineChartPainter(
-                data: data,
-                avgLine: avgHours,
-                goalLine: goalHours,
-                primaryColor: Colors.green,
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: days.map((day) {
-              return Text(
-                day,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: cs.onSurface.withOpacity(0.6),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final cs = Theme.of(context).colorScheme;
+//     return Container(
+//       padding: const EdgeInsets.all(20),
+//       decoration: BoxDecoration(
+//         color: cs.surface,
+//         borderRadius: BorderRadius.circular(20),
+//         border: Border.all(color: cs.outline.withValues(alpha: 0.15)),
+//       ),
+//       child: Column(
+//         children: [
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Row(
+//                 children: [
+//                   Icon(
+//                     Icons.trending_up,
+//                     size: 18,
+//                     color: cs.onSurface.withValues(alpha: 0.7),
+//                   ),
+//                   const SizedBox(width: 6),
+//                   Text(
+//                     'Avg ${avgHours}h / day',
+//                     style: TextStyle(
+//                       color: cs.onSurface.withValues(alpha: 0.7),
+//                       fontSize: 14,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Container(
+//                 padding: const EdgeInsets.symmetric(
+//                   horizontal: 12,
+//                   vertical: 6,
+//                 ),
+//                 decoration: BoxDecoration(
+//                   color: Colors.green.withValues(alpha: 0.15),
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 child: const Text(
+//                   'Week',
+//                   style: TextStyle(
+//                     color: Colors.green,
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.w600,
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//           const SizedBox(height: 20),
+//           SizedBox(
+//             height: 180,
+//             child: CustomPaint(
+//               size: Size.infinite,
+//               painter: _LineChartPainter(
+//                 data: data,
+//                 avgLine: avgHours,
+//                 goalLine: goalHours,
+//                 primaryColor: Colors.green,
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 12),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: days.map((day) {
+//               return Text(
+//                 day,
+//                 style: TextStyle(
+//                   fontSize: 11,
+//                   color: cs.onSurface.withValues(alpha: 0.6),
+//                 ),
+//               );
+//             }).toList(),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // Advanced Insights Section with calculated metrics
 class _AdvancedInsightsSection extends StatelessWidget {
@@ -648,7 +649,10 @@ class _EnhancedCircularCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: cs.outline.withOpacity(0.08), width: 0.5),
+        border: Border.all(
+          color: cs.outline.withValues(alpha: 0.08),
+          width: 0.5,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -661,7 +665,7 @@ class _EnhancedCircularCard extends StatelessWidget {
               painter: _CircularProgressPainter(
                 progress: value / 100,
                 color: color,
-                backgroundColor: cs.outline.withOpacity(0.1),
+                backgroundColor: cs.outline.withValues(alpha: 0.1),
               ),
               child: Center(
                 child: Text(
@@ -682,7 +686,7 @@ class _EnhancedCircularCard extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: cs.onSurface.withOpacity(0.5),
+              color: cs.onSurface.withValues(alpha: 0.5),
               fontSize: 11,
               fontWeight: FontWeight.w400,
               height: 1.2,
@@ -696,140 +700,140 @@ class _EnhancedCircularCard extends StatelessWidget {
 }
 
 // Custom painter for line chart
-class _LineChartPainter extends CustomPainter {
-  final List<double> data;
-  final double avgLine;
-  final double goalLine;
-  final Color primaryColor;
+// class _LineChartPainter extends CustomPainter {
+//   final List<double> data;
+//   final double avgLine;
+//   final double goalLine;
+//   final Color primaryColor;
 
-  _LineChartPainter({
-    required this.data,
-    required this.avgLine,
-    required this.goalLine,
-    required this.primaryColor,
-  });
+//   _LineChartPainter({
+//     required this.data,
+//     required this.avgLine,
+//     required this.goalLine,
+//     required this.primaryColor,
+//   });
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = primaryColor
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = primaryColor
+//       ..strokeWidth = 3
+//       ..style = PaintingStyle.stroke
+//       ..strokeCap = StrokeCap.round;
 
-    final fillPaint = Paint()
-      ..color = primaryColor.withOpacity(0.1)
-      ..style = PaintingStyle.fill;
+//     final fillPaint = Paint()
+//       ..color = primaryColor.withValues(alpha: 0.1)
+//       ..style = PaintingStyle.fill;
 
-    final dashedPaint = Paint()
-      ..color = Colors.grey.withOpacity(0.3)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
+//     final dashedPaint = Paint()
+//       ..color = Colors.grey.withValues(alpha: 0.3)
+//       ..strokeWidth = 1.5
+//       ..style = PaintingStyle.stroke;
 
-    final maxValue = data.reduce(math.max);
-    final minValue = data.reduce(math.min);
-    final range = maxValue - minValue;
+//     final maxValue = data.reduce(math.max);
+//     final minValue = data.reduce(math.min);
+//     final range = maxValue - minValue;
 
-    final path = Path();
-    final fillPath = Path();
+//     final path = Path();
+//     final fillPath = Path();
 
-    // Draw dashed lines for avg and goal
-    final avgY = size.height - ((avgLine - minValue) / range) * size.height;
-    final goalY = size.height - ((goalLine - minValue) / range) * size.height;
+//     // Draw dashed lines for avg and goal
+//     final avgY = size.height - ((avgLine - minValue) / range) * size.height;
+//     final goalY = size.height - ((goalLine - minValue) / range) * size.height;
 
-    _drawDashedLine(
-      canvas,
-      dashedPaint,
-      Offset(0, avgY),
-      Offset(size.width, avgY),
-    );
-    _drawDashedLine(
-      canvas,
-      dashedPaint,
-      Offset(0, goalY),
-      Offset(size.width, goalY),
-    );
+//     _drawDashedLine(
+//       canvas,
+//       dashedPaint,
+//       Offset(0, avgY),
+//       Offset(size.width, avgY),
+//     );
+//     _drawDashedLine(
+//       canvas,
+//       dashedPaint,
+//       Offset(0, goalY),
+//       Offset(size.width, goalY),
+//     );
 
-    // Draw line chart
-    final stepX = size.width / (data.length - 1);
+//     // Draw line chart
+//     final stepX = size.width / (data.length - 1);
 
-    for (int i = 0; i < data.length; i++) {
-      final x = i * stepX;
-      final y = size.height - ((data[i] - minValue) / range) * size.height;
+//     for (int i = 0; i < data.length; i++) {
+//       final x = i * stepX;
+//       final y = size.height - ((data[i] - minValue) / range) * size.height;
 
-      if (i == 0) {
-        path.moveTo(x, y);
-        fillPath.moveTo(x, size.height);
-        fillPath.lineTo(x, y);
-      } else {
-        path.lineTo(x, y);
-        fillPath.lineTo(x, y);
-      }
-    }
+//       if (i == 0) {
+//         path.moveTo(x, y);
+//         fillPath.moveTo(x, size.height);
+//         fillPath.lineTo(x, y);
+//       } else {
+//         path.lineTo(x, y);
+//         fillPath.lineTo(x, y);
+//       }
+//     }
 
-    fillPath.lineTo(size.width, size.height);
-    fillPath.close();
+//     fillPath.lineTo(size.width, size.height);
+//     fillPath.close();
 
-    canvas.drawPath(fillPath, fillPaint);
-    canvas.drawPath(path, paint);
+//     canvas.drawPath(fillPath, fillPaint);
+//     canvas.drawPath(path, paint);
 
-    // Draw dots
-    final dotPaint = Paint()
-      ..color = primaryColor
-      ..style = PaintingStyle.fill;
+//     // Draw dots
+//     final dotPaint = Paint()
+//       ..color = primaryColor
+//       ..style = PaintingStyle.fill;
 
-    for (int i = 0; i < data.length; i++) {
-      final x = i * stepX;
-      final y = size.height - ((data[i] - minValue) / range) * size.height;
-      canvas.drawCircle(Offset(x, y), 4, dotPaint);
-    }
+//     for (int i = 0; i < data.length; i++) {
+//       final x = i * stepX;
+//       final y = size.height - ((data[i] - minValue) / range) * size.height;
+//       canvas.drawCircle(Offset(x, y), 4, dotPaint);
+//     }
 
-    // Draw labels
-    final textPainter = TextPainter(textDirection: TextDirection.ltr);
+//     // Draw labels
+//     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
-    textPainter.text = TextSpan(
-      text: 'avg ${avgLine}h',
-      style: const TextStyle(color: Colors.grey, fontSize: 10),
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(size.width - 60, avgY - 20));
+//     textPainter.text = TextSpan(
+//       text: 'avg ${avgLine}h',
+//       style: const TextStyle(color: Colors.grey, fontSize: 10),
+//     );
+//     textPainter.layout();
+//     textPainter.paint(canvas, Offset(size.width - 60, avgY - 20));
 
-    textPainter.text = TextSpan(
-      text: 'goal ${goalLine}h',
-      style: const TextStyle(color: Colors.grey, fontSize: 10),
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(size.width - 60, goalY + 8));
-  }
+//     textPainter.text = TextSpan(
+//       text: 'goal ${goalLine}h',
+//       style: const TextStyle(color: Colors.grey, fontSize: 10),
+//     );
+//     textPainter.layout();
+//     textPainter.paint(canvas, Offset(size.width - 60, goalY + 8));
+//   }
 
-  void _drawDashedLine(Canvas canvas, Paint paint, Offset start, Offset end) {
-    const dashWidth = 5;
-    const dashSpace = 5;
-    double distance = (end - start).distance;
-    double dashCount = distance / (dashWidth + dashSpace);
+//   void _drawDashedLine(Canvas canvas, Paint paint, Offset start, Offset end) {
+//     const dashWidth = 5;
+//     const dashSpace = 5;
+//     double distance = (end - start).distance;
+//     double dashCount = distance / (dashWidth + dashSpace);
 
-    for (int i = 0; i < dashCount; i++) {
-      double startX =
-          start.dx +
-          (end.dx - start.dx) * (i * (dashWidth + dashSpace) / distance);
-      double startY =
-          start.dy +
-          (end.dy - start.dy) * (i * (dashWidth + dashSpace) / distance);
-      double endX =
-          start.dx +
-          (end.dx - start.dx) *
-              ((i * (dashWidth + dashSpace) + dashWidth) / distance);
-      double endY =
-          start.dy +
-          (end.dy - start.dy) *
-              ((i * (dashWidth + dashSpace) + dashWidth) / distance);
-      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);
-    }
-  }
+//     for (int i = 0; i < dashCount; i++) {
+//       double startX =
+//           start.dx +
+//           (end.dx - start.dx) * (i * (dashWidth + dashSpace) / distance);
+//       double startY =
+//           start.dy +
+//           (end.dy - start.dy) * (i * (dashWidth + dashSpace) / distance);
+//       double endX =
+//           start.dx +
+//           (end.dx - start.dx) *
+//               ((i * (dashWidth + dashSpace) + dashWidth) / distance);
+//       double endY =
+//           start.dy +
+//           (end.dy - start.dy) *
+//               ((i * (dashWidth + dashSpace) + dashWidth) / distance);
+//       canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);
+//     }
+//   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+// }
 
 // Custom painter for circular progress
 class _CircularProgressPainter extends CustomPainter {
@@ -895,14 +899,17 @@ class _BalanceScoreCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.purple.withOpacity(0.3), width: 1.5),
+        border: Border.all(
+          color: Colors.purple.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
       ),
       child: Column(
         children: [
           Text(
             'Balance Score',
             style: TextStyle(
-              color: cs.onSurface.withOpacity(0.7),
+              color: cs.onSurface.withValues(alpha: 0.7),
               fontSize: 16,
             ),
           ),
@@ -917,7 +924,7 @@ class _BalanceScoreCard extends StatelessWidget {
                   painter: _CircularProgressPainter(
                     progress: score / 100,
                     color: Colors.purple,
-                    backgroundColor: cs.outline.withOpacity(0.1),
+                    backgroundColor: cs.outline.withValues(alpha: 0.1),
                   ),
                   child: Center(
                     child: Text(
@@ -949,7 +956,7 @@ class _BalanceScoreCard extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.purple.withOpacity(0.15),
+                      color: Colors.purple.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
@@ -991,7 +998,7 @@ class _FocusRecapCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: cs.outline.withOpacity(0.15)),
+        border: Border.all(color: cs.outline.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1024,7 +1031,7 @@ class _FocusRecapCard extends StatelessWidget {
                   Text(
                     metric['label']!,
                     style: TextStyle(
-                      color: cs.onSurface.withOpacity(0.7),
+                      color: cs.onSurface.withValues(alpha: 0.7),
                       fontSize: 13,
                     ),
                   ),
@@ -1082,7 +1089,7 @@ class _SuggestionTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: cs.outline.withOpacity(0.15)),
+        border: Border.all(color: cs.outline.withValues(alpha: 0.15)),
       ),
       child: Row(
         children: [
@@ -1090,7 +1097,7 @@ class _SuggestionTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.15),
+              color: iconColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -1112,7 +1119,7 @@ class _SuggestionTile extends StatelessWidget {
                   description,
                   style: TextStyle(
                     fontSize: 13,
-                    color: cs.onSurface.withOpacity(0.7),
+                    color: cs.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],

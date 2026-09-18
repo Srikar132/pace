@@ -171,7 +171,7 @@ final isAuthenticatedProvider = Provider<bool>((ref) {
   return authState.when(
     data: (user) => user != null,
     loading: () => false,
-    error: (_, __) => false,
+    error: (_, _) => false,
   );
 });
 

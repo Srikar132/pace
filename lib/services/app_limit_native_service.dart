@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:pace/data/models/app_limit_model.dart';
+import 'package:flutter/foundation.dart';
 
 /// Native service for app limit management
 /// Communicates with Android's AccessibilityService + UsageStatsManager
@@ -23,7 +24,7 @@ class AppLimitNativeService {
       });
       return result ?? false;
     } catch (e) {
-      print('Error updating limits: $e');
+      debugPrint('Error updating limits: $e');
       return false;
     }
   }
@@ -56,7 +57,7 @@ class AppLimitNativeService {
       );
       return result ?? 0;
     } catch (e) {
-      print('Error getting today usage: $e');
+      debugPrint('Error getting today usage: $e');
       return 0;
     }
   }
@@ -75,7 +76,7 @@ class AppLimitNativeService {
         ),
       );
     } catch (e) {
-      print('Error getting usage stats: $e');
+      debugPrint('Error getting usage stats: $e');
       return {};
     }
   }
@@ -88,7 +89,7 @@ class AppLimitNativeService {
       );
       return result?.map((e) => e.toString()).toList() ?? [];
     } catch (e) {
-      print('Error forcing check limits: $e');
+      debugPrint('Error forcing check limits: $e');
       return [];
     }
   }
@@ -101,27 +102,27 @@ class AppLimitNativeService {
       );
       return result ?? false;
     } catch (e) {
-      print('Error clearing warnings: $e');
+      debugPrint('Error clearing warnings: $e');
       return false;
     }
   }
 
   /// Initialize limit events handler
   void initLimitEventsHandler(Function(String packageName) onLimitReached) {
-    print('🔔 Setting up app limit events handler...');
+    debugPrint('🔔 Setting up app limit events handler...');
     _eventsChannel.setMethodCallHandler((call) async {
-      print('🔔 Received method call: ${call.method}');
-      print('🔔 Arguments: ${call.arguments}');
+      debugPrint('🔔 Received method call: ${call.method}');
+      debugPrint('🔔 Arguments: ${call.arguments}');
       if (call.method == 'limitReached') {
         final packageName = call.arguments['package'] as String?;
-        print('⚠️ Limit reached event for: $packageName');
+        debugPrint('⚠️ Limit reached event for: $packageName');
         if (packageName != null) {
           onLimitReached(packageName);
         } else {
-          print('❌ Package name is null in limit reached event');
+          debugPrint('❌ Package name is null in limit reached event');
         }
       }
     });
-    print('✅ App limit events handler setup complete');
+    debugPrint('✅ App limit events handler setup complete');
   }
 }

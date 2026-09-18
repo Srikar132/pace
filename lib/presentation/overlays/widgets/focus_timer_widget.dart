@@ -6,10 +6,10 @@ class FocusTimerWidget extends StatelessWidget {
   final bool compact;
 
   const FocusTimerWidget({
-    super. key,
+    super.key,
     required this.elapsedMinutes,
     required this.sessionType,
-    this. compact = false,
+    this.compact = false,
   });
 
   @override
@@ -20,17 +20,17 @@ class FocusTimerWidget extends StatelessWidget {
         gradient: const LinearGradient(
           colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
         ),
-        borderRadius: BorderRadius. circular(20),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 15,
             spreadRadius: 2,
           ),
         ],
       ),
       child: Row(
-        mainAxisSize: MainAxisSize. min,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             _getTimerIcon(sessionType),
@@ -44,10 +44,10 @@ class FocusTimerWidget extends StatelessWidget {
             children: [
               Text(
                 'Focus Time',
-                style:  TextStyle(
-                  color: Colors.white. withOpacity(0.9),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontSize: compact ? 12 : 14,
-                  fontWeight: FontWeight. w500,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
@@ -55,7 +55,7 @@ class FocusTimerWidget extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: compact ? 18 : 22,
-                  fontWeight: FontWeight. bold,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -72,7 +72,7 @@ class FocusTimerWidget extends StatelessWidget {
       case 'stopwatch':
         return Icons.access_time;
       case 'pomodoro':
-        return Icons. schedule;
+        return Icons.schedule;
       default:
         return Icons.timer;
     }

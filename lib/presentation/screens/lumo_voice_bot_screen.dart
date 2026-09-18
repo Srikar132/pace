@@ -13,7 +13,6 @@ class LumoVoiceBotScreen extends ConsumerStatefulWidget {
 
 class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
     with TickerProviderStateMixin {
-  bool _isInitialized = false;
   VoiceSessionNotifier? _voiceNotifier;
 
   late AnimationController _controller;
@@ -51,13 +50,7 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
 
   Future<void> _initialize() async {
     _voiceNotifier = ref.read(voiceSessionProvider.notifier);
-    final success = await _voiceNotifier!.initialize();
-
-    if (mounted) {
-      setState(() {
-        _isInitialized = success;
-      });
-    }
+    await _voiceNotifier!.initialize();
   }
 
   void _handleTap() {
@@ -174,8 +167,8 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: dotColor.withOpacity(
-                        (0.3 * glowVal).clamp(0.0, 1.0),
+                      color: dotColor.withValues(
+                        alpha: (0.3 * glowVal).clamp(0.0, 1.0),
                       ),
                       blurRadius: 30,
                       spreadRadius: 8,
@@ -190,7 +183,7 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
                       return Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: dotColor.withOpacity(0.3),
+                          color: dotColor.withValues(alpha: 0.3),
                         ),
                         child: Icon(
                           Icons.mic_rounded,
@@ -280,7 +273,7 @@ class _LumoVoiceBotScreenState extends ConsumerState<LumoVoiceBotScreen>
             child: Text(
               subText,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),
@@ -382,7 +375,7 @@ class GreenDotsPainter extends CustomPainter {
       final opacity = _safeOpacity(baseOpacity + sparkle);
 
       final paint = Paint()
-        ..color = color.withOpacity(opacity)
+        ..color = color.withValues(alpha: opacity)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(x, y), dotSize, paint);
@@ -391,7 +384,7 @@ class GreenDotsPainter extends CustomPainter {
       if (state == VoiceSessionState.listening ||
           state == VoiceSessionState.speaking) {
         final glowPaint = Paint()
-          ..color = color.withOpacity(_safeOpacity(opacity * 0.25))
+          ..color = color.withValues(alpha: _safeOpacity(opacity * 0.25))
           ..style = PaintingStyle.fill;
         canvas.drawCircle(Offset(x, y), dotSize * 2, glowPaint);
       }
@@ -405,7 +398,7 @@ class GreenDotsPainter extends CustomPainter {
       final y = center.dy + sin(angle) * innerRadius;
 
       final paint = Paint()
-        ..color = color.withOpacity(0.4)
+        ..color = color.withValues(alpha: 0.4)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(x, y), 2.0, paint);

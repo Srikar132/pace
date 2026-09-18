@@ -7,7 +7,6 @@ import 'package:pace/presentation/overlays/widgets/motivational_message.dart';
 import 'package:pace/presentation/overlays/widgets/overlay_background.dart';
 //import 'package:lottie/lottie.dart';
 
-
 class BlockedAppOverlay extends ConsumerStatefulWidget {
   const BlockedAppOverlay({super.key});
 
@@ -26,7 +25,7 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
 
     // Initialize animations
     _pulseController = AnimationController(
-      duration:  const Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
 
@@ -56,9 +55,9 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
     final overlayState = ref.watch(overlayDataProvider);
     final overlayNotifier = ref.read(overlayDataProvider.notifier);
 
-    if (overlayState. error != null) {
+    if (overlayState.error != null) {
       return Scaffold(
-        backgroundColor:  Colors.black,
+        backgroundColor: Colors.black,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -67,10 +66,10 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
               const SizedBox(height: 16),
               Text(
                 'Error:  ${overlayState.error}',
-                style: const TextStyle(color: Colors. white),
+                style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height:  24),
+              const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => overlayNotifier.goHome(),
                 child: const Text('Go Home'),
@@ -89,50 +88,52 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
             child: FadeTransition(
               opacity: _fadeController,
               child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment. center,
-                    children: [
-                      // Animated block icon
-                      _buildBlockIcon(),
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Animated block icon
+                    _buildBlockIcon(),
 
-                      const SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
-                      // App name and block message
-                      _buildBlockMessage(overlayState),
+                    // App name and block message
+                    _buildBlockMessage(overlayState),
 
-                      const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                      // Focus timer
-                      FocusTimerWidget(
-                        elapsedMinutes:  overlayState.focusTimeMinutes,
-                        sessionType: overlayState.sessionType,
-                      ),
+                    // Focus timer
+                    FocusTimerWidget(
+                      elapsedMinutes: overlayState.focusTimeMinutes,
+                      sessionType: overlayState.sessionType,
+                    ),
 
-                      const SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
-                      // Motivational message
-                      MotivationalMessage(
-                        message: overlayState.overlayData['motivationalMessage'] as String? ??
-                            'Stay focused on what truly matters!',
-                      ),
+                    // Motivational message
+                    MotivationalMessage(
+                      message:
+                          overlayState.overlayData['motivationalMessage']
+                              as String? ??
+                          'Stay focused on what truly matters!',
+                    ),
 
-                      const SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
-                      // App info card
+                    // App info card
+                    const SizedBox(height: 32),
 
-
-                      const SizedBox(height: 32),
-
-                      // Action buttons
-                      ActionButtons(
-                        onGoHome: () => overlayNotifier.goHome(),
-                        onEndSession: () => _showEndSessionDialog(context, overlayNotifier),
-                        onShowEducation: () => overlayNotifier.showEducationalContent('blocked_app'),
-                      ),
-                    ],
-                  ),
+                    // Action buttons
+                    ActionButtons(
+                      onGoHome: () => overlayNotifier.goHome(),
+                      onEndSession: () =>
+                          _showEndSessionDialog(context, overlayNotifier),
+                      onShowEducation: () =>
+                          overlayNotifier.showEducationalContent('blocked_app'),
+                    ),
+                  ],
                 ),
+              ),
             ),
           ),
         ),
@@ -148,27 +149,20 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
           scale: 1.0 + (_pulseController.value * 0.1),
           child: Container(
             width: 120,
-            height:  120,
+            height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color:  Colors.red.withOpacity(0.1),
-              border: Border.all(
-                color: Colors. red,
-                width: 3,
-              ),
-              boxShadow:  [
+              color: Colors.red.withValues(alpha: 0.1),
+              border: Border.all(color: Colors.red, width: 3),
+              boxShadow: [
                 BoxShadow(
-                  color: Colors. red.withOpacity(0.3),
+                  color: Colors.red.withValues(alpha: 0.3),
                   blurRadius: 20,
                   spreadRadius: 5,
                 ),
               ],
             ),
-            child: const Icon(
-              Icons.block,
-              size: 60,
-              color: Colors.red,
-            ),
+            child: const Icon(Icons.block, size: 60, color: Colors.red),
           ),
         );
       },
@@ -187,19 +181,19 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height:  8),
+        const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.2),
+            color: Colors.orange.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.orange.withOpacity(0.5)),
+            border: Border.all(color: Colors.orange.withValues(alpha: 0.5)),
           ),
           child: const Text(
             'Focus Mode Active',
             style: TextStyle(
-              color: Colors. orange,
-              fontWeight: FontWeight. w600,
+              color: Colors.orange,
+              fontWeight: FontWeight.w600,
               fontSize: 16,
             ),
           ),
@@ -208,18 +202,19 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
     );
   }
 
-  void _showEndSessionDialog(BuildContext context, OverlayDataNotifier notifier) {
+  void _showEndSessionDialog(
+    BuildContext context,
+    OverlayDataNotifier notifier,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E1E),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'End Focus Session?',
-          style:  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         content: const Text(
           'Are you sure you want to end your focus session?  Your progress will be saved, but you\'ll lose your current momentum.',
@@ -228,7 +223,10 @@ class _BlockedAppOverlayState extends ConsumerState<BlockedAppOverlay>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Continue Focusing', style: TextStyle(color: Colors.blue)),
+            child: const Text(
+              'Continue Focusing',
+              style: TextStyle(color: Colors.blue),
+            ),
           ),
           ElevatedButton(
             onPressed: () {

@@ -16,7 +16,8 @@ class OnboardingScreen extends ConsumerWidget {
     final currentUser = ref.watch(currentUserProvider).value;
 
     // Check if user is returning (has some data)
-    final isReturningUser = currentUser?.hasCompletedOnboarding == false &&
+    final isReturningUser =
+        currentUser?.hasCompletedOnboarding == false &&
         (currentUser?.procrastinationLevel != null ||
             currentUser?.distractions?.isNotEmpty == true);
 
@@ -37,10 +38,7 @@ class OnboardingScreen extends ConsumerWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF0A2A1E),
-                    Color(0xFF0F0F0F),
-                  ],
+                  colors: [Color(0xFF0A2A1E), Color(0xFF0F0F0F)],
                 ),
               ),
             ),
@@ -52,7 +50,7 @@ class OnboardingScreen extends ConsumerWidget {
               children: [
                 LinearProgressIndicator(
                   value: (onboardingState.currentPage + 1) / screens.length,
-                  backgroundColor: Colors.white.withOpacity(0.1),
+                  backgroundColor: Colors.white.withValues(alpha: 0.1),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     Theme.of(context).colorScheme.primary,
                   ),

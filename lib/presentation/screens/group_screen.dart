@@ -19,13 +19,13 @@ Color _getGroupColor(String groupName) {
     const Color(0xFF81C784), // Light Green
     const Color(0xFF64B5F6), // Light Blue
   ];
-  
+
   // Generate consistent index from group name
   int hash = 0;
   for (int i = 0; i < groupName.length; i++) {
     hash = groupName.codeUnitAt(i) + ((hash << 5) - hash);
   }
-  
+
   return colors[hash.abs() % colors.length];
 }
 
@@ -36,7 +36,7 @@ class GroupScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authStateProvider).value;
-    
+
     if (user == null) {
       return const Scaffold(
         backgroundColor: Color(0xFF1A1A1A),
@@ -68,10 +68,7 @@ class GroupScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
-              showSearch(
-                context: context,
-                delegate: GroupSearchDelegate(),
-              );
+              showSearch(context: context, delegate: GroupSearchDelegate());
             },
           ),
         ],
@@ -122,7 +119,7 @@ class GroupScreen extends ConsumerWidget {
                       ],
                     );
                   }
-                  
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -152,7 +149,9 @@ class GroupScreen extends ConsumerWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF82D65D).withOpacity(0.2),
+                              color: const Color(
+                                0xFF82D65D,
+                              ).withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
@@ -176,7 +175,7 @@ class GroupScreen extends ConsumerWidget {
                                 color: const Color(0xFF2D2D2D),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                 ),
                               ),
                               child: const Column(
@@ -223,7 +222,7 @@ class GroupScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
               ),
             ],
           );
@@ -235,11 +234,7 @@ class GroupScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 48,
-                color: Colors.red,
-              ),
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -257,9 +252,7 @@ class GroupScreen extends ConsumerWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const CreateGroupScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
           );
         },
         backgroundColor: const Color(0xFF82D65D),
@@ -285,7 +278,7 @@ class GroupScreen extends ConsumerWidget {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: const Color(0xFF82D65D).withOpacity(0.1),
+              color: const Color(0xFF82D65D).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -309,23 +302,15 @@ class GroupScreen extends ConsumerWidget {
             child: Text(
               'Create or join a group to\nstay focused together',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
-            onPressed: () {
-             
-            },
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF82D65D),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -358,9 +343,7 @@ class _GroupCard extends ConsumerWidget {
       color: const Color(0xFF2D2D2D),
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -385,13 +368,13 @@ class _GroupCard extends ConsumerWidget {
                     end: Alignment.bottomRight,
                     colors: [
                       _getGroupColor(group.name),
-                      _getGroupColor(group.name).withOpacity(0.7),
+                      _getGroupColor(group.name).withValues(alpha: 0.7),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: _getGroupColor(group.name).withOpacity(0.3),
+                      color: _getGroupColor(group.name).withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -409,7 +392,7 @@ class _GroupCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              
+
               // Group Info
               Expanded(
                 child: Column(
@@ -465,10 +448,7 @@ class _GroupCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Icon(
-                Icons.chevron_right,
-                color: Colors.white54,
-              ),
+              const Icon(Icons.chevron_right, color: Colors.white54),
             ],
           ),
         ),
@@ -538,11 +518,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.search,
-                    size: 64,
-                    color: Colors.white24,
-                  ),
+                  Icon(Icons.search, size: 64, color: Colors.white24),
                   SizedBox(height: 16),
                   Text(
                     'Search for public groups',
@@ -554,7 +530,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
           }
 
           final searchResults = ref.watch(groupSearchProvider(query));
-          
+
           return searchResults.when(
             data: (groups) {
               if (groups.isEmpty) {
@@ -562,11 +538,7 @@ class GroupSearchDelegate extends SearchDelegate<String> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.search_off,
-                        size: 64,
-                        color: Colors.white24,
-                      ),
+                      Icon(Icons.search_off, size: 64, color: Colors.white24),
                       SizedBox(height: 16),
                       Text(
                         'No groups found',

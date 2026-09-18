@@ -18,7 +18,7 @@ class _BlockedAppsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).value;
-    final blockedAppsAsync = user != null 
+    final blockedAppsAsync = user != null
         ? ref.watch(permanentlyBlockedAppsProvider(user.uid))
         : const AsyncValue<List<String>>.data([]);
 
@@ -40,9 +40,12 @@ class _BlockedAppsSection extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.1),
+            width: 1,
+          ),
         ),
         child: Row(
           children: [
@@ -59,7 +62,7 @@ class _BlockedAppsSection extends ConsumerWidget {
             const SizedBox(width: 8),
             Icon(
               Icons.chevron_right,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               size: 20,
             ),
           ],
@@ -91,7 +94,7 @@ class _BlockedAppsPreview extends ConsumerWidget {
         if (blockedAppsList.isEmpty) {
           return Text(
             'None',
-            style: TextStyle(color: Colors.white.withOpacity(0.5)),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
           );
         }
 
@@ -103,7 +106,7 @@ class _BlockedAppsPreview extends ConsumerWidget {
             Text(
               '${blockedSet.length} app${blockedSet.length != 1 ? 's' : ''}',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 fontSize: 14,
               ),
             ),
@@ -115,7 +118,7 @@ class _BlockedAppsPreview extends ConsumerWidget {
         height: 16,
         child: CircularProgressIndicator(strokeWidth: 2),
       ),
-      error: (_, __) => const SizedBox(),
+      error: (_, _) => const SizedBox(),
     );
   }
 }
@@ -194,7 +197,7 @@ class _AppIconCircle extends ConsumerWidget {
             return const Icon(Icons.android, size: 12, color: Colors.white);
           },
           loading: () => const SizedBox(),
-          error: (_, __) =>
+          error: (_, _) =>
               const Icon(Icons.android, size: 12, color: Colors.white),
         ),
       ),
@@ -208,10 +211,7 @@ class _AppIconCircle extends ConsumerWidget {
 class FocusTimeBottomSheet extends ConsumerStatefulWidget {
   final Function() onSave;
 
-  const FocusTimeBottomSheet({
-    super.key,
-    required this.onSave,
-  });
+  const FocusTimeBottomSheet({super.key, required this.onSave});
 
   @override
   ConsumerState<FocusTimeBottomSheet> createState() =>
@@ -229,7 +229,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     // Initialize settings from provider only once
     if (!_isInitialized) {
       final user = ref.read(currentUserProvider).value;
@@ -248,7 +248,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
           }
         });
       }
-      
+
       // Set defaults if settings not available
       if (!_isInitialized) {
         _duration = 25;
@@ -297,7 +297,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider).value;
-    
+
     if (user == null) {
       return Container(
         height: MediaQuery.of(context).size.height * 0.3,
@@ -321,7 +321,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
         ),
         child: const Center(child: CircularProgressIndicator()),
       ),
-      error: (_, __) => _buildContent(context, null),
+      error: (_, _) => _buildContent(context, null),
     );
   }
 
@@ -433,16 +433,16 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
   }
 
   // OPTIMIZED: Cached color values
-  static final _containerBgColor = Colors.white.withOpacity(0.05);
-  static final _borderColor = Colors.white.withOpacity(0.1);
-  static final _textSecondaryColor = Colors.white.withOpacity(0.7);
-  static final _iconColor = Colors.white.withOpacity(0.5);
+  static final _containerBgColor = Colors.white.withValues(alpha: 0.05);
+  static final _borderColor = Colors.white.withValues(alpha: 0.1);
+  static final _textSecondaryColor = Colors.white.withValues(alpha: 0.7);
+  static final _iconColor = Colors.white.withValues(alpha: 0.5);
 
   Widget _buildModeSelector() {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -587,9 +587,9 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
               value: value,
               onChanged: onChanged,
               activeThumbColor: Colors.white,
-              activeTrackColor: Colors.white.withOpacity(0.3),
-              inactiveThumbColor: Colors.white.withOpacity(0.5),
-              inactiveTrackColor: Colors.white.withOpacity(0.1),
+              activeTrackColor: Colors.white.withValues(alpha: 0.3),
+              inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
+              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
             ),
           ),
         ],
@@ -650,9 +650,9 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
                     _updateSettings(strict: value);
                   },
                   activeThumbColor: Colors.white,
-                  activeTrackColor: Colors.white.withOpacity(0.3),
-                  inactiveThumbColor: Colors.white.withOpacity(0.5),
-                  inactiveTrackColor: Colors.white.withOpacity(0.1),
+                  activeTrackColor: Colors.white.withValues(alpha: 0.3),
+                  inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
+                  inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
                 ),
               ),
             ],
@@ -663,7 +663,7 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
             child: Text(
               'You cannot end your session early',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 13,
               ),
             ),

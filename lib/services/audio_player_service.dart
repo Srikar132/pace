@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class AudioPlayerService {
   final _player = AudioPlayer();
@@ -24,7 +24,7 @@ class AudioPlayerService {
     _player.setVolume(1.0);
 
     _player.onPlayerComplete.listen((_) {
-      print('🔊 Playback complete');
+      debugPrint('🔊 Playback complete');
       _isPlaying = false;
       _cleanupFile();
       if (!_playbackController.isClosed) {
@@ -46,14 +46,14 @@ class AudioPlayerService {
     await Future.delayed(const Duration(milliseconds: 500));
 
     if (_audioBuffer.isEmpty) {
-      print('⚠️ No audio to play');
+      debugPrint('⚠️ No audio to play');
       onPlaybackComplete?.call();
       return;
     }
 
     // Don't play if buffer is too small (likely incomplete)
     if (_audioBuffer.length < 5000) {
-      print(
+      debugPrint(
         '⚠️ Audio buffer too small: ${_audioBuffer.length} bytes, skipping',
       );
       _audioBuffer.clear();
@@ -74,7 +74,7 @@ class AudioPlayerService {
       final pcmData = Uint8List.fromList(_audioBuffer);
       _audioBuffer.clear();
 
-      print('🔊 Playing ${pcmData.length} bytes of audio');
+      debugPrint('🔊 Playing ${pcmData.length} bytes of audio');
 
       // Amplify audio for better volume
       final amplified = _amplifyAudio(pcmData, 2.0);
@@ -90,7 +90,7 @@ class AudioPlayerService {
 
       await _player.play(DeviceFileSource(_currentAudioFile!.path));
     } catch (e) {
-      print('❌ Play error: $e');
+      debugPrint('❌ Play error: $e');
       _isPlaying = false;
       if (!_playbackController.isClosed) {
         _playbackController.add(false);

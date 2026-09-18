@@ -17,7 +17,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  
+
   bool _isPublic = false;
   bool _allowMemberInvites = true;
   bool _showLeaderboard = true;
@@ -31,7 +31,11 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     super.dispose();
   }
 
-  void _showShareDialog(BuildContext context, String groupId, String groupName) {
+  void _showShareDialog(
+    BuildContext context,
+    String groupId,
+    String groupName,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -42,10 +46,14 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF82D65D).withOpacity(0.2),
+                color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.share, color: Color(0xFF82D65D), size: 20),
+              child: const Icon(
+                Icons.share,
+                color: Color(0xFF82D65D),
+                size: 20,
+              ),
             ),
             const SizedBox(width: 12),
             const Expanded(
@@ -68,9 +76,9 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
@@ -79,7 +87,10 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                   Expanded(
                     child: Text(
                       'Group ID: $groupId',
-                      style: const TextStyle(color: Colors.white54, fontSize: 12),
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 12,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -101,12 +112,17 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF25D366),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             icon: const Icon(Icons.send, color: Colors.white, size: 18),
             label: const Text(
               'Share via WhatsApp',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -115,17 +131,16 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   }
 
   void _shareToWhatsApp(String groupId, String groupName) {
-    final message = 
+    final message =
         '🎯 Join my focus group: "$groupName"!\n\n'
         '📚 Let\'s stay focused and productive together.\n'
         '🏆 Track progress on the leaderboard.\n\n'
         '👉 Open Pace app and search for this group:\n'
         'Group ID: $groupId\n\n'
         '💪 Let\'s achieve our goals together!';
-    
-    Share.share(
-      message,
-      subject: 'Join my focus group: $groupName',
+
+    SharePlus.instance.share(
+      ShareParams(text: message, subject: 'Join my focus group: $groupName'),
     );
   }
 
@@ -139,12 +154,13 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       if (user == null) throw Exception('User not logged in');
 
       final groupActions = ref.read(groupActionsProvider);
-      
+
       final createdGroupId = await groupActions.createGroup(
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim(),
         creatorId: user.uid,
-        creatorDisplayName: user.displayName ?? user.email?.split('@')[0] ?? 'User',
+        creatorDisplayName:
+            user.displayName ?? user.email?.split('@')[0] ?? 'User',
         settings: GroupSettings(
           isPublic: _isPublic,
           allowMemberInvites: _allowMemberInvites,
@@ -155,7 +171,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
 
       if (mounted) {
         final groupName = _nameController.text;
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -167,11 +183,13 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             ),
             backgroundColor: const Color(0xFF82D65D),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
         Navigator.pop(context);
-        
+
         // Show share dialog after successful creation
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
@@ -233,13 +251,13 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                   gradient: LinearGradient(
                     colors: [
                       const Color(0xFF82D65D),
-                      const Color(0xFF82D65D).withOpacity(0.6),
+                      const Color(0xFF82D65D).withValues(alpha: 0.6),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF82D65D).withOpacity(0.3),
+                      color: const Color(0xFF82D65D).withValues(alpha: 0.3),
                       blurRadius: 15,
                       spreadRadius: 3,
                     ),
@@ -256,9 +274,15 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               hint: 'e.g., Study Squad, Gym Warriors',
               icon: Icons.groups,
               validator: (value) {
-                if (value == null || value.isEmpty) return 'Please enter a group name';
-                if (value.length < 3) return 'Name must be at least 3 characters';
-                if (value.length > 50) return 'Name must be less than 50 characters';
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a group name';
+                }
+                if (value.length < 3) {
+                  return 'Name must be at least 3 characters';
+                }
+                if (value.length > 50) {
+                  return 'Name must be less than 50 characters';
+                }
                 return null;
               },
             ),
@@ -271,9 +295,15 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               icon: Icons.description,
               maxLines: 3,
               validator: (value) {
-                if (value == null || value.isEmpty) return 'Please enter a description';
-                if (value.length < 10) return 'Description must be at least 10 characters';
-                if (value.length > 200) return 'Description must be less than 200 characters';
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a description';
+                }
+                if (value.length < 10) {
+                  return 'Description must be at least 10 characters';
+                }
+                if (value.length > 200) {
+                  return 'Description must be less than 200 characters';
+                }
                 return null;
               },
             ),
@@ -334,7 +364,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                 color: const Color(0xFF2D2D2D),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: const Color(0xFF82D65D).withOpacity(0.2),
+                  color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                 ),
               ),
               child: Column(
@@ -345,7 +375,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withOpacity(0.2),
+                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -382,17 +412,20 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF82D65D).withOpacity(0.2),
+                          color: const Color(0xFF82D65D).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           _focusGoalMinutes == 0
                               ? 'None'
                               : _focusGoalMinutes < 60
-                                  ? '${_focusGoalMinutes}m'
-                                  : '${_focusGoalMinutes ~/ 60}h ${_focusGoalMinutes % 60}m',
+                              ? '${_focusGoalMinutes}m'
+                              : '${_focusGoalMinutes ~/ 60}h ${_focusGoalMinutes % 60}m',
                           style: const TextStyle(
                             color: Color(0xFF82D65D),
                             fontWeight: FontWeight.bold,
@@ -413,7 +446,9 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                 onPressed: _isLoading ? null : _createGroup,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF82D65D),
-                  disabledBackgroundColor: const Color(0xFF82D65D).withOpacity(0.5),
+                  disabledBackgroundColor: const Color(
+                    0xFF82D65D,
+                  ).withValues(alpha: 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -520,8 +555,8 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: value
-              ? const Color(0xFF82D65D).withOpacity(0.3)
-              : Colors.white.withOpacity(0.1),
+              ? const Color(0xFF82D65D).withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -529,7 +564,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF82D65D).withOpacity(0.2),
+              color: const Color(0xFF82D65D).withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: const Color(0xFF82D65D), size: 20),
@@ -550,10 +585,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ],
             ),
@@ -562,7 +594,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
             value: value,
             onChanged: onChanged,
             activeThumbColor: const Color(0xFF82D65D),
-            activeTrackColor: const Color(0xFF82D65D).withOpacity(0.5),
+            activeTrackColor: const Color(0xFF82D65D).withValues(alpha: 0.5),
           ),
         ],
       ),

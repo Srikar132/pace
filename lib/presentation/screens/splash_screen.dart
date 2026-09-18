@@ -19,6 +19,7 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   bool _hasCheckedSession = false;
+  bool _hasCheckedPermissions = false;
 
   @override
   void initState() {
@@ -100,10 +101,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // This ensures we always check actual permission status
         final permissionState = ref.watch(permissionProvider);
 
-        // Always trigger permission check on splash screen
-        Future.microtask(() {
-          ref.read(permissionProvider.notifier).checkPermissions();
-        });
+        // Trigger permission check once per splash screen visit, not on
+        // every rebuild (this widget also rebuilds on every focus-session
+        // timer tick, since it stays mounted as the app's root widget).
+        if (!_hasCheckedPermissions) {
+          _hasCheckedPermissions = true;
+          Future.microtask(() {
+            ref.read(permissionProvider.notifier).checkPermissions();
+          });
+        }
 
         // If ANY permission is not granted, show permission screen
         // User must grant ALL permissions before proceeding
@@ -159,7 +165,7 @@ class _ErrorScreen extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.2),
+                  color: Colors.red.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Icon(
@@ -188,7 +194,7 @@ class _ErrorScreen extends StatelessWidget {
               Text(
                 error,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,

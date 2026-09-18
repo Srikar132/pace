@@ -19,7 +19,7 @@ class EntryScreen extends StatelessWidget {
           ),
 
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.25)),
+            child: Container(color: Colors.black.withValues(alpha: 0.25)),
           ),
 
           SafeArea(
