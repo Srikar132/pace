@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/presentation/providers/focus_session_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/background_image_provider.dart';
@@ -12,20 +14,10 @@ import 'package:pace/widgets/allowed_apps_drawer.dart';
 import 'package:pace/models/model_manager.dart';
 import 'package:pace/models/end_session_bottom_sheet.dart';
 import 'package:pace/models/audio_bottom_model.dart';
-import 'package:pace/presentation/screens/save_session_screen.dart';
 import 'package:pace/services/audio_service.dart';
 
 class ActiveFocusScreen extends ConsumerStatefulWidget {
-  final String sessionId;
-  final int plannedDuration;
-  final String sessionType;
-
-  const ActiveFocusScreen({
-    super.key,
-    required this.sessionId,
-    required this.plannedDuration,
-    required this.sessionType,
-  });
+  const ActiveFocusScreen({super.key});
 
   @override
   ConsumerState<ActiveFocusScreen> createState() => _ActiveFocusScreenState();
@@ -172,21 +164,12 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
 
       debugPrint('🎯 Session data retrieved: $sessionData');
 
-      // Use pushReplacement to replace current screen
-      Navigator.of(context)
-          .pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => SaveSessionScreen(sessionData: sessionData),
-            ),
-          )
-          .then((_) {
-            debugPrint('🎯 Navigation completed');
-            _isNavigating = false;
-          })
-          .catchError((error) {
-            debugPrint('🎯 Navigation error: $error');
-            _isNavigating = false;
-          });
+      // Use pushReplacement to replace current screen. Unlike Navigator's
+      // pushReplacement, go_router's doesn't return a Future to await - this
+      // widget gets disposed as part of the replacement anyway, so there's
+      // nothing further to do once the call returns.
+      context.pushReplacement(saveSessionRoute, extra: sessionData);
+      _isNavigating = false;
 
       debugPrint('🎯 Navigation initiated successfully');
     } catch (e, stackTrace) {
@@ -211,8 +194,13 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
     _isNavigating = true;
     debugPrint('🎯 Navigating to home');
 
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
+    // Reached via context.push() from FocusScreen -> pop back to it.
+    // Reached via the router's redirect (cold start into an already-active
+    // session) -> nothing to pop back to, go home directly.
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(homeRoute);
     }
 
     _isNavigating = false;
@@ -391,9 +379,8 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
   Widget _buildTimerCircle(FocusSessionState sessionState) {
     final elapsedSeconds = sessionState.elapsedSeconds ?? 0;
     final remainingSeconds = sessionState.remainingSeconds ?? 0;
-    final plannedDuration =
-        sessionState.plannedDuration ?? widget.plannedDuration;
-    final sessionType = sessionState.sessionType ?? widget.sessionType;
+    final plannedDuration = sessionState.plannedDuration ?? 0;
+    final sessionType = sessionState.sessionType ?? 'focus';
     final isPaused = sessionState.status == FocusSessionStatus.paused;
 
     // Calculate progress based on session type

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/presentation/providers/onboarding_provider.dart';
 
@@ -124,9 +126,10 @@ class ProcrastinationScreen extends ConsumerWidget {
                               user.uid,
                             );
 
-                            // Navigate to permissions screen
+                            // Route back through /splash so the router's
+                            // redirect logic decides where to land next.
                             if (context.mounted) {
-                              Navigator.of(context).pushReplacementNamed('/');
+                              context.go(splashRoute);
                             }
                           } catch (e) {
                             if (context.mounted) {
