@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/presentation/providers/permission_provider.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
 import 'package:pace/widgets/permission_instruction_dialog.dart';
@@ -174,12 +176,13 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen>
                             .read(permissionProvider.notifier)
                             .completePermissions(user.uid);
 
-                        // Navigate to SplashScreen after successful completion
+                        // Route back through /splash so the router's
+                        // redirect logic (single source of truth) decides
+                        // where to actually land, instead of duplicating
+                        // that decision here.
                         if (!context.mounted) return;
-                        
-                        Navigator.of(
-                          context,
-                        ).pushNamedAndRemoveUntil('/', (route) => false);
+
+                        context.go(splashRoute);
                       } catch (e) {
                         if (mounted) {
                           scaffoldMessenger.showSnackBar(

@@ -1,8 +1,5 @@
-
-
-
-// ENTRY SCREEN IMAGES
-String get kEntryBackgroundImage => 'assets/images/entry_bg.jpg';
+// WELCOME SCREEN IMAGES
+String get kWelcomeBackgroundImage => 'assets/images/entry_bg.jpg';
 
 // SOCIAL ICONS
 String get kGoogleLogoImage => 'assets/images/google_icon.png';
@@ -21,7 +18,7 @@ String get kBackgroundImage5 => 'assets/images/song-image2.png';
 
 class BackgroundImageConstants {
   static const String defaultBackground = 'assets/images/home-bg1.png';
-  
+
   static const List<String> availableBackgrounds = [
     'assets/images/home-bg1.png',
     'assets/images/entry_bg.jpg',

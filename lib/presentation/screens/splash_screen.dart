@@ -1,148 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
-import 'package:pace/presentation/providers/focus_session_provider.dart';
-import 'package:pace/presentation/providers/permission_provider.dart';
-import 'package:pace/presentation/screens/entry_screen.dart';
-import 'package:pace/presentation/screens/home_screen.dart';
-import 'package:pace/presentation/screens/onboarding/onboarding_screen.dart';
-import 'package:pace/presentation/screens/permission_screen.dart';
-import 'package:pace/presentation/screens/active_focus_screen.dart';
-import 'package:pace/services/native_service.dart';
 
-class SplashScreen extends ConsumerStatefulWidget {
+/// Pure loading/error gate. All routing decisions (auth, onboarding,
+/// permissions, active-session) live in `appRouterProvider`'s `redirect`
+/// callback now - this widget only renders while that's still resolving,
+/// or if auth hit an error along the way.
+class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends ConsumerState<SplashScreen> {
-  bool _hasCheckedSession = false;
-  bool _hasCheckedPermissions = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkActiveSession();
-  }
-
-  Future<void> _checkActiveSession() async {
-    // Wait a brief moment to ensure providers are ready
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    try {
-      final status = await NativeService.getCurrentSessionStatus();
-
-      if (status != null && status['isActive'] == true && mounted) {
-        // Sync the session state to Flutter
-        await ref
-            .read(focusSessionProvider.notifier)
-            .refreshSessionFromNative();
-
-        setState(() {
-          _hasCheckedSession = true;
-        });
-      } else {
-        setState(() {
-          _hasCheckedSession = true;
-        });
-      }
-    } catch (e) {
-      debugPrint('Error checking active session: $e');
-      setState(() {
-        _hasCheckedSession = true;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Watch authentication status and user data
-    final isAuthenticated = ref.watch(isAuthenticatedProvider);
-    final currentUser = ref.watch(currentUserProvider);
-    final isLoading = ref.watch(authLoadingProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
     final authError = ref.watch(authErrorProvider);
-    final focusSession = ref.watch(focusSessionProvider);
 
-    // Show loading screen while determining state
-    if (isLoading || currentUser.isLoading || !_hasCheckedSession) {
-      return const _LoadingScreen();
-    }
-
-    // Handle authentication error
     if (authError != null) {
       return _ErrorScreen(
         error: authError,
-        onRetry: () {
-          ref.read(authNotifierProvider.notifier).clearError();
-        },
+        onRetry: () => ref.read(authNotifierProvider.notifier).clearError(),
       );
     }
 
-    // Not authenticated - show entry screen
-    if (!isAuthenticated) {
-      return const EntryScreen();
-    }
-
-    // Authenticated - route based on user completion status
-    return currentUser.when(
-      data: (user) {
-        if (user == null) {
-          return const EntryScreen();
-        }
-
-        // Check onboarding status
-        if (!user.hasCompletedOnboarding) {
-          return const OnboardingScreen();
-        }
-
-        // Check permissions in real-time from provider, not database
-        // This ensures we always check actual permission status
-        final permissionState = ref.watch(permissionProvider);
-
-        // Trigger permission check once per splash screen visit, not on
-        // every rebuild (this widget also rebuilds on every focus-session
-        // timer tick, since it stays mounted as the app's root widget).
-        if (!_hasCheckedPermissions) {
-          _hasCheckedPermissions = true;
-          Future.microtask(() {
-            ref.read(permissionProvider.notifier).checkPermissions();
-          });
-        }
-
-        // Don't judge allGranted off the default-false constructor values -
-        // wait for the real sweep to resolve first, or every cold start
-        // flashes PermissionScreen for a moment even when everything is
-        // actually granted.
-        if (!permissionState.hasCheckedOnce) {
-          return const _LoadingScreen();
-        }
-
-        // If ANY permission is not granted, show permission screen
-        // User must grant ALL permissions before proceeding
-        if (!permissionState.allGranted) {
-          return const PermissionScreen();
-        }
-
-        // If there's an active focus session, show the active focus screen
-        if (focusSession.isActive) {
-          return ActiveFocusScreen(
-            sessionId: focusSession.sessionId ?? '',
-            plannedDuration: focusSession.plannedDuration ?? 0,
-            sessionType: focusSession.sessionType ?? 'focus',
-          );
-        }
-
-        // Everything completed - show home
-        return const HomeScreen();
-      },
-      loading: () => const _LoadingScreen(),
-      error: (error, _) => _ErrorScreen(
-        error: error.toString(),
-        onRetry: () => ref.read(authNotifierProvider.notifier).clearError(),
-      ),
-    );
+    return const _LoadingScreen();
   }
 }
 

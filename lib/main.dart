@@ -3,10 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/presentation/overlays/overlay_app.dart';
-import 'package:pace/presentation/screens/splash_screen.dart';
-import 'package:pace/presentation/screens/manage_blocked_apps_screen.dart';
 import 'package:pace/services/native_service.dart';
 
 // Overlay entry point - separate from main app
@@ -66,7 +66,6 @@ class LockInApp extends ConsumerStatefulWidget {
 }
 
 class _LockInAppState extends ConsumerState<LockInApp> {
-  
   @override
   void initState() {
     super.initState();
@@ -79,15 +78,14 @@ class _LockInAppState extends ConsumerState<LockInApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final router = ref.watch(appRouterProvider);
+
+    return MaterialApp.router(
       title: 'Pace',
       debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: const SplashScreen(),
-      routes: {
-        '/manage-blocked-apps': (context) => const ManageBlockedAppsScreen(),
-      },
+      routerConfig: router,
       builder: (context, child) {
         ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
           return Material(
@@ -115,12 +113,7 @@ class _LockInAppState extends ConsumerState<LockInApp> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (_) => const SplashScreen(),
-                          ),
-                          (route) => false,
-                        );
+                        context.go(splashRoute);
                       },
                       child: const Text('Restart App'),
                     ),

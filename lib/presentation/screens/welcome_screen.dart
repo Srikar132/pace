@@ -4,8 +4,8 @@ import 'package:pace/models/auth_actions_bottom_model.dart';
 import 'package:pace/models/model_manager.dart';
 import 'package:pace/widgets/testimonial_card.dart';
 
-class EntryScreen extends StatelessWidget {
-  const EntryScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class EntryScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(kEntryBackgroundImage, fit: BoxFit.cover),
+            child: Image.asset(kWelcomeBackgroundImage, fit: BoxFit.cover),
           ),
 
           Positioned.fill(

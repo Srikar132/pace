@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pace/core/constants/images.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/models/focus_time_bottom_model.dart';
 import 'package:pace/models/model_manager.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
@@ -9,7 +11,6 @@ import 'package:pace/presentation/providers/blocked_content_provider.dart';
 import 'package:pace/presentation/providers/settings_provider.dart';
 import 'package:pace/presentation/providers/background_image_provider.dart';
 import 'package:pace/presentation/providers/usage_stats_provider.dart';
-import 'package:pace/presentation/screens/active_focus_screen.dart';
 import 'package:pace/presentation/screens/profile_screen.dart';
 import 'package:pace/presentation/screens/usage_stats_screen.dart';
 import 'package:pace/widgets/focus_timer_widget.dart';
@@ -118,17 +119,11 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
             notificationsBlocked: true, // Default to blocking notifications
           );
 
-      // Navigate to active focus screen
+      // Navigate to active focus screen. startSession() above already
+      // populated focusSessionProvider's state, which ActiveFocusScreen
+      // reads directly - no need to pass session data through the route.
       if (mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ActiveFocusScreen(
-              sessionId: DateTime.now().millisecondsSinceEpoch.toString(),
-              plannedDuration: settings.defaultDuration,
-              sessionType: settings.timerMode,
-            ),
-          ),
-        );
+        context.push(activeSessionRoute);
       }
     } catch (e) {
       debugPrint('Error starting focus session: $e');

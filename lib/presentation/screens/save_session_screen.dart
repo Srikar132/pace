@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pace/core/router/app_router.dart';
 import 'package:pace/presentation/providers/focus_session_provider.dart';
 import 'package:pace/core/constants/images.dart';
-import 'package:pace/presentation/screens/splash_screen.dart';
 
 class SaveSessionScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> sessionData;
@@ -111,10 +112,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
           );
 
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const SplashScreen()),
-          (route) => false,
-        );
+        context.go(splashRoute);
       }
     } catch (e) {
       if (mounted) {
@@ -135,10 +133,14 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
   }
 
   void _discardSession() {
+    // Captured before the bottom sheet's builder shadows `context` with its
+    // own - needed afterward to navigate the actual screen, not the sheet.
+    final screenContext = context;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
+      builder: (sheetContext) => Container(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
         decoration: const BoxDecoration(
           color: Color(0xFF1E1E1E),
@@ -183,14 +185,12 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sheetContext);
                   ref.read(focusSessionProvider.notifier).discardSession();
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => const SplashScreen(),
-                    ),
-                    (route) => false,
-                  );
+                  // Route back through /splash so the router's redirect
+                  // logic decides where to land, instead of duplicating
+                  // that decision here.
+                  screenContext.go(splashRoute);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF5252),
@@ -217,7 +217,7 @@ class _SaveSessionScreenState extends ConsumerState<SaveSessionScreen> {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(sheetContext),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 18),
