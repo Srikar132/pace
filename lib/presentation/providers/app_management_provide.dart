@@ -52,17 +52,25 @@ final groupedAppsProvider = Provider<Map<String, List<InstalledApp>>>((ref) {
         return matchesSearch && isNotPace;
       }).toList();
 
-      // Sort apps: popular apps first, then alphabetically
+      // Sort apps: popular apps first, then alphabetically. Popularity is
+      // precomputed once per app here - the comparator below runs O(n log n)
+      // times during sort, and this whole provider recomputes on every
+      // keystroke (see appSearchQueryProvider), so redoing toLowerCase()
+      // and 15x .any() checks inside the comparator itself was real,
+      // avoidable synchronous cost on every recompute.
+      final isPopular = <String, bool>{
+        for (final app in filtered)
+          app.packageName: popularApps.any(
+            (popular) =>
+                app.appName.toLowerCase().contains(popular) ||
+                app.packageName.toLowerCase().contains(popular),
+          ),
+      };
+
       filtered.sort((a, b) {
-        final aIsPopular = popularApps.any((popular) => 
-          a.appName.toLowerCase().contains(popular) || 
-          a.packageName.toLowerCase().contains(popular)
-        );
-        final bIsPopular = popularApps.any((popular) => 
-          b.appName.toLowerCase().contains(popular) || 
-          b.packageName.toLowerCase().contains(popular)
-        );
-        
+        final aIsPopular = isPopular[a.packageName]!;
+        final bIsPopular = isPopular[b.packageName]!;
+
         if (aIsPopular && !bIsPopular) return -1;
         if (!aIsPopular && bIsPopular) return 1;
         return a.appName.compareTo(b.appName);

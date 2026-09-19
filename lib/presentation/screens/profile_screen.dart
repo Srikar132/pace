@@ -85,6 +85,11 @@ class ProfileScreen extends ConsumerWidget {
                         // Weekly Reports Section
                         _buildWeeklyReportsSection(context),
 
+                        const SizedBox(height: 24),
+
+                        // Sign Out
+                        _buildSignOutButton(context, ref),
+
                         const SizedBox(height: 16),
                       ],
                     ),
@@ -119,17 +124,10 @@ class ProfileScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.of(context).pop(),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                  onPressed: () {
-                    // TODO: Navigate to settings
-                  },
                 ),
               ],
             ),
@@ -941,6 +939,59 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSignOutButton(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () async {
+          final confirmed = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: AppColors.surfaceElevated,
+              title: const Text(
+                'Sign out?',
+                style: TextStyle(color: Colors.white),
+              ),
+              content: const Text(
+                'You can sign back in anytime.',
+                style: TextStyle(color: Colors.white70),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text(
+                    'Sign out',
+                    style: TextStyle(color: AppColors.error),
+                  ),
+                ),
+              ],
+            ),
+          );
+
+          if (confirmed == true) {
+            await ref.read(authNotifierProvider.notifier).signOut();
+          }
+        },
+        icon: const Icon(Icons.logout, color: AppColors.error),
+        label: const Text(
+          'Sign out',
+          style: TextStyle(color: AppColors.error),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColors.error),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ),
       ),
     );
   }
