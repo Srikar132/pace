@@ -178,6 +178,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "276612873176-g9p43a3dsvaa4m51a2g2b17ng47hm4d9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.srikar.pace",
+            "certificate_hash": "bae5d40e5cad16a410414a2d5812a6aca0e336bf"
+          }
+        },
+        {
           "client_id": "276612873176-0f83fdm29agqtufq1utl52d7usge8abg.apps.googleusercontent.com",
           "client_type": 3
         }
