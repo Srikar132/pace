@@ -343,14 +343,19 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
       });
     }
 
-    // FIXED: Account for keyboard
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final screenHeight = MediaQuery.of(context).size.height;
-    final availableHeight = screenHeight - keyboardHeight;
 
     return Container(
-      // FIXED: Use available height to prevent overflow
-      height: availableHeight * 0.85,
+      // Fixed height, independent of the keyboard - this sheet hosts
+      // BlockAppsSheet as a nested modal on top of itself, and when a
+      // search field inside that inner sheet gets focus, this outer
+      // Container was ALSO resizing+repainting its full decorated
+      // background on every raw keyboard-inset frame (same anti-pattern
+      // already fixed in block_app_bottom_model.dart's BlockAppsSheet -
+      // this was the other half of it, still causing the same jank since
+      // both sheets are mounted at once during that flow).
+      height: screenHeight * 0.85,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -362,8 +367,12 @@ class _FocusTimeBottomSheetState extends ConsumerState<FocusTimeBottomSheet> {
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.all(16),
-              // FIXED: Add keyboard padding
-              child: Padding(
+              // AnimatedPadding (not raw Padding) so Flutter's own Tween
+              // smooths bursty keyboard-inset updates instead of relaying
+              // out this whole scroll content on every raw callback.
+              child: AnimatedPadding(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOut,
                 padding: EdgeInsets.only(bottom: keyboardHeight),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

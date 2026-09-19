@@ -51,6 +51,7 @@ Pure Flutter UI/Dart logic that doesn't touch the above can move faster, but sti
 # 3. UI work
 
 - **Calm/minimal dark theme.** Build on the existing dark `MaterialApp` theme (`core/theme/app_theme.dart`) — low-stimulation aesthetic fitting a focus app. Don't push toward a heavily animated/premium redesign.
+- **Theme source of truth: `lib/core/theme/app_theme.dart` only.** All colors, text styles, component themes come from `AppTheme.darkTheme`/`AppColors` there — no inline one-off colors/styles in screens/widgets. Wired in `lib/main.dart` (`MaterialApp.router(darkTheme: AppTheme.darkTheme, themeMode: ThemeMode.dark, ...)`) — dark-only, no light theme exists.
 - Keep new screens visually consistent with existing ones (`presentation/screens/`) rather than introducing new patterns.
 - Phone-first, Android-only — no tablet/desktop layout priority.
 - **Overlay screens** (`presentation/overlays/`) run in a *separate Flutter engine* (`overlayMain()` in `main.dart`, hosted by `BlockOverlayActivity`). They must stay visually consistent with the main app despite being a different widget tree/session with no shared state — don't assume a provider from the main app's `ProviderScope` is visible there.

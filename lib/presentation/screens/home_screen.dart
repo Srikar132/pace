@@ -15,20 +15,45 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // INDEXED SCREENS
-  final List<Widget> _screens = [
-    const FocusScreen(),
-    const GroupScreen(),
-    const BlocksScreen(),
-    const UsageStatsScreen(),
-    const InsightsScreen(),
+  // Lazily built so tabs the user never opens don't pay init/network cost.
+  // Once built, kept alive by IndexedStack (index null -> not built yet).
+  static const _screenBuilders = <WidgetBuilder>[
+    _buildFocus,
+    _buildGroup,
+    _buildBlocks,
+    _buildUsage,
+    _buildInsights,
   ];
+  final List<Widget?> _screens = List.filled(_screenBuilders.length, null);
+
+  static Widget _buildFocus(BuildContext _) => const FocusScreen();
+  static Widget _buildGroup(BuildContext _) => const GroupScreen();
+  static Widget _buildBlocks(BuildContext _) => const BlocksScreen();
+  static Widget _buildUsage(BuildContext _) => const UsageStatsScreen();
+  static Widget _buildInsights(BuildContext _) => const InsightsScreen();
 
   @override
   Widget build(BuildContext context) {
+    _screens[_selectedIndex] ??= _screenBuilders[_selectedIndex](context);
+
     return Scaffold(
-    
-      body: _screens[_selectedIndex],
+      // Keyboard viewInsets are a single global window value - every
+      // Scaffold in the tree reacts to them by default, not just the one
+      // actually hosting the focused field. Modal sheets opened above this
+      // (FocusTimeBottomSheet, BlockAppsSheet) already handle their own
+      // keyboard inset manually, so this base Scaffold reacting too was
+      // redundant - it made the tab behind the sheet visibly shift/resize
+      // whenever a text field inside the sheet got focus. Tabs that do need
+      // resize-avoidance for their own inline fields (UsageStatsScreen) have
+      // their own nested Scaffold, so they're unaffected by this.
+      resizeToAvoidBottomInset: false,
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          for (var i = 0; i < _screens.length; i++)
+            _screens[i] ?? const SizedBox.shrink(),
+        ],
+      ),
 
       // USING MATERIAL 3 NAVIGATION BAR
       // This matches the 'navigationBarTheme' in your AppTheme file

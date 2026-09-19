@@ -3,7 +3,9 @@ package com.example.pace.utils
 import android.content. Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.util.Log
+import android.util.LruCache
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,6 +13,16 @@ import kotlinx.coroutines.withContext
 object AppUtils {
 
     private const val TAG = "AppUtils"
+
+    // Icon bytes are re-requested constantly as ListView.builder recycles
+    // rows and appIconProvider gets re-watched - cache them in memory so
+    // repeats (the common case) skip the bitmap decode/encode entirely.
+    // Bounded to avoid unbounded growth over the process lifetime.
+    private val iconCache = LruCache<String, ByteArray>(300)
+
+    // Nothing in the app renders icons above ~48dp; even at 3x density
+    // that's 144px, so 96px covers every real render size with headroom.
+    private const val ICON_SIZE_PX = 96
 
     /**
      * GET ALL INSTALLED APPS
@@ -176,17 +188,38 @@ object AppUtils {
      * Get app icon as byte array (for Flutter)
      */
     fun getAppIcon(context: Context, packageName: String): ByteArray? {
+        iconCache.get(packageName)?.let { return it }
+
         return try {
             val packageManager = context.packageManager
             val appIcon = packageManager.getApplicationIcon(packageName)
 
-            // Convert Drawable to Bitmap
-            val bitmap = appIcon.toBitmap()
+            // Convert Drawable to Bitmap. Not recycled: for a BitmapDrawable
+            // this can be a reference to a bitmap the system icon cache
+            // still owns, not a fresh copy - recycling it would risk a
+            // "trying to use a recycled bitmap" crash elsewhere.
+            val fullBitmap = appIcon.toBitmap()
 
-            // Compress to PNG Byte Array
+            // Downscale before encoding - the full-resolution launcher icon
+            // (often 192-512px) is wasted work when the UI only ever draws
+            // this at a few dozen dp.
+            val scaledBitmap = Bitmap.createScaledBitmap(
+                fullBitmap,
+                ICON_SIZE_PX,
+                ICON_SIZE_PX,
+                true,
+            )
+
             val stream = java.io.ByteArrayOutputStream()
-            bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
-            stream.toByteArray() // Return raw bytes directly
+            scaledBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val bytes = stream.toByteArray()
+
+            if (scaledBitmap !== fullBitmap) {
+                scaledBitmap.recycle()
+            }
+
+            iconCache.put(packageName, bytes)
+            bytes
         } catch (e: Exception) {
             Log.e(TAG, "Error getting app icon for $packageName", e)
             null

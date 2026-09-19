@@ -10,6 +10,7 @@ import 'package:pace/presentation/screens/home_screen.dart';
 import 'package:pace/presentation/screens/manage_blocked_apps_screen.dart';
 import 'package:pace/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:pace/presentation/screens/permission_screen.dart';
+import 'package:pace/presentation/screens/profile_screen.dart';
 import 'package:pace/presentation/screens/save_session_screen.dart';
 import 'package:pace/presentation/screens/splash_screen.dart';
 import 'package:pace/presentation/screens/welcome_screen.dart';
@@ -22,6 +23,7 @@ const homeRoute = '/home';
 const activeSessionRoute = '/active-session';
 const saveSessionRoute = '/save-session';
 const manageBlockedAppsRoute = '/manage-blocked-apps';
+const profileRoute = '/profile';
 
 /// Bridges Riverpod state changes into go_router's `refreshListenable`, so
 /// `redirect` gets re-evaluated whenever any of the gating providers change
@@ -144,6 +146,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: manageBlockedAppsRoute,
         builder: (context, state) => const ManageBlockedAppsScreen(),
+      ),
+      GoRoute(
+        path: profileRoute,
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

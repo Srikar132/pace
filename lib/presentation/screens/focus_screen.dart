@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pace/core/constants/images.dart';
-import 'package:pace/core/router/app_router.dart';
+import 'package:pace/core/router/app_router.dart' show profileRoute , activeSessionRoute;
 import 'package:pace/models/focus_time_bottom_model.dart';
 import 'package:pace/models/model_manager.dart';
 import 'package:pace/presentation/providers/auth_provider.dart';
@@ -11,8 +11,6 @@ import 'package:pace/presentation/providers/blocked_content_provider.dart';
 import 'package:pace/presentation/providers/settings_provider.dart';
 import 'package:pace/presentation/providers/background_image_provider.dart';
 import 'package:pace/presentation/providers/usage_stats_provider.dart';
-import 'package:pace/presentation/screens/profile_screen.dart';
-import 'package:pace/presentation/screens/usage_stats_screen.dart';
 import 'package:pace/widgets/focus_timer_widget.dart';
 import 'package:pace/widgets/lumo_mascot_widget.dart';
 import 'package:pace/widgets/background_image_selector.dart';
@@ -299,12 +297,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
       children: [
         // User Profile Avatar
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
-          },
+          onTap: () => context.push(profileRoute),
           child: Container(
             width: 32,
             height: 32,
@@ -344,51 +337,21 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
 
             return todayUsageAsync.when(
               data: (usageStats) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UsageStatsScreen(),
-                      ),
-                    );
-                  },
-                  child: _buildStatCard(
-                    label: 'Usage',
-                    value: usageStats.formattedTotalTimeExcludingSelf,
-                    backgroundColor: Colors.white.withValues(alpha: 0.15),
-                  ),
+                return _buildStatCard(
+                  label: 'Usage',
+                  value: usageStats.formattedTotalTimeExcludingSelf,
+                  backgroundColor: Colors.white.withValues(alpha: 0.15),
                 );
               },
-              loading: () => GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UsageStatsScreen(),
-                    ),
-                  );
-                },
-                child: _buildStatCard(
-                  label: 'Usage',
-                  value: '...',
-                  backgroundColor: Colors.white.withValues(alpha: 0.15),
-                ),
+              loading: () => _buildStatCard(
+                label: 'Usage',
+                value: '...',
+                backgroundColor: Colors.white.withValues(alpha: 0.15),
               ),
-              error: (_, _) => GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UsageStatsScreen(),
-                    ),
-                  );
-                },
-                child: _buildStatCard(
-                  label: 'Usage',
-                  value: '0m',
-                  backgroundColor: Colors.white.withValues(alpha: 0.15),
-                ),
+              error: (_, _) => _buildStatCard(
+                label: 'Usage',
+                value: '0m',
+                backgroundColor: Colors.white.withValues(alpha: 0.15),
               ),
             );
           },
