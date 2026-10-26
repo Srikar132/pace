@@ -91,6 +91,12 @@
       "skillPath": "skills/dart-write-documentation/SKILL.md",
       "computedHash": "2c6cf741f5424f7f3ed805a09ec0c46b668bb9f9c2861988b3da42e558e5ae95"
     },
+    "flutter-adaptive-ui": {
+      "source": "madteacher/mad-agents-skills",
+      "sourceType": "github",
+      "skillPath": "flutter-adaptive-ui/SKILL.md",
+      "computedHash": "2de3eca022a485ee1c98f52e973299b809ae7f29b49621cc82d1536457e5b4fe"
+    },
     "flutter-add-integration-test": {
       "source": "flutter/skills",
       "sourceType": "github",
