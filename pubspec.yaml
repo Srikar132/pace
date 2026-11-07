@@ -4,7 +4,8 @@ publish_to: 'none'
 version: 0.1.0+1
 
 environment:
-  sdk: ^3.10.0
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 dependencies:
   cloud_firestore: ^6.1.1
