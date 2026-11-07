@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pace/core/theme/app_theme.dart';
@@ -140,11 +141,11 @@ class _BlockAppsSheetState extends ConsumerState<BlockAppsSheet> {
             Expanded(
               child: RepaintBoundary(
                 child: ListView.builder(
+                  scrollCacheExtent: ScrollCacheExtent.pixels(500),
                   controller: _scrollController,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(bottom: 30),
                   itemCount: rows.length,
-                  cacheExtent: 500,
                   itemBuilder: (context, index) {
                     final row = rows[index];
                     return switch (row) {
@@ -425,7 +426,10 @@ class _CategoryHeader extends ConsumerWidget {
               AnimatedRotation(
                 duration: const Duration(milliseconds: 200),
                 turns: isExpanded ? 0.5 : 0,
-                child: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                child: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

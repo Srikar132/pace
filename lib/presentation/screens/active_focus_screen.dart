@@ -770,10 +770,7 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
 
     return Stack(
       clipBehavior: Clip.none,
-      children: [
-        navIcon,
-        if (blockedContentWidget != null) blockedContentWidget,
-      ],
+      children: [navIcon, ?blockedContentWidget],
     );
   }
 

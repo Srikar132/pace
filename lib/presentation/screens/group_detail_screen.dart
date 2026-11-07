@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pace/core/theme/app_theme.dart';
 import 'package:pace/data/models/group_memeber_model.dart';
@@ -456,10 +457,10 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     }
 
     return ListView.builder(
+      scrollCacheExtent: ScrollCacheExtent.pixels(500),
       padding: const EdgeInsets.all(16),
       physics: const BouncingScrollPhysics(),
       itemCount: members.length,
-      cacheExtent: 500,
       itemBuilder: (context, index) {
         final member = members[index];
         final isAdmin = group.isAdmin(member.userId);
@@ -642,10 +643,10 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
     }
 
     return ListView.builder(
+      scrollCacheExtent: ScrollCacheExtent.pixels(500),
       padding: const EdgeInsets.all(16),
       physics: const BouncingScrollPhysics(),
       itemCount: sortedMembers.length,
-      cacheExtent: 500,
       itemBuilder: (context, index) {
         final member = sortedMembers[index];
         final rank = index + 1;
@@ -831,9 +832,7 @@ class _GroupDetailScreenState extends ConsumerState<GroupDetailScreen>
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.accent),
             child: const Text('Go Back', style: TextStyle(color: Colors.black)),
           ),
         ],
