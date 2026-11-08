@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -268,33 +269,47 @@ class _ActiveFocusScreenState extends ConsumerState<ActiveFocusScreen>
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      // Header with notification banner
-                      _buildHeader(sessionState),
+                  // Full height: identical to before (the Spacer absorbs the extra room).
+                  // Short window (split-screen pane, floating window): the content
+                  // scrolls instead of overflowing the bottom.
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            children: [
+                              // Header with notification banner
+                              _buildHeader(sessionState),
 
-                      const SizedBox(height: 60),
+                              const SizedBox(height: 60),
 
-                      // Main Timer Circle
-                      _buildTimerCircle(sessionState),
+                              // Main Timer Circle
+                              _buildTimerCircle(sessionState),
 
-                      const Spacer(),
+                              const Spacer(),
 
-                      // Lumo Mascot
-                      LumoMascotWidget(onTap: () {}),
+                              // Lumo Mascot
+                              LumoMascotWidget(onTap: () {}),
 
-                      const SizedBox(height: 50),
+                              const SizedBox(height: 50),
 
-                      // Control Buttons
-                      _buildControlButtons(sessionState),
+                              // Control Buttons
+                              _buildControlButtons(sessionState),
 
-                      const SizedBox(height: 20),
+                              const SizedBox(height: 20),
 
-                      // Bottom Navigation Icons
-                      _buildBottomNavigation(user),
+                              // Bottom Navigation Icons
+                              _buildBottomNavigation(user),
 
-                      const SizedBox(height: 5),
-                    ],
+                              const SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
