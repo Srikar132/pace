@@ -74,6 +74,7 @@ class LockInAccessibilityService : AccessibilityService() {
     private lateinit var appLimitManager: AppLimitManager
     private lateinit var appLimitTracker: AppLimitTracker
     private lateinit var overlayLauncher: OverlayLauncher
+    private var focusWindowEnforcer: com.example.pace.services.focus.FocusWindowEnforcer? = null
     private var lastCheckedUrl: String? = null
     private var lastBlockTime = 0L // Add cooldown tracking
     private val BLOCK_COOLDOWN_MS = 5000L // 5 second cooldown
@@ -179,6 +180,7 @@ class LockInAccessibilityService : AccessibilityService() {
         // Configure the accessibility service
         val info = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or
+                        AccessibilityEvent.TYPE_WINDOWS_CHANGED or
                         AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED or
                         AccessibilityEvent.TYPE_VIEW_SCROLLED or
                         AccessibilityEvent.TYPE_VIEW_CLICKED
@@ -192,7 +194,13 @@ class LockInAccessibilityService : AccessibilityService() {
             notificationTimeout = 100
         }
         serviceInfo = info
-        
+
+        // Multi-window focus enforcement (split-screen / PiP / freeform)
+        focusWindowEnforcer = com.example.pace.services.focus.FocusWindowEnforcer(this).also {
+            it.start()
+            it.onSessionStateChanged()
+        }
+
         // Start usage tracking
         usageCheckHandler.postDelayed(usageCheckRunnable, USAGE_CHECK_INTERVAL_MS)
         Log.d(TAG, "Service configuration completed - running in foreground")
@@ -200,6 +208,15 @@ class LockInAccessibilityService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         try {
+            // Window-level events can have a null package, so this must run before the early return below.
+            if (event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED ||
+                event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                    event.packageName?.toString()?.let { focusWindowEnforcer?.onWindowEvent(event.windowId, it) }
+                }
+                focusWindowEnforcer?.requestEvaluation()
+            }
+
             val packageName = event.packageName?.toString() ?: return
             val eventType = event.eventType
             
@@ -2079,7 +2096,17 @@ class LockInAccessibilityService : AccessibilityService() {
         return appLimitTracker
     }
 
+    /** True only while the window enforcer is alive AND evaluating, so FocusMonitoringService can defer to it. */
+    fun isFocusEnforcerActive(): Boolean = focusWindowEnforcer?.isHealthy() == true
+
+    /** Focus session started/paused/resumed/ended: re-evaluate windows right away. */
+    fun onFocusSessionStateChanged() {
+        focusWindowEnforcer?.onSessionStateChanged()
+    }
+
     override fun onUnbind(intent: Intent?): Boolean {
+        focusWindowEnforcer?.stop()
+        focusWindowEnforcer = null
         isServiceRunning = false
         instance = null
         lastCheckedUrl = null
