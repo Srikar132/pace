@@ -500,8 +500,4 @@ class FocusSessionManager private constructor(private val context: Context) {
 }
 
 // Helper extension
-private fun JSONObject.toMap(): Map<String, Any> {
-    val map = mutableMapOf<String, Any>()
-    keys().forEach { key -> map[key] = get(key) }
-    return map
-}
+private fun JSONObject.toMap(): Map<String, Any> = JsonConversion.toMap(this)
