@@ -16,6 +16,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
+import com.example.pace.services.LockInAccessibilityService
 import com.example.pace.services.overlay.OverlayLauncher
 
 /**
@@ -106,7 +107,13 @@ class FocusMonitoringService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
+        if (intent == null) {
+            // START_STICKY restart after the process was killed: the session is restored from
+            // prefs by FocusSessionManager, so pick monitoring back up instead of staying dead.
+            restoreMonitoringAfterRestart()
+            return START_STICKY
+        }
+        when (intent.action) {
             ACTION_START -> startMonitoring()
             ACTION_STOP -> {
                 stopMonitoring()
@@ -115,7 +122,22 @@ class FocusMonitoringService : Service() {
             ACTION_PAUSE -> pauseMonitoring()
             ACTION_RESUME -> resumeMonitoring()
         }
+        // Multi-window enforcer (accessibility service) re-checks windows on every state change.
+        LockInAccessibilityService.getInstance()?.onFocusSessionStateChanged()
         return START_STICKY
+    }
+
+    private fun restoreMonitoringAfterRestart() {
+        if (!sessionManager.isSessionActive()) {
+            Log.d(TAG, "Restarted with no active session, stopping")
+            stopSelf()
+            return
+        }
+        Log.d(TAG, "Restarted mid-session, resuming monitoring")
+        startMonitoring()
+        if (sessionManager.isSessionPaused()) {
+            pauseMonitoring()
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -214,6 +236,13 @@ class FocusMonitoringService : Service() {
                 return
             }
 
+            // The accessibility enforcer handles every window, including full screen, while it is
+            // healthy (it evaluated within the last few seconds). If it is off, stalled or broken this
+            // original usage-events path takes over, so full-screen blocking can never silently stop.
+            if (LockInAccessibilityService.getInstance()?.isFocusEnforcerActive() == true) {
+                return
+            }
+
             val currentApp = getCurrentForegroundApp()
 
             if (currentApp.isNotEmpty() && currentApp != lastCheckedApp) {
@@ -243,7 +272,7 @@ class FocusMonitoringService : Service() {
                 val event = UsageEvents.Event()
                 usageEvents.getNextEvent(event)
 
-                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
                     lastApp = event.packageName
                 }
             }
